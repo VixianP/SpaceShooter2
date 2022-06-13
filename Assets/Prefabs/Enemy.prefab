@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fe2edbeb7ac2f945b470910350bb4b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EnemyHealth: 0
   EnemyMoveSpeed: 8
   CollsionDamage: 1
   PointValue: 1

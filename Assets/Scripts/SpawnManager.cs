@@ -57,7 +57,7 @@ public class SpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PowerUpTimer = Time.time + PowerUpTimer;
+        PowerUpTime = Time.time + PowerUpTimer;
         EnemyCount = AmountOfEnemiesToSpawn;
         SpawnPlayer();
         SpawnEnemy();
@@ -67,7 +67,7 @@ public class SpawnManager : MonoBehaviour
     {
         if (PlayerToSpawn != null)
         {
-            SpawnedPlayer = Instantiate(PlayerToSpawn, new Vector3(0, -6, 0), Quaternion.identity);
+            SpawnedPlayer = Instantiate(PlayerToSpawn, new Vector3(0, -14, 0), Quaternion.identity);
         }
         else
         {
@@ -106,6 +106,7 @@ public class SpawnManager : MonoBehaviour
             {
                 if(PowerUpGameObject != null)
                 {
+                    
                     Instantiate(PowerUpGameObject, new Vector3(transform.position.x + Random.Range(-30, 30), 25, 0), Quaternion.identity);
                     PowerUpTime = Time.time + PowerUpTimer;
                 }

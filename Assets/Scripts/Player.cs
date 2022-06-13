@@ -114,7 +114,10 @@ public class Player : MonoBehaviour
     #endregion
 
     //level property where it alters other stats
-
+    private void Awake()
+    {
+        ResetPlayer();
+    }
 
     void Start()
     {
@@ -124,9 +127,12 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PlayerInputs();
-        Movement();
-        TemporaryPowerUptimer();
+        if (PlayerValues.PlayerIsDead == false)
+        {
+            PlayerInputs();
+            Movement();
+            TemporaryPowerUptimer();
+        }
     }
     private void Initialize()
     {
@@ -215,5 +221,10 @@ public class Player : MonoBehaviour
         }
         Destroy(PowerUpGameObject);
         
+    }
+    void ResetPlayer()
+    {
+        PlayerValues.PlayerIsDead = false;
+        PlayerValues.Score = 0;
     }
 }

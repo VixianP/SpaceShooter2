@@ -7,7 +7,6 @@ public static class PlayerValues
 {
 
     public static int Score;
-    public static int Currency;
     public static bool PlayerIsDead;
 
 }
