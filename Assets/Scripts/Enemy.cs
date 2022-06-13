@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    #region EnemyStats
     [SerializeField]
     private int EnemyHealth;
     [SerializeField]
     int EnemyMoveSpeed = 4;
     [SerializeField]
     private int CollsionDamage = 1;
-
+    #endregion
     #region Score,Value,Drops
     [SerializeField]
     private int PointValue;
+    #endregion
+    #region OnDeathStuff
+    [SerializeField]
+    private GameObject Explosion;
     #endregion
 
     // Update is called once per frame
