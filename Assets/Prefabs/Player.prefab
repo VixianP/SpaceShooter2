@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 15
+  MaxSpeed: 30
   Damage: 0
   MaxHealth: 100
   FiringSpeed: 0.1

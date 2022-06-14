@@ -42,6 +42,7 @@ public class Enemy : MonoBehaviour
             PlayerValues.Score += PointValue;
             //gives the player experiance
             //adds currency
+            Instantiate(Explosion, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
         if(other.tag == "Player")
@@ -49,6 +50,7 @@ public class Enemy : MonoBehaviour
             other.GetComponent<Player>().TakeDamage(CollsionDamage * 50);
             //gives the player experiance
             //adds currency
+            Instantiate(Explosion, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

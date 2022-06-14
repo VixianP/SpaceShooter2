@@ -4,18 +4,26 @@ using UnityEngine;
 
 public class ExplosionScript : MonoBehaviour
 {
+
+    Animator ExplodeAnim;
     [SerializeField]
-    private Vector3 Scale;
-
-    Animator ExplosionAnim;
-
+    Vector3 Size;
+    [SerializeField]
+    int MovementSpeed = 10;
     private void Start()
     {
-        ExplosionAnim = gameObject.GetComponent<Animator>();
-        gameObject.transform.localScale = Scale;
+        transform.localScale = Size;
+        ExplodeAnim = gameObject.GetComponent<Animator>();
     }
+
     private void Update()
     {
-      //checks if animation state is exit
+        transform.Translate(0, MovementSpeed * Time.deltaTime, 0);
+        if(ExplodeAnim.GetCurrentAnimatorStateInfo(0).IsName("Dead"))
+        {
+            Destroy(gameObject);
+        }
     }
+
 }
+    

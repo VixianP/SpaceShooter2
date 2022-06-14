@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int speed;
     [SerializeField]
+    int MaxSpeed;
+    [SerializeField]
     private int Damage;
     [SerializeField]
     private int MaxHealth;
@@ -194,6 +196,17 @@ public class Player : MonoBehaviour
         PlayerShield.SetActive(true);
         print("shield");
     }
+    void SpeedBoost()
+    {
+        if (speed < MaxSpeed)
+        {
+            speed++;
+        } else
+        {
+            speed = MaxSpeed;
+            ActivateShield();
+        }
+    }
     //ieum for accelerate
     //ienum for decellerate
     private void OnTriggerEnter2D(Collider2D collision)
@@ -215,7 +228,7 @@ public class Player : MonoBehaviour
         {
             BaseProjectile = PowUp.PowerUp[PowUp.PowerUpSelector].Projectile;
         }
-        if (PowUp.PowerUp[PowUp.PowerUpSelector].Category == "Utility" && PowUp.PowerUp[PowUp.PowerUpSelector].Type == "Temp")
+        if (PowUp.PowerUp[PowUp.PowerUpSelector].Category == "Utility")
         {
             Invoke(PowUp.PowerUp[PowUp.PowerUpSelector].CallMethod,0.1f);
         }

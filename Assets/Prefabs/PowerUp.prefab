@@ -109,8 +109,15 @@ MonoBehaviour:
     PowerUpDuration: 0
     Damage: 0
     Category: Utility
-    Type: Temp
+    Type: 
     CallMethod: ActivateShield
+    PowerUpImage: {fileID: 21300000, guid: 9f7fd78149709af4ea749d6cdcea07c9, type: 3}
+  - Projectile: {fileID: 0}
+    PowerUpDuration: 0
+    Damage: 0
+    Category: Utility
+    Type: 
+    CallMethod: SpeedBoost
     PowerUpImage: {fileID: 21300000, guid: 9f7fd78149709af4ea749d6cdcea07c9, type: 3}
   PowerUpSelector: 0
   PowerUpMoveDownSpeed: 2

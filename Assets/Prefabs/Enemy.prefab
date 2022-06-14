@@ -50,6 +50,7 @@ MonoBehaviour:
   EnemyMoveSpeed: 8
   CollsionDamage: 1
   PointValue: 1
+  Explosion: {fileID: 772484977331015354, guid: 3eb5ef472a7b15944b580e01bcc7915d, type: 3}
 --- !u!212 &-3542093485557580126
 SpriteRenderer:
   m_ObjectHideFlags: 0
