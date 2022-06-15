@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -46,28 +47,34 @@ public class SpawnManager : MonoBehaviour
     float PowerUpTime;
     #endregion
     #region Game Timer
+    [SerializeField]
+    float StartDelayTimer = 6;
+    float StartTime;
+    #endregion
+    #region SpawnManagerUI
+    [SerializeField]
+    Text[] SpawnUI;
 
     #endregion
 
     #region DevNotes
     //the longer the player plays, the harder to game gets
 
-    
+
     #endregion
     // Start is called before the first frame update
     void Start()
     {
-        PowerUpTime = Time.time + PowerUpTimer;
-        EnemyCount = AmountOfEnemiesToSpawn;
-        SpawnPlayer();
-        SpawnEnemy();
+        StartCoroutine(StartGameCounter());
     }
+
+ 
 
     void SpawnPlayer()
     {
         if (PlayerToSpawn != null)
         {
-            SpawnedPlayer = Instantiate(PlayerToSpawn, new Vector3(0, -14, 0), Quaternion.identity);
+            SpawnedPlayer = Instantiate(PlayerToSpawn, new Vector3(0, -12, 0), Quaternion.identity);
         }
         else
         {
@@ -82,6 +89,10 @@ public class SpawnManager : MonoBehaviour
             return;
         }
         StartCoroutine(SpawnCoroutine());
+    }
+    void WaveSpawner()
+    {
+
     }
     public void EnemyDeath()
     {
@@ -115,5 +126,18 @@ public class SpawnManager : MonoBehaviour
             EnemiesInPlay++;
 
         }
+    }
+    public IEnumerator StartGameCounter()
+    {
+        SpawnUI[0].gameObject.SetActive(true);
+        SpawnPlayer();
+        yield return new WaitForSeconds(2);
+        SpawnUI[0].gameObject.SetActive(false);
+        SpawnUI[1].gameObject.SetActive(true);
+        PowerUpTime = Time.time + PowerUpTimer;
+        EnemyCount = AmountOfEnemiesToSpawn;
+        SpawnEnemy();
+        yield return new WaitForSeconds(2);
+        SpawnUI[1].gameObject.SetActive(false);
     }
 }

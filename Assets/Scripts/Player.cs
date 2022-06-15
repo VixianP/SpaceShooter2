@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -48,7 +49,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     GameObject PlayerShield;
     [SerializeField]
-    int ShieldHealth = 3;
+    int MaxShieldHealth;
+    int ShieldHealth;
 
     int shieldhealth
     {
@@ -114,6 +116,10 @@ public class Player : MonoBehaviour
     Collider2D PlayerCollider;
     SpriteRenderer PlayerSpriteRenderer;
     #endregion
+    #region PlayerUI
+    [SerializeField]
+    Text PlayerHP;
+    #endregion
 
     //level property where it alters other stats
     private void Awake()
@@ -142,6 +148,7 @@ public class Player : MonoBehaviour
         PlayerCurrentHealth = MaxHealth;
         PlayerCollider = gameObject.GetComponent<Collider2D>();
         PlayerSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + shieldhealth + ")" + "/" + MaxHealth;
     }
     void Movement()
     {
@@ -173,7 +180,7 @@ public class Player : MonoBehaviour
         if (PlayerShield.activeInHierarchy == false)
         {
             PlayerHealth -= value;
-            print(PlayerHealth);
+            PlayerHP.text = "HP " + PlayerCurrentHealth +"("+shieldhealth+")"+"/" + MaxHealth;
         } else
         {
             shieldhealth--;
@@ -193,8 +200,9 @@ public class Player : MonoBehaviour
     }
     void ActivateShield()
     {
+        MaxShieldHealth = +3;
+        shieldhealth = MaxShieldHealth;
         PlayerShield.SetActive(true);
-        print("shield");
     }
     void SpeedBoost()
     {

@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 8f44c9927d908bd4cbfd4a54b0ffd85f
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Mabook
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 7230cf8351c049746abee0e6b4d470e6, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
