@@ -119,6 +119,8 @@ public class Player : MonoBehaviour
     #region PlayerUI
     [SerializeField]
     Text PlayerHP;
+    [SerializeField]
+    Slider PlayerHpBar;
     #endregion
 
     //level property where it alters other stats
@@ -149,6 +151,8 @@ public class Player : MonoBehaviour
         PlayerCollider = gameObject.GetComponent<Collider2D>();
         PlayerSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + shieldhealth + ")" + "/" + MaxHealth;
+        PlayerHpBar.maxValue = MaxHealth;
+        PlayerHpBar.value = MaxHealth;
     }
     void Movement()
     {
@@ -180,10 +184,20 @@ public class Player : MonoBehaviour
         if (PlayerShield.activeInHierarchy == false)
         {
             PlayerHealth -= value;
+            PlayerHpBar.value = PlayerCurrentHealth;
             PlayerHP.text = "HP " + PlayerCurrentHealth +"("+shieldhealth+")"+"/" + MaxHealth;
+            DamageVisuals();
         } else
         {
             shieldhealth--;
+        }
+    }
+    void DamageVisuals()
+    {
+        if(PlayerCurrentHealth <= MaxHealth * .5 && PlayerCurrentHealth > MaxHealth *.3)
+        {
+            print(MaxHealth * .5f);
+            //instantiate and add to list
         }
     }
     void ProjectilePowerUp(GameObject Projectile, int Timer)
