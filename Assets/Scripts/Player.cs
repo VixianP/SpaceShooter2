@@ -28,9 +28,30 @@ public class Player : MonoBehaviour
             if (PlayerHealth < 1)
             {
                 PlayerValues.PlayerIsDead = true;
-                print(PlayerValues.PlayerIsDead + " Player is dead equals ");
+                PlayerDamage[0].SetActive(false);
+                PlayerDamage[1].SetActive(false);
+                PlayerDamage[2].SetActive(false);
                 PlayerCollider.enabled = false;
                 PlayerSpriteRenderer.enabled = false;
+                return;
+            }
+            if (PlayerCurrentHealth <= MaxHealth * .7 && PlayerCurrentHealth > MaxHealth * .5)
+            {
+                PlayerDamage[0].SetActive(true);
+                PlayerDamage[1].SetActive(false);
+                PlayerDamage[2].SetActive(false);
+                return;
+            }
+            if (PlayerCurrentHealth <= MaxHealth * .5 && PlayerCurrentHealth > MaxHealth * .3)
+            {
+
+                PlayerDamage[1].SetActive(true);
+                PlayerDamage[2].SetActive(false);
+                return;
+            } else if(PlayerCurrentHealth <= MaxHealth * .10)
+            {
+                PlayerDamage[2].SetActive(true);
+                return;
             }
         }
     }
@@ -122,6 +143,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     Slider PlayerHpBar;
     #endregion
+    #region Instantiated objects and position
+    [SerializeField]
+    GameObject[] PlayerDamage;
+    #endregion
 
     //level property where it alters other stats
     private void Awake()
@@ -186,18 +211,9 @@ public class Player : MonoBehaviour
             PlayerHealth -= value;
             PlayerHpBar.value = PlayerCurrentHealth;
             PlayerHP.text = "HP " + PlayerCurrentHealth +"("+shieldhealth+")"+"/" + MaxHealth;
-            DamageVisuals();
         } else
         {
             shieldhealth--;
-        }
-    }
-    void DamageVisuals()
-    {
-        if(PlayerCurrentHealth <= MaxHealth * .5 && PlayerCurrentHealth > MaxHealth *.3)
-        {
-            print(MaxHealth * .5f);
-            //instantiate and add to list
         }
     }
     void ProjectilePowerUp(GameObject Projectile, int Timer)
