@@ -45,6 +45,14 @@ public class Enemy : MonoBehaviour
             Instantiate(Explosion, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
+        if(other.tag == "ChargedShot")
+        {
+            PlayerValues.Score += PointValue;
+            //gives the player experiance
+            //adds currency
+            Instantiate(Explosion, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
         if(other.tag == "Player")
         {
             other.GetComponent<Player>().TakeDamage(CollsionDamage * 50);

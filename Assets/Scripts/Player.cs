@@ -61,9 +61,13 @@ public class Player : MonoBehaviour
     float FiringTimer = -1f;
     #endregion
     #region Projectile
-    GameObject BaseProjectile;
+    [SerializeField]
+    GameObject[] BaseProjectile;
     [SerializeField]
     GameObject Laser;
+    [SerializeField]
+    GameObject ChargedLaser;
+    float ChargeTimer;
     float WeaponTimer;
     #endregion
     #region Abilities
@@ -147,6 +151,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     GameObject[] PlayerDamage;
     #endregion
+    #region The Super K
+    [SerializeField]
+    GameObject SuperK;
+    #endregion
 
     //level property where it alters other stats
     private void Awake()
@@ -171,7 +179,6 @@ public class Player : MonoBehaviour
     }
     private void Initialize()
     {
-        BaseProjectile = Laser;
         PlayerCurrentHealth = MaxHealth;
         PlayerCollider = gameObject.GetComponent<Collider2D>();
         PlayerSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
@@ -197,12 +204,36 @@ public class Player : MonoBehaviour
     {
         if ( Time.time > FiringTimer)
         {
+            if (Input.GetMouseButton(0))
+            {
+                ChargeTimer += 1 * Time.deltaTime;
+                //play charging effect
+                //if charged fully, fire full charge
+                return;
+            } else if (Input.GetMouseButtonUp(0))
+            {
+                if (ChargeTimer > .90f)
+                {
+                    Instantiate(ChargedLaser, new Vector3(transform.position.x, transform.position.y + 2, 0), Quaternion.identity);
+                    FiringTimer = Time.time + FiringSpeed + .30f;
+                    ChargeTimer = 0;
+                } else
+                {
+                    Instantiate(Laser, new Vector3(transform.position.x, transform.position.y + 2, 0), Quaternion.identity);
+                    FiringTimer = Time.time + FiringSpeed - 1;
+                    ChargeTimer = 0;
+                }
+            }
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 Instantiate(Laser, new Vector3(transform.position.x, transform.position.y + 2, 0), Quaternion.identity);
                 FiringTimer= Time.time + FiringSpeed;
             }
-        } 
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+
+        }
     }
     public void TakeDamage(int value)
     {
@@ -225,7 +256,7 @@ public class Player : MonoBehaviour
     {
         if(Time.time > WeaponTimer)
         {
-            Laser = BaseProjectile;
+            Laser = BaseProjectile[0];
         }
     }
     void ActivateShield()
@@ -264,7 +295,7 @@ public class Player : MonoBehaviour
         }
         if (PowUp.PowerUp[PowUp.PowerUpSelector].Category == "Weapon" && PowUp.PowerUp[PowUp.PowerUpSelector].Type == "Perm")
         {
-            BaseProjectile = PowUp.PowerUp[PowUp.PowerUpSelector].Projectile;
+            BaseProjectile[0] = PowUp.PowerUp[PowUp.PowerUpSelector].Projectile;
         }
         if (PowUp.PowerUp[PowUp.PowerUpSelector].Category == "Utility")
         {
