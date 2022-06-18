@@ -8,6 +8,7 @@ TagManager:
   - Laser
   - PowerUp
   - ChargedShot
+  - EnemyProjectile
   layers:
   - Default
   - TransparentFX

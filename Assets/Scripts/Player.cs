@@ -208,6 +208,7 @@ public class Player : MonoBehaviour
     }
     private void Initialize()
     {
+        PlayerValues.playerGameobject = gameObject;
         SK = SuperKGameObject.GetComponent<SuperK>();
         SK.PlayerGameObject = gameObject;
         BaseSpeed = speed;
@@ -295,11 +296,17 @@ public class Player : MonoBehaviour
     }
    public void CollisionDmg(int CollDmg)
     {
-        PlayerAudio.clip = SoundClips[1];
-        PlayerAudio.Play();
-        PlayerHealth -= CollDmg;
-        PlayerHpBar.value = PlayerCurrentHealth;
-        PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + shieldhealth + ")" + "/" + MaxHealth;
+        if (PlayerShield.activeInHierarchy == false)
+        {
+            PlayerAudio.clip = SoundClips[1];
+            PlayerAudio.Play();
+            PlayerHealth -= CollDmg;
+            PlayerHpBar.value = PlayerCurrentHealth;
+            PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + shieldhealth + ")" + "/" + MaxHealth;
+        } else
+        {
+            shieldhealth--;
+        }
     }
     void ProjectilePowerUp(GameObject Projectile, int Timer)
     {
@@ -398,6 +405,9 @@ public class Player : MonoBehaviour
     void ResetPlayer()
     {
         PlayerValues.PlayerIsDead = false;
+
         PlayerValues.Score = 0;
+
+        PlayerValues.playerGameobject = null;
     }
 }
