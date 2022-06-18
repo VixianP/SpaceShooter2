@@ -55,11 +55,11 @@ public class Enemy : MonoBehaviour
         }
         if(other.tag == "Player")
         {
-            other.GetComponent<Player>().TakeDamage(CollsionDamage * 50);
-            //gives the player experiance
-            //adds currency
-            Instantiate(Explosion, transform.position, Quaternion.identity);
-            Destroy(gameObject);
+            other.GetComponent<Player>().CollisionDmg(CollsionDamage * 50);
+                //gives the player experiance
+                //adds currency
+                Instantiate(Explosion, transform.position, Quaternion.identity);
+                Destroy(gameObject);
         }
     }
 }

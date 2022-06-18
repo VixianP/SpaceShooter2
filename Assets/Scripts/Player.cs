@@ -8,10 +8,6 @@ public class Player : MonoBehaviour
     static GameObject PlayerGameObject; //will be used for later
     #region Player Stats
     [SerializeField]
-    private int speed;
-    [SerializeField]
-    int MaxSpeed;
-    [SerializeField]
     private int Damage;
     [SerializeField]
     private int MaxHealth;
@@ -59,6 +55,23 @@ public class Player : MonoBehaviour
     [SerializeField]
     float FiringSpeed;
     float FiringTimer = -1f;
+    #endregion
+    #region Speed and Dodging
+    [SerializeField]
+    private float speed;
+    private float BaseSpeed;
+    [SerializeField]
+    float MaxDashDistance;
+    float DashDistance;
+    [SerializeField]
+    float MaxSpeed;
+
+    float DashCooldown;
+
+    bool CanBoost;
+    bool IsBoosting;
+    [HideInInspector]
+    public bool IsDodging;
     #endregion
     #region Projectile
     [SerializeField]
@@ -153,7 +166,11 @@ public class Player : MonoBehaviour
     #endregion
     #region The Super K
     [SerializeField]
-    GameObject SuperK;
+    GameObject SuperKGameObject;
+    SuperK SK;
+
+    //instantiate super k
+    //when death, destroy the super k
     #endregion
 
     //level property where it alters other stats
@@ -179,6 +196,10 @@ public class Player : MonoBehaviour
     }
     private void Initialize()
     {
+        SK = SuperKGameObject.GetComponent<SuperK>();
+        SK.PlayerGameObject = gameObject;
+        BaseSpeed = speed;
+        DashDistance = speed * MaxDashDistance;
         PlayerCurrentHealth = MaxHealth;
         PlayerCollider = gameObject.GetComponent<Collider2D>();
         PlayerSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
@@ -232,20 +253,38 @@ public class Player : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(1))
         {
-
+            //superk
+        }
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            if (Time.time > DashCooldown)
+            {
+                StartCoroutine(Boost(DashDistance * .8f));
+                DashCooldown = Time.time + 1.3f;
+            }
         }
     }
     public void TakeDamage(int value)
     {
-        if (PlayerShield.activeInHierarchy == false)
+        if (IsDodging == false)
         {
-            PlayerHealth -= value;
-            PlayerHpBar.value = PlayerCurrentHealth;
-            PlayerHP.text = "HP " + PlayerCurrentHealth +"("+shieldhealth+")"+"/" + MaxHealth;
-        } else
-        {
-            shieldhealth--;
+            if (PlayerShield.activeInHierarchy == false)
+            {
+                PlayerHealth -= value;
+                PlayerHpBar.value = PlayerCurrentHealth;
+                PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + shieldhealth + ")" + "/" + MaxHealth;
+            }
+            else
+            {
+                shieldhealth--;
+            }
         }
+    }
+   public void CollisionDmg(int CollDmg)
+    {
+        PlayerHealth -= CollDmg;
+        PlayerHpBar.value = PlayerCurrentHealth;
+        PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + shieldhealth + ")" + "/" + MaxHealth;
     }
     void ProjectilePowerUp(GameObject Projectile, int Timer)
     {
@@ -277,7 +316,44 @@ public class Player : MonoBehaviour
         }
     }
     //ieum for accelerate
+    IEnumerator Boost(float RateToAmplifySpeed)
+    {
+        if (speed < DashDistance)
+        {
+            IsDodging = true;
+            IsBoosting = true;
+            while (IsBoosting == true)
+            {
+                yield return new WaitForSeconds(0.1f);
+                speed += RateToAmplifySpeed;
+                if (speed > DashDistance)
+                {
+                    speed = DashDistance;
+                    CanBoost = false;
+                    StartCoroutine(Deccerlate(-DashDistance * 0.5f));
+                    IsBoosting = false;
+                }
+            }
+        }
+    }
     //ienum for decellerate
+    IEnumerator Deccerlate(float boostnum)
+    {
+        if (speed > BaseSpeed)
+        {
+            while (CanBoost == false)
+            {
+                yield return new WaitForSeconds(0.1f);
+                speed += boostnum;
+                if (speed < BaseSpeed)
+                {
+                    speed = BaseSpeed;
+                    IsDodging = false;
+                    CanBoost = true;
+                }
+            }
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "PowerUp")

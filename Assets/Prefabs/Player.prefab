@@ -51,11 +51,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a88c2f05ba5f0cc4086da82e02c7326e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 15
-  MaxSpeed: 30
   Damage: 0
   MaxHealth: 100
   FiringSpeed: 0.3
+  speed: 15
+  MaxDashDistance: 4.5
+  MaxSpeed: 30
+  DashCooldown: 0
   BaseProjectile:
   - {fileID: 9122776032926891870, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
   - {fileID: 6948892251134745428, guid: 6bf65cafa0f7818499cbe4c50874ad13, type: 3}
@@ -70,7 +72,7 @@ MonoBehaviour:
   - {fileID: 8763409697285627759}
   - {fileID: 9146951950659520324}
   - {fileID: 2562759475093597624}
-  SuperK: {fileID: 0}
+  SuperKGameObject: {fileID: 8431501687028158309, guid: 1114688aba1411945b504a98fd095ec8, type: 3}
 --- !u!212 &2724464766563349090
 SpriteRenderer:
   m_ObjectHideFlags: 0
