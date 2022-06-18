@@ -160,6 +160,18 @@ public class Player : MonoBehaviour
     [SerializeField]
     Slider PlayerHpBar;
     #endregion
+    #region Audio
+    AudioSource PlayerAudio;
+    [SerializeField]
+    AudioClip[] SoundClips;
+    /// <summary> Sound Clip Index
+    /// 0 = Laser
+    /// 1 = Player Damaged
+    /// 3 = Power Up 
+    /// 4 = Player Dash
+    /// 5 = Player Death
+    /// </summary>
+    #endregion
     #region Instantiated objects and position
     [SerializeField]
     GameObject[] PlayerDamage;
@@ -203,6 +215,7 @@ public class Player : MonoBehaviour
         PlayerCurrentHealth = MaxHealth;
         PlayerCollider = gameObject.GetComponent<Collider2D>();
         PlayerSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        PlayerAudio = GetComponent<AudioSource>();
         PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + shieldhealth + ")" + "/" + MaxHealth;
         PlayerHpBar.maxValue = MaxHealth;
         PlayerHpBar.value = MaxHealth;
@@ -223,10 +236,11 @@ public class Player : MonoBehaviour
     }
     void PlayerInputs()
     {
-        if ( Time.time > FiringTimer)
+        if ( Time.time > FiringTimer && Time.timeScale == 1)
         {
             if (Input.GetMouseButton(0))
             {
+                PlayerAudio.clip = SoundClips[0];
                 ChargeTimer += 1 * Time.deltaTime;
                 //play charging effect
                 //if charged fully, fire full charge
@@ -235,20 +249,17 @@ public class Player : MonoBehaviour
             {
                 if (ChargeTimer > .90f)
                 {
+                    PlayerAudio.Play();
                     Instantiate(ChargedLaser, new Vector3(transform.position.x, transform.position.y + 2, 0), Quaternion.identity);
                     FiringTimer = Time.time + FiringSpeed + .30f;
                     ChargeTimer = 0;
                 } else
                 {
+                    PlayerAudio.Play();
                     Instantiate(Laser, new Vector3(transform.position.x, transform.position.y + 2, 0), Quaternion.identity);
-                    FiringTimer = Time.time + FiringSpeed - 1;
+                    FiringTimer = Time.time + FiringSpeed;
                     ChargeTimer = 0;
                 }
-            }
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                Instantiate(Laser, new Vector3(transform.position.x, transform.position.y + 2, 0), Quaternion.identity);
-                FiringTimer= Time.time + FiringSpeed;
             }
         }
         if (Input.GetMouseButtonDown(1))
@@ -268,8 +279,10 @@ public class Player : MonoBehaviour
     {
         if (IsDodging == false)
         {
+            PlayerAudio.clip = SoundClips[1];
             if (PlayerShield.activeInHierarchy == false)
             {
+                PlayerAudio.Play();
                 PlayerHealth -= value;
                 PlayerHpBar.value = PlayerCurrentHealth;
                 PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + shieldhealth + ")" + "/" + MaxHealth;
@@ -282,6 +295,8 @@ public class Player : MonoBehaviour
     }
    public void CollisionDmg(int CollDmg)
     {
+        PlayerAudio.clip = SoundClips[1];
+        PlayerAudio.Play();
         PlayerHealth -= CollDmg;
         PlayerHpBar.value = PlayerCurrentHealth;
         PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + shieldhealth + ")" + "/" + MaxHealth;

@@ -27,6 +27,10 @@ public class UIManager : MonoBehaviour
     {
         PlayerScoreText.text = "Score " + PlayerValues.Score;
         OnDeath();
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            PauseGame(0);
+        }
 
     }
     void OnDeath()
@@ -39,5 +43,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
-
+    public void PauseGame(int timescale)
+    {
+            PlayerUserInterface.SetActive(false);
+            PauseMenu.SetActive(true);
+            Time.timeScale = timescale;
+    }
 }
