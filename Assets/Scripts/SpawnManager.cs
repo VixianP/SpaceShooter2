@@ -68,8 +68,6 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(StartGameCounter());
     }
 
- 
-
     void SpawnPlayer()
     {
         if (PlayerToSpawn != null)
@@ -81,6 +79,7 @@ public class SpawnManager : MonoBehaviour
             Debug.LogError("PlayerToSpawn = null");
         }
     }
+
     void SpawnEnemy()
     {
         if (EnemyToSpawn == null)
@@ -90,10 +89,12 @@ public class SpawnManager : MonoBehaviour
         }
         StartCoroutine(SpawnCoroutine());
     }
+
     void WaveSpawner()
     {
 
     }
+
     public void EnemyDeath()
     {
         //make this a property
@@ -108,7 +109,7 @@ public class SpawnManager : MonoBehaviour
         while (EnemyCount > 0 && SpawnedPlayer != null && PlayerValues.PlayerIsDead != true)
         {
             yield return new WaitForSeconds(EnemySpawnTimer);
-            GameObject SpawnedEnemy = Instantiate(EnemyToSpawn, new Vector3(Random.Range(-16, 16), 25, 0), Quaternion.identity);
+            GameObject SpawnedEnemy = Instantiate(EnemyToSpawn, new Vector3(Random.Range(-30, 30), 25, 0), Quaternion.identity);
             if (EnemyContainer != null)
             {
                 SpawnedEnemy.transform.parent = EnemyContainer.transform;

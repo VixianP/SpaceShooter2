@@ -186,6 +186,7 @@ public class Player : MonoBehaviour
     #endregion
 
     //level property where it alters other stats
+
     private void Awake()
     {
         ResetPlayer();
@@ -196,7 +197,7 @@ public class Player : MonoBehaviour
         Initialize();
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         if (PlayerValues.PlayerIsDead == false)
@@ -206,6 +207,7 @@ public class Player : MonoBehaviour
             TemporaryPowerUptimer();
         }
     }
+
     private void Initialize()
     {
         PlayerValues.playerGameobject = gameObject;
@@ -221,20 +223,30 @@ public class Player : MonoBehaviour
         PlayerHpBar.maxValue = MaxHealth;
         PlayerHpBar.value = MaxHealth;
     }
+
     void Movement()
     {
         float h = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+
         float v = Input.GetAxis("Vertical") * speed * Time.deltaTime;
+
         if(transform.position.x > 37)
         {
+
             transform.position = new Vector3(-37, transform.position.y, 0);
+
         } else if (transform.position.x < -37)
         {
+
             transform.position = new Vector3(37, transform.position.y, 0);
+
         }
+
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -18, 19),0);
+
         transform.Translate(h, v, 0);
     }
+
     void PlayerInputs()
     {
         if ( Time.time > FiringTimer && Time.timeScale == 1)
@@ -276,21 +288,32 @@ public class Player : MonoBehaviour
             }
         }
     }
+
     public void TakeDamage(int value)
     {
         if (IsDodging == false)
         {
+
             PlayerAudio.clip = SoundClips[1];
+
             if (PlayerShield.activeInHierarchy == false)
             {
+
                 PlayerAudio.Play();
+
                 PlayerHealth -= value;
+
                 PlayerHpBar.value = PlayerCurrentHealth;
+
                 PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + shieldhealth + ")" + "/" + MaxHealth;
+
             }
+
             else
             {
+
                 shieldhealth--;
+
             }
         }
     }
@@ -308,11 +331,13 @@ public class Player : MonoBehaviour
             shieldhealth--;
         }
     }
+
     void ProjectilePowerUp(GameObject Projectile, int Timer)
     {
         WeaponTimer = Timer + Time.time;
         Laser = Projectile;
     }
+
     void TemporaryPowerUptimer()
     {
         if(Time.time > WeaponTimer)
@@ -320,12 +345,14 @@ public class Player : MonoBehaviour
             Laser = BaseProjectile[0];
         }
     }
+
     void ActivateShield()
     {
         MaxShieldHealth = +3;
         shieldhealth = MaxShieldHealth;
         PlayerShield.SetActive(true);
     }
+
     void SpeedBoost()
     {
         if (speed < MaxSpeed)
@@ -358,6 +385,7 @@ public class Player : MonoBehaviour
             }
         }
     }
+
     //ienum for decellerate
     IEnumerator Deccerlate(float boostnum)
     {
@@ -376,13 +404,24 @@ public class Player : MonoBehaviour
             }
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+
+     void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "PowerUp")
+        if (collision.tag == "EnemyBullet")
+        {
+            print("Hit by bullet");
+            EnemyProjectileScript Bullet = collision.gameObject.GetComponent<EnemyProjectileScript>();
+            if(Bullet != null)
+            {
+                TakeDamage(Bullet.damage);
+            }
+        }
+        if (collision.tag == "PowerUp")
         {
             CallPowerUp(collision.gameObject);
         }
     }
+
     void CallPowerUp(GameObject PowerUpGameObject)
     {
         PowerUpScript PowUp = PowerUpGameObject.gameObject.GetComponent<PowerUpScript>();
@@ -402,6 +441,7 @@ public class Player : MonoBehaviour
         Destroy(PowerUpGameObject);
         
     }
+
     void ResetPlayer()
     {
         PlayerValues.PlayerIsDead = false;
