@@ -39,7 +39,7 @@ public class PowerUpScript : MonoBehaviour
 
     private void Start()
     {
-        PowerUpSelector = Random.Range(0, PowerUp.Count);
+       // PowerUpSelector = Random.Range(0, PowerUp.Count);
         if(gameObject.GetComponent<SpriteRenderer>().sprite == null && PowerUp[PowerUpSelector].PowerUpImage != null)
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = PowerUp[PowerUpSelector].PowerUpImage;

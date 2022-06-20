@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class Player : MonoBehaviour
 {
     static GameObject PlayerGameObject; //will be used for later
@@ -157,8 +158,13 @@ public class Player : MonoBehaviour
     #region PlayerUI
     [SerializeField]
     Text PlayerHP;
+
     [SerializeField]
     Slider PlayerHpBar;
+
+    Text _powerUpDescription;
+
+    Image _powerUpImage;
     #endregion
     #region Audio
     AudioSource PlayerAudio;
@@ -311,8 +317,24 @@ public class Player : MonoBehaviour
 
             else
             {
+                
+                if(value > shieldhealth)
+                {
 
-                shieldhealth--;
+                    int remainder = shieldhealth - value;
+
+                    shieldhealth = 0;
+
+                    PlayerHealth -= remainder;
+
+                    PlayerAudio.Play();
+
+                    PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + shieldhealth + ")" + "/" + MaxHealth;
+                }
+
+                shieldhealth-=value;
+
+                PlayerHP.text = "HP " + PlayerCurrentHealth + "<color=aqua>(</color>" + shieldhealth + "<color=aqua>)</color>" + "/" + MaxHealth;
 
             }
         }
@@ -348,9 +370,10 @@ public class Player : MonoBehaviour
 
     void ActivateShield()
     {
-        MaxShieldHealth = +3;
+        MaxShieldHealth = +30;
         shieldhealth = MaxShieldHealth;
         PlayerShield.SetActive(true);
+        PlayerHP.text = "HP " + PlayerCurrentHealth + "<color=aqua>(</color>" + shieldhealth + "<color=aqua>)</color>" + "/" + MaxHealth;
     }
 
     void SpeedBoost()
@@ -414,6 +437,7 @@ public class Player : MonoBehaviour
             if(Bullet != null)
             {
                 TakeDamage(Bullet.damage);
+                Destroy(collision.gameObject);
             }
         }
         if (collision.tag == "PowerUp")
