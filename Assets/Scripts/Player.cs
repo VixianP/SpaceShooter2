@@ -86,27 +86,18 @@ public class Player : MonoBehaviour
     #endregion
     #region Abilities
     [SerializeField]
+
     GameObject PlayerShield;
+
     [SerializeField]
     int MaxShieldHealth;
-    int ShieldHealth;
 
-    int shieldhealth
-    {
-        get
-        {
-            return ShieldHealth;
-        }
-        set
-        {
-            if(ShieldHealth < 1)
-            {
-                PlayerShield.SetActive(false);
-            }
-            ShieldHealth = value;
-        }
-    }
+    int _shieldHealth;
+
     float ShieldDuration;
+
+    Animator _shieldAnim;
+
     #endregion
     #region Experience and Level up
     [SerializeField]
@@ -217,15 +208,21 @@ public class Player : MonoBehaviour
     private void Initialize()
     {
         PlayerValues.playerGameobject = gameObject;
+
+        _shieldAnim = PlayerShield.GetComponent<Animator>();
+
         SK = SuperKGameObject.GetComponent<SuperK>();
         SK.PlayerGameObject = gameObject;
+
         BaseSpeed = speed;
+
         DashDistance = speed * MaxDashDistance;
+
         PlayerCurrentHealth = MaxHealth;
         PlayerCollider = gameObject.GetComponent<Collider2D>();
         PlayerSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         PlayerAudio = GetComponent<AudioSource>();
-        PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + shieldhealth + ")" + "/" + MaxHealth;
+        PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + _shieldHealth + ")" + "/" + MaxHealth;
         PlayerHpBar.maxValue = MaxHealth;
         PlayerHpBar.value = MaxHealth;
     }
@@ -311,30 +308,51 @@ public class Player : MonoBehaviour
 
                 PlayerHpBar.value = PlayerCurrentHealth;
 
-                PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + shieldhealth + ")" + "/" + MaxHealth;
+                PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + _shieldHealth + ")" + "/" + MaxHealth;
 
             }
 
             else
             {
                 
-                if(value > shieldhealth)
+                if(value > _shieldHealth)
                 {
 
-                    int remainder = shieldhealth - value;
+                    PlayerHealth += _shieldHealth;
 
-                    shieldhealth = 0;
-
-                    PlayerHealth -= remainder;
+                    _shieldHealth = 0;
 
                     PlayerAudio.Play();
 
-                    PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + shieldhealth + ")" + "/" + MaxHealth;
+                    PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + _shieldHealth + ")" + "/" + MaxHealth;
+
+                    PlayerShield.SetActive(false);
                 }
 
-                shieldhealth-=value;
 
-                PlayerHP.text = "HP " + PlayerCurrentHealth + "<color=aqua>(</color>" + shieldhealth + "<color=aqua>)</color>" + "/" + MaxHealth;
+                _shieldHealth-= value; 
+
+                if(_shieldHealth < MaxShieldHealth * .7)
+                {
+                    _shieldAnim.SetFloat("shieldAnimFloat", .7f);
+                }
+                if (_shieldHealth < MaxShieldHealth * .5)
+                {
+                    _shieldAnim.SetFloat("shieldAnimFloat", .5f);
+                }
+                if (_shieldHealth < MaxShieldHealth * .3f)
+                {
+                    _shieldAnim.SetFloat("shieldAnimFloat", .2f);
+                }
+
+                if (_shieldHealth < 1)
+                {
+                    PlayerShield.SetActive(false);
+                    _shieldHealth = 0;
+                    PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + _shieldHealth + ")" + "/" + MaxHealth;
+                }
+                
+                PlayerHP.text = "HP " + PlayerCurrentHealth + "<color=aqua>(</color>" + _shieldHealth + "<color=aqua>)</color>" + "/" + MaxHealth;
 
             }
         }
@@ -347,10 +365,10 @@ public class Player : MonoBehaviour
             PlayerAudio.Play();
             PlayerHealth -= CollDmg;
             PlayerHpBar.value = PlayerCurrentHealth;
-            PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + shieldhealth + ")" + "/" + MaxHealth;
+            PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + _shieldHealth + ")" + "/" + MaxHealth;
         } else
         {
-            shieldhealth--;
+            _shieldHealth--;
         }
     }
 
@@ -371,9 +389,9 @@ public class Player : MonoBehaviour
     void ActivateShield()
     {
         MaxShieldHealth = +30;
-        shieldhealth = MaxShieldHealth;
+        _shieldHealth = MaxShieldHealth;
         PlayerShield.SetActive(true);
-        PlayerHP.text = "HP " + PlayerCurrentHealth + "<color=aqua>(</color>" + shieldhealth + "<color=aqua>)</color>" + "/" + MaxHealth;
+        PlayerHP.text = "HP " + PlayerCurrentHealth + "<color=aqua>(</color>" + _shieldHealth + "<color=aqua>)</color>" + "/" + MaxHealth;
     }
 
     void SpeedBoost()
