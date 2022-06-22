@@ -33,13 +33,13 @@ public class PowerUpScript : MonoBehaviour
     
     public List<PowerUps> PowerUp = new List<PowerUps>();
     
-    public int PowerUpSelector;
+    public int PowerUpSelector = 2;
     [SerializeField]
-    int PowerUpMoveDownSpeed = 2;
+    int PowerUpMoveDownSpeed = 3;
 
     private void Start()
     {
-       // PowerUpSelector = Random.Range(0, PowerUp.Count);
+        //PowerUpSelector = Random.Range(0, PowerUp.Count);
         if(gameObject.GetComponent<SpriteRenderer>().sprite == null && PowerUp[PowerUpSelector].PowerUpImage != null)
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = PowerUp[PowerUpSelector].PowerUpImage;

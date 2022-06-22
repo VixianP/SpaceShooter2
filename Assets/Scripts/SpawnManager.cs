@@ -55,7 +55,49 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     Text[] SpawnUI;
 
+    [SerializeField]
+    Text _gameTimeText;
     #endregion
+
+    float seconds;
+    float minutes;
+    float hours;
+
+    float Seconds
+    {
+        get
+        {
+            return seconds;
+        }
+        set
+        {
+            seconds = value;
+        }
+    }
+    float Minutes
+    {
+        get
+        {
+            minutes = seconds / 5;
+            return seconds;
+        }
+        set
+        {
+            seconds = value;
+            
+        }
+    }
+    float Hours
+    {
+        get
+        {
+            return minutes;
+        }
+        set
+        {
+            hours= minutes / 60;
+        }
+    }
 
     #region DevNotes
     //the longer the player plays, the harder to game gets
@@ -68,6 +110,10 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(StartGameCounter());
     }
 
+    private void Update()
+    {
+
+    }
     void SpawnPlayer()
     {
         if (PlayerToSpawn != null)

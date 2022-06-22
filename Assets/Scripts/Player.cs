@@ -77,12 +77,40 @@ public class Player : MonoBehaviour
     #region Projectile
     [SerializeField]
     GameObject[] BaseProjectile;
+
     [SerializeField]
     GameObject Laser;
+
     [SerializeField]
     GameObject ChargedLaser;
+
     float ChargeTimer;
+
     float WeaponTimer;
+
+    [SerializeField]
+    Text _ammoText;
+
+    float _maxAmmo = 13;
+
+    float _currentAmmoCount;
+
+
+    [SerializeField]
+    Slider _reloadBar;
+
+    bool _isReloading;
+
+    float _timeBetweenReloads;
+
+    [SerializeField]
+    Slider _reloadTimerBar;
+
+    [SerializeField]
+    GameObject _instandReloadBarDisplay;
+
+    bool _instantReloadAttempt;
+
     #endregion
     #region Abilities
     [SerializeField]
@@ -97,6 +125,9 @@ public class Player : MonoBehaviour
     float ShieldDuration;
 
     Animator _shieldAnim;
+
+    [SerializeField]
+    Slider shieldSlider;
 
     #endregion
     #region Experience and Level up
@@ -200,21 +231,28 @@ public class Player : MonoBehaviour
         if (PlayerValues.PlayerIsDead == false)
         {
             PlayerInputs();
+
             Movement();
+
             TemporaryPowerUptimer();
         }
     }
 
     private void Initialize()
     {
+        Time.timeScale = 1;
+
         PlayerValues.playerGameobject = gameObject;
 
         _shieldAnim = PlayerShield.GetComponent<Animator>();
 
         SK = SuperKGameObject.GetComponent<SuperK>();
+
         SK.PlayerGameObject = gameObject;
 
         BaseSpeed = speed;
+
+        _currentAmmoCount = _maxAmmo;
 
         DashDistance = speed * MaxDashDistance;
 
@@ -252,32 +290,76 @@ public class Player : MonoBehaviour
 
     void PlayerInputs()
     {
-        if ( Time.time > FiringTimer && Time.timeScale == 1)
+        if(Input.GetKeyDown(KeyCode.R) && _isReloading == false && _currentAmmoCount != _maxAmmo && Time.time > _timeBetweenReloads)
         {
-            if (Input.GetMouseButton(0))
+                _timeBetweenReloads = Time.time + 5;
+
+                _isReloading = true;
+
+            _reloadTimerBar.value = _timeBetweenReloads;
+
+            StartCoroutine(ReloadDelayTimer());
+            StartCoroutine(ReloadingCouroutine());
+        }
+        if ( Time.time > FiringTimer && Time.timeScale == 1 && _currentAmmoCount > 0)
+        {
+            if (Input.GetMouseButton(0) && _currentAmmoCount % 3 == 0)
             {
+                _isReloading = false;
+
+                _reloadBar.value = 0;
+
                 PlayerAudio.clip = SoundClips[0];
+
                 ChargeTimer += 1 * Time.deltaTime;
+
                 //play charging effect
-                //if charged fully, fire full charge
                 return;
+
             } else if (Input.GetMouseButtonUp(0))
             {
+
                 if (ChargeTimer > .90f)
                 {
                     PlayerAudio.Play();
+
                     Instantiate(ChargedLaser, new Vector3(transform.position.x, transform.position.y + 2, 0), Quaternion.identity);
+
                     FiringTimer = Time.time + FiringSpeed + .30f;
+
                     ChargeTimer = 0;
+
+                    _currentAmmoCount -= 3;
+
+                    _ammoText.text = _currentAmmoCount.ToString() + "/" + _maxAmmo;
+
+                    if (_currentAmmoCount < 1)
+                    {
+                        _ammoText.text = "Press R";
+                    }
+
                 } else
                 {
                     PlayerAudio.Play();
+
                     Instantiate(Laser, new Vector3(transform.position.x, transform.position.y + 2, 0), Quaternion.identity);
+
                     FiringTimer = Time.time + FiringSpeed;
+
                     ChargeTimer = 0;
+
+                    _currentAmmoCount -= 1;
+
+                    _ammoText.text = _currentAmmoCount.ToString() + "/" + _maxAmmo;
+                    if ( _currentAmmoCount  < 1)
+                    {
+                        _ammoText.text = "Press R"; ;
+                    }
+
                 }
             }
         }
+
         if (Input.GetMouseButtonDown(1))
         {
             //superk
@@ -317,6 +399,7 @@ public class Player : MonoBehaviour
                 
                 if(value > _shieldHealth)
                 {
+                    _shieldHealth -= value;
 
                     PlayerHealth += _shieldHealth;
 
@@ -330,20 +413,11 @@ public class Player : MonoBehaviour
                 }
 
 
-                _shieldHealth-= value; 
+                _shieldHealth-= value;
+                shieldSlider.value = _shieldHealth;
 
-                if(_shieldHealth < MaxShieldHealth * .7)
-                {
-                    _shieldAnim.SetFloat("shieldAnimFloat", .7f);
-                }
-                if (_shieldHealth < MaxShieldHealth * .5)
-                {
-                    _shieldAnim.SetFloat("shieldAnimFloat", .5f);
-                }
-                if (_shieldHealth < MaxShieldHealth * .3f)
-                {
-                    _shieldAnim.SetFloat("shieldAnimFloat", .2f);
-                }
+                ShieldEffects();
+
 
                 if (_shieldHealth < 1)
                 {
@@ -351,8 +425,15 @@ public class Player : MonoBehaviour
                     _shieldHealth = 0;
                     PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + _shieldHealth + ")" + "/" + MaxHealth;
                 }
-                
-                PlayerHP.text = "HP " + PlayerCurrentHealth + "<color=aqua>(</color>" + _shieldHealth + "<color=aqua>)</color>" + "/" + MaxHealth;
+
+                if (_shieldHealth != 0)
+                {
+                    PlayerHP.text = "HP " + PlayerCurrentHealth + "<color=aqua>(</color>" + _shieldHealth + "<color=aqua>)</color>" + "/" + MaxHealth;
+                }
+                else
+                {
+                    PlayerHP.text = "HP " + PlayerCurrentHealth + "/" + MaxHealth;
+                }
 
             }
         }
@@ -368,7 +449,60 @@ public class Player : MonoBehaviour
             PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + _shieldHealth + ")" + "/" + MaxHealth;
         } else
         {
-            _shieldHealth--;
+
+            if (CollDmg > _shieldHealth)
+            {
+                _shieldHealth -= CollDmg;
+
+                PlayerHealth += _shieldHealth;
+
+                _shieldHealth = 0;
+
+                PlayerAudio.Play();
+
+                MaxShieldHealth = 30;
+
+                PlayerHpBar.value = PlayerCurrentHealth;
+                PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + _shieldHealth + ")" + "/" + MaxHealth;
+
+                PlayerShield.SetActive(false);
+            }
+
+            _shieldHealth-=CollDmg;
+            shieldSlider.value = _shieldHealth;
+            ShieldEffects();
+
+            if (_shieldHealth < 1)
+            {
+                PlayerShield.SetActive(false);
+                MaxShieldHealth = 30;
+                _shieldHealth = 0;
+                PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + _shieldHealth + ")" + "/" + MaxHealth;
+            }
+            if (_shieldHealth != 0)
+            {
+                PlayerHP.text = "HP " + PlayerCurrentHealth + "<color=aqua>(</color>" + _shieldHealth + "<color=aqua>)</color>" + "/" + MaxHealth;
+            } else
+            {
+                PlayerHP.text = "HP " + PlayerCurrentHealth +  "/" + MaxHealth;
+            }
+            
+        }
+    }
+
+    void ShieldEffects()
+    {
+        if (_shieldHealth < MaxShieldHealth * .7)
+        {
+            _shieldAnim.SetFloat("shieldAnimFloat", .7f);
+        }
+        if (_shieldHealth < MaxShieldHealth * .5)
+        {
+            _shieldAnim.SetFloat("shieldAnimFloat", .5f);
+        }
+        if (_shieldHealth < MaxShieldHealth * .3f)
+        {
+            _shieldAnim.SetFloat("shieldAnimFloat", .2f);
         }
     }
 
@@ -376,6 +510,13 @@ public class Player : MonoBehaviour
     {
         WeaponTimer = Timer + Time.time;
         Laser = Projectile;
+    }
+
+    public void IncreaseAmmo()
+    {
+        _maxAmmo += 13;
+        _currentAmmoCount = _maxAmmo;
+        _ammoText.text = _currentAmmoCount.ToString() + "/" + _maxAmmo;
     }
 
     void TemporaryPowerUptimer()
@@ -388,8 +529,10 @@ public class Player : MonoBehaviour
 
     void ActivateShield()
     {
-        MaxShieldHealth = +30;
+        MaxShieldHealth += 30;
         _shieldHealth = MaxShieldHealth;
+        shieldSlider.maxValue = MaxShieldHealth;
+        shieldSlider.value = MaxShieldHealth;
         PlayerShield.SetActive(true);
         PlayerHP.text = "HP " + PlayerCurrentHealth + "<color=aqua>(</color>" + _shieldHealth + "<color=aqua>)</color>" + "/" + MaxHealth;
     }
@@ -405,7 +548,66 @@ public class Player : MonoBehaviour
             ActivateShield();
         }
     }
-    //ieum for accelerate
+
+    void Heal()
+    {
+
+    }
+
+    void HealthBoost()
+    {
+
+    }
+   
+    IEnumerator ReloadDelayTimer()
+    {
+        while (Time.time < _timeBetweenReloads)
+        {
+            yield return new WaitForSeconds(0.1f);
+
+            _reloadTimerBar.value -= 0.1f;
+        }
+    }
+
+    IEnumerator ReloadingCouroutine()
+    {
+        while (_isReloading == true)
+        {
+            _reloadBar.value += 0.1f;
+
+            _currentAmmoCount += Mathf.RoundToInt(_maxAmmo * .1f);
+
+            _ammoText.text = _currentAmmoCount.ToString() + "/" + _maxAmmo;
+
+            yield return new WaitForSeconds(0.1f);
+
+            if(_currentAmmoCount >= _maxAmmo)
+            {
+
+                _currentAmmoCount = _maxAmmo;
+
+                _reloadBar.value = 0;
+
+                _ammoText.text = _currentAmmoCount.ToString() + "/" + _maxAmmo;
+
+                _isReloading = false;
+
+            }
+            if(_reloadBar.value >= _reloadBar.maxValue)
+            {
+
+                _currentAmmoCount = _maxAmmo;
+
+                _reloadBar.value = 0;
+
+                _ammoText.text = _currentAmmoCount.ToString() + "/" + _maxAmmo;
+
+                _isReloading = false;
+
+            }
+        }
+    }
+
     IEnumerator Boost(float RateToAmplifySpeed)
     {
         if (speed < DashDistance)
@@ -427,20 +629,27 @@ public class Player : MonoBehaviour
         }
     }
 
-    //ienum for decellerate
     IEnumerator Deccerlate(float boostnum)
     {
         if (speed > BaseSpeed)
         {
+
             while (CanBoost == false)
             {
+
                 yield return new WaitForSeconds(0.1f);
+
                 speed += boostnum;
+
                 if (speed < BaseSpeed)
                 {
+
                     speed = BaseSpeed;
+
                     IsDodging = false;
+
                     CanBoost = true;
+
                 }
             }
         }
