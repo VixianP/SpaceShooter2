@@ -55,21 +55,30 @@ public class Player : MonoBehaviour
 
     #endregion
     #region Speed and Dodging
+
     [SerializeField]
     private float speed;
+
     private float BaseSpeed;
+
     [SerializeField]
     float MaxDashDistance;
+
     float DashDistance;
+
     [SerializeField]
     float MaxSpeed;
 
-    float DashCooldown;
 
     bool CanBoost;
+
     bool IsBoosting;
+
     [HideInInspector]
     public bool IsDodging;
+
+    [SerializeField]
+    Slider _dashSlider;
     #endregion
     #region Projectile
 
@@ -321,12 +330,14 @@ public class Player : MonoBehaviour
 
                 _reloadBar.value = 0;
 
-                PlayerAudio.clip = SoundClips[0];
-
                 ChargeTimer += 1 * Time.deltaTime;
 
+                PlayerAudio.clip = SoundClips[0];
+
                 _chargedShotBar.value = ChargeTimer;
+
                 //play charging effect
+                
                 return;
 
             } else if (Input.GetMouseButtonUp(0))
@@ -387,10 +398,14 @@ public class Player : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            if (Time.time > DashCooldown)
+            if (_dashSlider.value == 0)
             {
                 StartCoroutine(Boost(DashDistance * .8f));
-                DashCooldown = Time.time + 1.3f;
+                
+                _dashSlider.value = _dashSlider.maxValue;
+
+                StartCoroutine(DashCoolDownCoroutine());
+
             }
         }
     }
@@ -691,18 +706,30 @@ public class Player : MonoBehaviour
 
                     IsDodging = false;
 
-                    CanBoost = true;
-
                 }
             }
         }
     }
 
+    IEnumerator DashCoolDownCoroutine()
+    {
+        while(_dashSlider.value > 0) 
+        { 
+        yield return new WaitForSeconds(0.2f);
+        _dashSlider.value -= _dashSlider.maxValue * .10f;
+        }
+        if(_dashSlider.value == 0)
+        {
+            CanBoost = true;
+        }
+
+    }
+
      void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "EnemyBullet")
+        if (collision.tag == "EnemyBullet" && IsDodging == false)
         {
-            print("Hit by bullet");
+            
             EnemyProjectileScript Bullet = collision.gameObject.GetComponent<EnemyProjectileScript>();
             if(Bullet != null)
             {
