@@ -53,9 +53,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    float FiringSpeed;
-    float FiringTimer = -1f;
     #endregion
     #region Speed and Dodging
     [SerializeField]
@@ -75,6 +72,12 @@ public class Player : MonoBehaviour
     public bool IsDodging;
     #endregion
     #region Projectile
+
+    [SerializeField]
+    float FiringSpeed;
+
+    float FiringTimer = -1f;
+
     [SerializeField]
     GameObject[] BaseProjectile;
 
@@ -84,8 +87,17 @@ public class Player : MonoBehaviour
     [SerializeField]
     GameObject ChargedLaser;
 
+    [Range(0,1)]
     float ChargeTimer;
 
+    [SerializeField]
+    Slider _chargedShotBar;
+
+    [SerializeField]
+    Slider _chargedShotCoolDownTimerSlider;
+
+
+    //timer for temporary power ups
     float WeaponTimer;
 
     [SerializeField]
@@ -301,7 +313,7 @@ public class Player : MonoBehaviour
             StartCoroutine(ReloadDelayTimer());
             StartCoroutine(ReloadingCouroutine());
         }
-        if ( Time.time > FiringTimer && Time.timeScale == 1 && _currentAmmoCount > 0)
+        if (_chargedShotCoolDownTimerSlider.value == 0 && Time.timeScale == 1 && _currentAmmoCount > 0)
         {
             if (Input.GetMouseButton(0) && _currentAmmoCount % 3 == 0)
             {
@@ -313,13 +325,14 @@ public class Player : MonoBehaviour
 
                 ChargeTimer += 1 * Time.deltaTime;
 
+                _chargedShotBar.value = ChargeTimer;
                 //play charging effect
                 return;
 
             } else if (Input.GetMouseButtonUp(0))
             {
 
-                if (ChargeTimer > .90f)
+                if (ChargeTimer > .99f)
                 {
                     PlayerAudio.Play();
 
@@ -332,6 +345,12 @@ public class Player : MonoBehaviour
                     _currentAmmoCount -= 3;
 
                     _ammoText.text = _currentAmmoCount.ToString() + "/" + _maxAmmo;
+
+                    _chargedShotCoolDownTimerSlider.value = _chargedShotCoolDownTimerSlider.maxValue;
+
+                    _chargedShotBar.value = 0;
+
+                    StartCoroutine(ChargeShotCoolDown());
 
                     if (_currentAmmoCount < 1)
                     {
@@ -347,6 +366,8 @@ public class Player : MonoBehaviour
                     FiringTimer = Time.time + FiringSpeed;
 
                     ChargeTimer = 0;
+
+                    _chargedShotBar.value = 0;
 
                     _currentAmmoCount -= 1;
 
@@ -551,14 +572,36 @@ public class Player : MonoBehaviour
 
     void Heal()
     {
-
+        PlayerCurrentHealth = MaxHealth;
+        if (_shieldHealth > 0)
+        {
+            PlayerHP.text = "HP " + PlayerCurrentHealth + "<color=aqua>(</color>" + _shieldHealth + "<color=aqua>)</color>" + "/" + MaxHealth;
+            PlayerHpBar.value = PlayerCurrentHealth;
+        }
+        else
+        {
+            PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + _shieldHealth + ")" + "/" + MaxHealth;
+            PlayerHpBar.value = PlayerCurrentHealth;
+        }
     }
 
     void HealthBoost()
     {
 
     }
-   
+
+    IEnumerator ChargeShotCoolDown()
+    {
+        while (_chargedShotCoolDownTimerSlider.value > 0)
+        {
+            yield return new WaitForSeconds(0.1f);
+            _chargedShotCoolDownTimerSlider.value -= 0.033f;
+            if (_chargedShotCoolDownTimerSlider.value < 0)
+            {
+                _chargedShotCoolDownTimerSlider.value = 0;
+            }
+        }
+    }
     IEnumerator ReloadDelayTimer()
     {
         while (Time.time < _timeBetweenReloads)

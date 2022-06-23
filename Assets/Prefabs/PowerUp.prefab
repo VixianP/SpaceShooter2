@@ -117,9 +117,16 @@ MonoBehaviour:
     Damage: 0
     Category: Utility
     Type: 
-    CallMethod: AmmoIncrease
+    CallMethod: IncreaseAmmo
     PowerUpImage: {fileID: 21300000, guid: 66f3c820e74b139499f0e3473a132e52, type: 3}
-  PowerUpSelector: 1
+  - Projectile: {fileID: 0}
+    PowerUpDuration: 0
+    Damage: 0
+    Category: Utility
+    Type: 
+    CallMethod: Heal
+    PowerUpImage: {fileID: 21300000, guid: 3869e48181024c9458fea43098561e33, type: 3}
+  PowerUpSelector: 2
   PowerUpMoveDownSpeed: 2
 --- !u!50 &6958498216029273272
 Rigidbody2D:

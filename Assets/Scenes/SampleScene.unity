@@ -1440,11 +1440,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 788236486629070912, guid: cf5ca0c1eada9f94da21da8f97044c01, type: 3}
       propertyPath: PowerUpSelector
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 788236486629070912, guid: cf5ca0c1eada9f94da21da8f97044c01, type: 3}
-      propertyPath: PowerUp.Array.data[2].CallMethod
-      value: IncreaseAmmo
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1245582286157996602, guid: cf5ca0c1eada9f94da21da8f97044c01, type: 3}
       propertyPath: m_RootOrder
