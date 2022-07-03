@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyHealth: 0
-  EnemyMoveSpeed: 4
+  EnemyMoveSpeed: 15
   CollsionDamage: 1
   enemyProjetileGameobject_: {fileID: 7993733017014561468, guid: 1c7d3f83860499f49a6b3b8b2cd5c3d5, type: 3}
   PointValue: 1

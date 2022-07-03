@@ -9,6 +9,7 @@ TagManager:
   - PowerUp
   - ChargedShot
   - EnemyBullet
+  - Obstacle
   layers:
   - Default
   - TransparentFX

@@ -13,9 +13,11 @@ public class EnemyProjectileScript : MonoBehaviour
 
 
 
-    Vector2 moveDir_;
+    public Vector2 moveDir_;
 
-    Vector2 _playerPositon;
+    Vector3 _playerPositon;
+    Vector3 _distanceBetweenPlayer;
+
     private void Start()
     {
         timer_ = Time.time + 2;
@@ -24,18 +26,10 @@ public class EnemyProjectileScript : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(Vector2.down * _bulletSpeed * Time.deltaTime);
+        transform.Translate(moveDir_ * _bulletSpeed * Time.deltaTime);
+        Destroy(gameObject, 3);
     }
-    void Fire()
-    {
-        if (transform.position.y < 4)
-        {
-            transform.Translate(_playerPositon * _bulletSpeed * Time.deltaTime);
-        } else
-        {
-            
-        }
-    }
+
     void FollowePlayer()
     {
         if (Time.time < timer_)

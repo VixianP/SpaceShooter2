@@ -221,9 +221,13 @@ public class Player : MonoBehaviour
     /// 5 = Player Death
     /// </summary>
     #endregion
-    #region Instantiated objects and position
+    #region Visuals and Aniation
+
+    //the damage visuals
     [SerializeField]
     GameObject[] PlayerDamage;
+
+    Animator _cameraAnim;
     #endregion
     #region The Super K
     [SerializeField]
@@ -284,6 +288,8 @@ public class Player : MonoBehaviour
         PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + _shieldHealth + ")" + "/" + MaxHealth;
         PlayerHpBar.maxValue = MaxHealth;
         PlayerHpBar.value = MaxHealth;
+
+        _cameraAnim = Camera.main.GetComponent<Animator>();
     }
 
     void Movement()
@@ -311,6 +317,7 @@ public class Player : MonoBehaviour
 
     void PlayerInputs()
     {
+
         if(Input.GetKeyDown(KeyCode.R) && _isReloading == false && _currentAmmoCount != _maxAmmo && Time.time > _timeBetweenReloads)
         {
                 _timeBetweenReloads = Time.time + 5;
@@ -322,6 +329,7 @@ public class Player : MonoBehaviour
             StartCoroutine(ReloadDelayTimer());
             StartCoroutine(ReloadingCouroutine());
         }
+
         if (_chargedShotCoolDownTimerSlider.value == 0 && Time.timeScale == 1 && _currentAmmoCount > 0)
         {
             if (Input.GetMouseButton(0) && _currentAmmoCount % 3 == 0)
@@ -383,6 +391,7 @@ public class Player : MonoBehaviour
                     _currentAmmoCount -= 1;
 
                     _ammoText.text = _currentAmmoCount.ToString() + "/" + _maxAmmo;
+
                     if ( _currentAmmoCount  < 1)
                     {
                         _ammoText.text = "Press R"; ;
@@ -423,6 +432,8 @@ public class Player : MonoBehaviour
                 PlayerAudio.Play();
 
                 PlayerHealth -= value;
+
+                _cameraAnim.SetTrigger("Shake");
 
                 PlayerHpBar.value = PlayerCurrentHealth;
 
