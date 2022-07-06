@@ -70,6 +70,20 @@ public class ScrollingBackgrounds : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Player")
+        {
+            collision.SendMessage("TakeDamage", 100);
+        }
+        /*
+        if(collision.tag == "SuperKamio")
+        {
+            Destroy(collision.gameObject);
+        }
+        */
+    }
+
     IEnumerator Speedin()
     {
 

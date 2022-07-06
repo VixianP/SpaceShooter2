@@ -10,6 +10,7 @@ TagManager:
   - ChargedShot
   - EnemyBullet
   - Obstacle
+  - SuperKamio
   layers:
   - Default
   - TransparentFX

@@ -6,16 +6,24 @@ public class Enemy : MonoBehaviour
 {
     #region EnemyStats
     [SerializeField]
-    private int EnemyHealth;
+    private int _enemyHealth;
+
+    [SerializeField]
+    int _enemyShieldHealth;
 
     [SerializeField]
     private int CollsionDamage = 1;
+
     #endregion
 
     #region Enemy Projectile
 
     [SerializeField]
     GameObject enemyProjetileGameobject_;
+
+    [SerializeField]
+    float _fireDelay = 5;
+
 
     float timeBetweenShots = 0;
 
@@ -32,6 +40,22 @@ public class Enemy : MonoBehaviour
 
     [SerializeField]
     private GameObject Explosion;
+
+    #endregion
+
+    #region Elite Variables
+
+    [SerializeField]
+    bool _isElite;
+
+    [SerializeField]
+    bool _hasShield;
+
+    [SerializeField]
+    GameObject _enemyShield;
+
+    [SerializeField]
+    GameObject _powerUpDrops;
 
     #endregion
 
@@ -55,17 +79,18 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
 
-        timeBetweenShots += Time.deltaTime;
+        //timeBetweenShots += Time.deltaTime + 2;
         _playerPosition = PlayerValues.playerGameobject.transform.position;
 
     }
-    // Update is called once per frame
+
     void Update()
     {
         EnemyFire();
         EnemyMovement();
 
     }
+
     void EnemyFire()
     {
 
@@ -83,7 +108,7 @@ public class Enemy : MonoBehaviour
                         _firingDirection = new Vector3(0, 1, 0);
                         GameObject _instantiatedBullet = Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.identity);
                         _instantiatedBullet.GetComponent<EnemyProjectileScript>().moveDir_ = _firingDirection;
-                        timeBetweenShots = timeBetweenShots + 2.5f;
+                        timeBetweenShots = timeBetweenShots + _fireDelay;
                     }
                 }
 
@@ -94,7 +119,7 @@ public class Enemy : MonoBehaviour
                         _firingDirection = new Vector3(0, -1, 0);
                         GameObject _instantiatedBullet = Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.identity);
                         _instantiatedBullet.GetComponent<EnemyProjectileScript>().moveDir_ = _firingDirection;
-                        timeBetweenShots = timeBetweenShots + 2.5f;
+                        timeBetweenShots = timeBetweenShots + _fireDelay;
                     }
                 }
             }
@@ -119,7 +144,7 @@ public class Enemy : MonoBehaviour
 
                     GameObject _instantiatedBullet = Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.identity);
                     _instantiatedBullet.GetComponent<EnemyProjectileScript>().moveDir_ = _firingDirection;
-                    timeBetweenShots = timeBetweenShots + 2.5f;
+                    timeBetweenShots = timeBetweenShots + _fireDelay;
 
                 }
             }
@@ -128,46 +153,91 @@ public class Enemy : MonoBehaviour
         }
         
     }
+
     void EnemyMovement()
     {
         //down movement
         transform.Translate(MveDirection * Time.deltaTime);
 
-       if(transform.position.x < -45 || transform.position.x > 40)
+        OutOfBounds();
+
+    }
+
+    void OutOfBounds()
+    {
+        if (transform.position.x < -45 || transform.position.x > 40)
         {
             _spwnManager.ReSpawner(gameObject);
         }
 
-        if(transform.position.y < -25 || transform.position.y > 25)
+        if (transform.position.y < -25 || transform.position.y > 25)
         {
             _spwnManager.ReSpawner(gameObject);
         }
-       
     }
+
+    void EnemyTakeDamage(int _damageAmount)
+    {
+        if (_hasShield == false)
+        {
+            _enemyHealth -= _damageAmount;
+            if (_enemyHealth <= 0)
+            {
+                Death();
+            }
+        } else
+        {
+            EnemyShieldDamage(_damageAmount);
+        }
+    }
+
+    void EnemyShieldDamage(int _damageAmount)
+    {
+
+        if(_damageAmount > _enemyShieldHealth)
+        {
+            _enemyShieldHealth -= _damageAmount;
+            _enemyHealth += _enemyShieldHealth;
+            _enemyShieldHealth = 0;
+
+            if(_enemyHealth <= 0)
+            {
+                Death();
+            }
+
+        }
+        if(_enemyShieldHealth <= 0)
+        {
+            _enemyShield.SetActive(false);
+            _hasShield = false;
+        }
+
+    }
+
     public void Death()
     {
         Instantiate(Explosion, transform.position, Quaternion.identity);
+        if(_isElite == true)
+        {
+            Instantiate(_powerUpDrops, transform.position, Quaternion.identity);
+        }
 
         _spwnManager.EnemyDeath(gameObject);
+
+        PlayerValues.Score += PointValue;
+
         Destroy(gameObject);
     }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
+
         if(other.tag == "Laser")
         {
             Destroy(other.gameObject);
 
-            PlayerValues.Score += PointValue;
-
-            Death();
-
         }
-        if(other.tag == "ChargedShot")
-        {
-            PlayerValues.Score += PointValue;
 
-            Death();
-        }
         if(other.tag == "Player")
         {
             other.GetComponent<Player>().CollisionDmg(CollsionDamage * 50);

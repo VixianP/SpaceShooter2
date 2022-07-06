@@ -229,9 +229,14 @@ public class Player : MonoBehaviour
 
     Animator _cameraAnim;
     #endregion
+
     #region The Super K
+
     [SerializeField]
-    GameObject SuperKGameObject;
+    GameObject _superKGameObjectToSpawn;
+
+    GameObject _theSuperKObject;
+
     SuperK SK;
 
     //instantiate super k
@@ -248,6 +253,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         Initialize();
+        SpawnSuperK();
     }
 
 
@@ -270,10 +276,6 @@ public class Player : MonoBehaviour
         PlayerValues.playerGameobject = gameObject;
 
         _shieldAnim = PlayerShield.GetComponent<Animator>();
-
-        SK = SuperKGameObject.GetComponent<SuperK>();
-
-        SK.PlayerGameObject = gameObject;
 
         BaseSpeed = speed;
 
@@ -330,81 +332,84 @@ public class Player : MonoBehaviour
             StartCoroutine(ReloadingCouroutine());
         }
 
-        if (_chargedShotCoolDownTimerSlider.value == 0 && Time.timeScale == 1 && _currentAmmoCount > 0)
+
+        if (SK._isattached == false)
         {
-            if (Input.GetMouseButton(0) && _currentAmmoCount % 3 == 0)
+            if (_chargedShotCoolDownTimerSlider.value == 0 && Time.timeScale == 1 && _currentAmmoCount > 0)
             {
-                _isReloading = false;
-
-                _reloadBar.value = 0;
-
-                ChargeTimer += 1 * Time.deltaTime;
-
-                PlayerAudio.clip = SoundClips[0];
-
-                _chargedShotBar.value = ChargeTimer;
-
-                //play charging effect
-                
-                return;
-
-            } else if (Input.GetMouseButtonUp(0))
-            {
-
-                if (ChargeTimer > .99f)
+                if (Input.GetMouseButton(0) && _currentAmmoCount % 3 == 0)
                 {
-                    PlayerAudio.Play();
+                    _isReloading = false;
 
-                    Instantiate(ChargedLaser, new Vector3(transform.position.x, transform.position.y + 2, 0), Quaternion.identity);
+                    _reloadBar.value = 0;
 
-                    FiringTimer = Time.time + FiringSpeed + .30f;
+                    ChargeTimer += 1 * Time.deltaTime;
 
-                    ChargeTimer = 0;
+                    PlayerAudio.clip = SoundClips[0];
 
-                    _currentAmmoCount -= 3;
+                    _chargedShotBar.value = ChargeTimer;
 
-                    _ammoText.text = _currentAmmoCount.ToString() + "/" + _maxAmmo;
+                    //play charging effect
 
-                    _chargedShotCoolDownTimerSlider.value = _chargedShotCoolDownTimerSlider.maxValue;
+                    return;
 
-                    _chargedShotBar.value = 0;
-
-                    StartCoroutine(ChargeShotCoolDown());
-
-                    if (_currentAmmoCount < 1)
-                    {
-                        _ammoText.text = "Press R";
-                    }
-
-                } else
+                }
+                else if (Input.GetMouseButtonUp(0))
                 {
-                    PlayerAudio.Play();
 
-                    Instantiate(Laser, new Vector3(transform.position.x, transform.position.y + 2, 0), Quaternion.identity);
-
-                    FiringTimer = Time.time + FiringSpeed;
-
-                    ChargeTimer = 0;
-
-                    _chargedShotBar.value = 0;
-
-                    _currentAmmoCount -= 1;
-
-                    _ammoText.text = _currentAmmoCount.ToString() + "/" + _maxAmmo;
-
-                    if ( _currentAmmoCount  < 1)
+                    if (ChargeTimer > .99f)
                     {
-                        _ammoText.text = "Press R"; ;
-                    }
+                        PlayerAudio.Play();
 
+                        Instantiate(ChargedLaser, new Vector3(transform.position.x, transform.position.y + 2, 0), Quaternion.identity);
+
+                        FiringTimer = Time.time + FiringSpeed + .30f;
+
+                        ChargeTimer = 0;
+
+                        _currentAmmoCount -= 3;
+
+                        _ammoText.text = _currentAmmoCount.ToString() + "/" + _maxAmmo;
+
+                        _chargedShotCoolDownTimerSlider.value = _chargedShotCoolDownTimerSlider.maxValue;
+
+                        _chargedShotBar.value = 0;
+
+                        StartCoroutine(ChargeShotCoolDown());
+
+                        if (_currentAmmoCount < 1)
+                        {
+                            _ammoText.text = "Press R";
+                        }
+
+                    }
+                    else
+                    {
+                        PlayerAudio.Play();
+
+                        Instantiate(Laser, new Vector3(transform.position.x, transform.position.y + 2, 0), Quaternion.identity);
+
+                        FiringTimer = Time.time + FiringSpeed;
+
+                        ChargeTimer = 0;
+
+                        _chargedShotBar.value = 0;
+
+                        _currentAmmoCount -= 1;
+
+                        _ammoText.text = _currentAmmoCount.ToString() + "/" + _maxAmmo;
+
+                        if (_currentAmmoCount < 1)
+                        {
+                            _ammoText.text = "Press R"; ;
+                        }
+
+                    }
                 }
             }
         }
 
-        if (Input.GetMouseButtonDown(1))
-        {
-            //superk
-        }
+
         if (Input.GetKey(KeyCode.LeftShift))
         {
             if (_dashSlider.value == 0)
@@ -417,6 +422,15 @@ public class Player : MonoBehaviour
 
             }
         }
+    }
+
+    void SpawnSuperK()
+    {
+        _theSuperKObject = Instantiate(_superKGameObjectToSpawn, new Vector3(transform.position.x, transform.position.y + 6, transform.position.z),Quaternion.identity);
+        SK = _theSuperKObject.GetComponent<SuperK>();
+        SK.PlayerGameObject = gameObject;
+        SK._isattached = true;
+
     }
 
     public void TakeDamage(int value)
@@ -485,6 +499,7 @@ public class Player : MonoBehaviour
             }
         }
     }
+
    public void CollisionDmg(int CollDmg)
     {
         if (PlayerShield.activeInHierarchy == false)
@@ -782,4 +797,6 @@ public class Player : MonoBehaviour
 
         PlayerValues.playerGameobject = null;
     }
+
+
 }

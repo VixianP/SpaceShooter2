@@ -175,7 +175,7 @@ MonoBehaviour:
   - {fileID: 8763409697285627759}
   - {fileID: 9146951950659520324}
   - {fileID: 2562759475093597624}
-  SuperKGameObject: {fileID: 8431501687028158309, guid: 1114688aba1411945b504a98fd095ec8, type: 3}
+  _superKGameObjectToSpawn: {fileID: 8431501687028158309, guid: 1114688aba1411945b504a98fd095ec8, type: 3}
 --- !u!212 &2724464766563349090
 SpriteRenderer:
   m_ObjectHideFlags: 0

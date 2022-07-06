@@ -10,14 +10,6 @@ public class Formation
 {
     public bool Type;
 
-    public int MaxNumberToSpawn;
-
-    public int CurrentNumberToSpawn;
-
-    public int NumberToRespawn;
-
-    public int InPlay;
-
     public GameObject CommonEnemy;
 
     public GameObject EliteEnemy;
@@ -26,22 +18,16 @@ public class Formation
 
     public Vector3 SpawnPosition;
 
-    public Vector3 RepawnDirection;
 
     public Vector3 MovementDirection;
 
-    public Formation(bool Type, int MaxNumberToSpawn, int CurrentNumberToSpawn, int NumberToSRespawn, int InPlay, GameObject CommonEnemy,GameObject EliteEnemy,string CallMethod, Vector3 SpawnPosition, Vector3 RepawnDirection, Vector3 MovementDirection)
+    public Formation(bool Type, int NumberToSRespawn, GameObject CommonEnemy,GameObject EliteEnemy,string CallMethod, Vector3 SpawnPosition, Vector3 MovementDirection)
     {
         this.Type = Type;
-        this.MaxNumberToSpawn = MaxNumberToSpawn;
-        this.CurrentNumberToSpawn = CurrentNumberToSpawn;
-        this.NumberToRespawn = NumberToSRespawn;
-        this.InPlay = InPlay;
         this.CommonEnemy = CommonEnemy;
         this.EliteEnemy = EliteEnemy;
         this.CallMethod = CallMethod;
         this.SpawnPosition = SpawnPosition;
-        this.RepawnDirection = RepawnDirection;
         this.MovementDirection = MovementDirection;
     }
 
@@ -56,6 +42,17 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField]
     float EnemySpawnTimer = 5;
+
+    int _enemiesInPlay;
+
+    [SerializeField]
+    int _maxNumberToSpawn;
+
+    int _currentNumberToSpawn;
+
+    int _eliteCoutner;
+
+    int _numberToRespawn;
 
     #endregion
 
@@ -185,7 +182,7 @@ public class SpawnManager : MonoBehaviour
     {
         if (PlayerValues.PlayerIsDead == false)
         {
-            SpawnPowerUp();
+           // SpawnPowerUp();
             SpawnObstacles();
         }
     }
@@ -212,16 +209,24 @@ public class SpawnManager : MonoBehaviour
     {
         if(Time.time > _obstacleTime * .9f && _WarningIndicator.activeInHierarchy == false)
         {
-            _spawnPosition = new Vector3(Random.Range(-_spawnPosition.x, _spawnPosition.x), _spawnPosition.y, _spawnPosition.z);
-            _WarningIndicator.transform.position = new Vector2(_spawnPosition.x, 19);
+            _spawnPosition = new Vector3(Random.Range(-22, 22), _spawnPosition.y, _spawnPosition.z);
+
+            _WarningIndicator.transform.position = new Vector2(_spawnPosition.x, 14);
+
             _WarningIndicator.SetActive(true);
         }
         if(Time.time > _obstacleTime)
         {
             GameObject _newObstacle = Instantiate(_obstaclesToSpawn[0], _spawnPosition , Quaternion.identity);
+
             ScrollingBackgrounds _obstacleVaryingSpeed = _newObstacle.GetComponent<ScrollingBackgrounds>();
-            _obstacleVaryingSpeed.MovementSpeed = Random.Range(30, 70);
+
+            _obstacleVaryingSpeed.MovementSpeed = Random.Range(50, 70);
+
+            _spawnPosition = new Vector3(Random.Range(-22, 22), _spawnPosition.y, _spawnPosition.z);
+
             _WarningIndicator.SetActive(false);
+
             _obstacleTime = Time.time + _obstacleSpawnDelay;
         }
     }
@@ -240,11 +245,22 @@ public class SpawnManager : MonoBehaviour
 
     void SpawnEnemy()
     {
+        
+
         if (_formationList[_fomartionSelection].CommonEnemy != null)
         {
             _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
-
-            _formationList[_fomartionSelection].CurrentNumberToSpawn = _formationList[_fomartionSelection].MaxNumberToSpawn;
+            _currentNumberToSpawn = 6;
+            //_currentNumberToSpawn = Random.Range(1, _maxNumberToSpawn);
+            if (_formationList[_fomartionSelection].EliteEnemy != null)
+            {
+                if (_currentNumberToSpawn > 5)
+                {
+                    _eliteCoutner += 1;
+                    _currentNumberToSpawn -= 1;
+                    print("we have" + _eliteCoutner);
+                }
+            }
         }
 
         StartCoroutine(SpawnCoroutine(_fomartionSelection));
@@ -259,7 +275,8 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator WaveSpawnDelay()
     {
-        _formationList[_fomartionSelection].CurrentNumberToSpawn = _formationList[_fomartionSelection].MaxNumberToSpawn;
+        _currentNumberToSpawn = Random.Range(1, _maxNumberToSpawn);
+        _fomartionSelection = Random.Range(0, _formationList.Count);
         _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
         yield return new WaitForSeconds(3);
         StartCoroutine(SpawnCoroutine(_fomartionSelection));
@@ -269,70 +286,24 @@ public class SpawnManager : MonoBehaviour
     {
         Enemy _eScript = EnemyGameObject.GetComponent<Enemy>();
 
-        _formationList[_eScript.FormationID].InPlay--;
-
-        _formationList[_eScript.FormationID].NumberToRespawn++;
-
+        _enemiesInPlay--;
+        _numberToRespawn++;
         Destroy(EnemyGameObject);
         
-
-            if (_formationList[_eScript.FormationID].InPlay == 0)
-            {
-
-            int _selectedFormationInLIst = _eScript.FormationID;
-
-            //up down
-            if (_formationList[_selectedFormationInLIst].Type == true) 
-            {
-                if (Mathf.Sign(_currentSpawnPosition.x) == 1)
-                {
-                    _formationList[_selectedFormationInLIst].CurrentNumberToSpawn = _formationList[_selectedFormationInLIst].NumberToRespawn;
-
-                    _currentSpawnPosition.x -= _formationList[_selectedFormationInLIst].SpawnPosition.x * _formationList[_selectedFormationInLIst].RepawnDirection.x;
-
-                    StartCoroutine(SpawnCoroutine(_selectedFormationInLIst));
-                }
-                else
-                {
-                    _formationList[_selectedFormationInLIst].CurrentNumberToSpawn = _formationList[_selectedFormationInLIst].NumberToRespawn;
-
-                    _currentSpawnPosition.x += _formationList[_selectedFormationInLIst].SpawnPosition.x * _formationList[_selectedFormationInLIst].RepawnDirection.x;
-
-                    StartCoroutine(SpawnCoroutine(_selectedFormationInLIst));
-                }
-            }
-
-            //left right
-            if (_formationList[EnemyGameObject.GetComponent<Enemy>().FormationID].Type == false)
-            {
-                if (Mathf.Sign(_currentSpawnPosition.y) == 1)
-                {
-                    _formationList[EnemyGameObject.GetComponent<Enemy>().FormationID].CurrentNumberToSpawn = _formationList[EnemyGameObject.GetComponent<Enemy>().FormationID].NumberToRespawn;
-
-                    _currentSpawnPosition.y = -16;
-                    //_eScript.MveDirection.x =
-
-                    StartCoroutine(SpawnCoroutine(_selectedFormationInLIst));
-                }
-                else
-                {
-                    _formationList[EnemyGameObject.GetComponent<Enemy>().FormationID].CurrentNumberToSpawn = _formationList[EnemyGameObject.GetComponent<Enemy>().FormationID].NumberToRespawn;
-
-                    _currentSpawnPosition.y = 12;
-
-                    StartCoroutine(SpawnCoroutine(_selectedFormationInLIst));
-                }
-            }
+        if(_enemiesInPlay <= 0)
+        {
+            _currentNumberToSpawn += _numberToRespawn;
+            _fomartionSelection = Random.Range(0, _formationList.Count);
+            StartCoroutine(SpawnCoroutine(_fomartionSelection));
         }
-
 
     }
 
     public void EnemyDeath(GameObject enemyGameobject)
     {
         Enemy _escirpt = enemyGameobject.GetComponent<Enemy>();
-        _formationList[_escirpt.FormationID].InPlay--;
-        if(_formationList[_escirpt.FormationID].InPlay== 0 && _formationList[_escirpt.FormationID].CurrentNumberToSpawn == 0 && _formationList[_escirpt.FormationID].NumberToRespawn == 0)
+        _enemiesInPlay--;
+        if(_enemiesInPlay == 0 && _currentNumberToSpawn == 0 )
         {
             WaveSpawner();
         }
@@ -341,8 +312,28 @@ public class SpawnManager : MonoBehaviour
  
     IEnumerator SpawnCoroutine(int Selection)
     {
-        print("spawing");
-        while (_formationList[Selection].CurrentNumberToSpawn > 0 && SpawnedPlayer != null && PlayerValues.PlayerIsDead != true)
+        yield return new WaitForSeconds(3);
+
+        //randomize position
+
+        
+        //left right movmeent
+        if(Mathf.Sign(_currentSpawnPosition.x) == 0)
+        {
+
+            //change the spawnpoint to positive
+            //change the move direciton to negative
+
+        }
+        else
+        {
+
+            //change the spawnpoint to negative
+            //change the move direciton to posiive
+
+        }
+
+        while (_currentNumberToSpawn > 0 && SpawnedPlayer != null && PlayerValues.PlayerIsDead != true)
         {
             yield return new WaitForSeconds(EnemySpawnTimer);
 
@@ -366,15 +357,29 @@ public class SpawnManager : MonoBehaviour
 
             }
 
-            _formationList[Selection].CurrentNumberToSpawn--;
+            _currentNumberToSpawn--;
 
-            _formationList[Selection].InPlay++;
-
-            if (_formationList[Selection].NumberToRespawn > 0)
-            {
-                _formationList[Selection].NumberToRespawn--;
-            }
+            _enemiesInPlay++;
         }
+
+        if(_currentNumberToSpawn == 0 && _eliteCoutner > 0)
+        {
+            GameObject _instantiatedEliteEnemy =  Instantiate(_formationList[_fomartionSelection].EliteEnemy, _currentSpawnPosition, Quaternion.identity);
+
+            Enemy _spawnedEnemyScript = _instantiatedEliteEnemy.GetComponent<Enemy>();
+
+            _spawnedEnemyScript.MveDirection = _formationList[Selection].MovementDirection;
+
+            _spawnedEnemyScript._spwnManager = this.GetComponent<SpawnManager>();
+
+            _spawnedEnemyScript.FormationID = Selection;
+
+            _spawnedEnemyScript.Down = _formationList[Selection].Type;
+        }
+        {
+
+        }
+
     }
     public IEnumerator StartGameCounter()
     {
@@ -390,7 +395,7 @@ public class SpawnManager : MonoBehaviour
 
         PowerUpTime = Time.time + PowerUpTimer;
 
-        //SpawnEnemy();
+        SpawnEnemy();
 
         yield return new WaitForSeconds(2);
 

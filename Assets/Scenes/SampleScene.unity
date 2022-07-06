@@ -170,117 +170,93 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: PowerUpTimer
-      value: 10
+    - target: {fileID: 1895132314, guid: a86231455529d0348a3432405a54e06f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1895132317, guid: a86231455529d0348a3432405a54e06f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 14.4
       objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
       propertyPath: EnemyContainer
       value: 
       objectReference: {fileID: 457199533}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: EnemySpawnTimer
-      value: 0.5
+      propertyPath: _spawnPosition.y
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _fomartionSelection
-      value: 1
+      propertyPath: _maxNumberToSpawn
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
+      propertyPath: _obstacleSpawnDelay
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
       propertyPath: _formationList.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[0].Type
+      propertyPath: _formationList.Array.data[2].Type
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[1].Type
-      value: 0
-      objectReference: {fileID: 0}
+      propertyPath: _formationList.Array.data[0].EliteEnemy
+      value: 
+      objectReference: {fileID: 2108941113338980787, guid: 28aa26b0dd0c3544598e1ee9efe02f68, type: 3}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[0].CallMethod
+      propertyPath: _formationList.Array.data[1].EliteEnemy
+      value: 
+      objectReference: {fileID: 2108941113338980787, guid: 28aa26b0dd0c3544598e1ee9efe02f68, type: 3}
+    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
+      propertyPath: _formationList.Array.data[2].CallMethod
       value: Line
       objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[1].CallMethod
-      value: Line
-      objectReference: {fileID: 0}
+      propertyPath: _formationList.Array.data[2].EliteEnemy
+      value: 
+      objectReference: {fileID: 2108941113338980787, guid: 28aa26b0dd0c3544598e1ee9efe02f68, type: 3}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[0].CommonEnemy
+      propertyPath: _formationList.Array.data[2].CommonEnemy
       value: 
       objectReference: {fileID: 3735273240401862461, guid: 5616cdf41cc9d2c42b882561004e551d, type: 3}
-    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[0].Description
-      value: DownWard
-      objectReference: {fileID: 0}
-    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[1].CommonEnemy
-      value: 
-      objectReference: {fileID: 3735273240401862461, guid: 5616cdf41cc9d2c42b882561004e551d, type: 3}
-    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[1].Description
-      value: Left and Right
-      objectReference: {fileID: 0}
-    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[0].NumberToSpawn
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
       propertyPath: _formationList.Array.data[0].SpawnPosition.x
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[0].SpawnPosition.y
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[1].SpawnPosition.x
-      value: -35
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
       propertyPath: _formationList.Array.data[1].SpawnPosition.y
-      value: 12
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[0].MaxNumberToSpawn
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[1].MaxNumberToSpawn
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[0].RepawnDirection.x
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[0].RepawnDirection.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[1].RepawnDirection.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[1].RepawnDirection.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[1].RepawnDirection.z
+      propertyPath: _formationList.Array.data[2].SpawnPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
-      propertyPath: _formationList.Array.data[0].MovementDirection.x
-      value: 0
+      propertyPath: _formationList.Array.data[2].SpawnPosition.y
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
       propertyPath: _formationList.Array.data[0].MovementDirection.y
-      value: -25
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
       propertyPath: _formationList.Array.data[1].MovementDirection.x
-      value: 30
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
+      propertyPath: _formationList.Array.data[1].MovementDirection.y
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
+      propertyPath: _formationList.Array.data[2].MovementDirection.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
+      propertyPath: _formationList.Array.data[2].MovementDirection.y
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 2286365955037996203, guid: a86231455529d0348a3432405a54e06f, type: 3}
       propertyPath: m_RootOrder
@@ -329,6 +305,10 @@ PrefabInstance:
     - target: {fileID: 4887760523704320981, guid: a86231455529d0348a3432405a54e06f, type: 3}
       propertyPath: m_Name
       value: SpawnManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 4887760523704320981, guid: a86231455529d0348a3432405a54e06f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a86231455529d0348a3432405a54e06f, type: 3}
