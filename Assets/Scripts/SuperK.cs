@@ -84,10 +84,11 @@ public class SuperK : MonoBehaviour
             {
                 transform.Translate(0, MovementSpeed * Time.deltaTime, 0);
 
-            } else
+            } else if(transform.position.y >= _distanceToCover.y)
             {
                 _isMoving = false;
                 _movementLock = false;
+                _clickCount = 2;
             }
         }
     }
@@ -155,6 +156,7 @@ public class SuperK : MonoBehaviour
             _clickCount = 0;
             _isReturning = true;
             _autoFire = false;
+            
         }
 
         //add coasting. if player holds right click for 1 second. super k will move left and right with the player while sent out

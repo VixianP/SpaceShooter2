@@ -50,10 +50,11 @@ MonoBehaviour:
   _enemyShieldHealth: 1
   CollsionDamage: 1
   enemyProjetileGameobject_: {fileID: 7993733017014561468, guid: 1c7d3f83860499f49a6b3b8b2cd5c3d5, type: 3}
-  _fireDelay: 1.2
+  _fireDelay: 0.9
   PointValue: 1
   Explosion: {fileID: 772484977331015354, guid: 3eb5ef472a7b15944b580e01bcc7915d, type: 3}
   _isElite: 0
+  _hasShield: 0
   _enemyShield: {fileID: 0}
   _powerUpDrops: {fileID: 8574808493367577513, guid: cf5ca0c1eada9f94da21da8f97044c01, type: 3}
   MveDirection: {x: 0, y: 0, z: 0}

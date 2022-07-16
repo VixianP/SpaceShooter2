@@ -10,8 +10,12 @@ public class ScrollingBackgrounds : MonoBehaviour
     [SerializeField]
     int _spawnPoint = 70;
 
-    
-    public int MovementSpeed =5;
+    [SerializeField]
+    float _initalSpeed;
+
+    public float MovementSpeed =5;
+
+    float _baseSpeed;
 
     [SerializeField]
     bool _isOverHead;
@@ -19,6 +23,15 @@ public class ScrollingBackgrounds : MonoBehaviour
     bool _canMove = true;
 
     public bool ToDestroy;
+
+    private void Start()
+    {
+        _baseSpeed = MovementSpeed;
+
+        //MovementSpeed = _initalSpeed;
+
+        //start speed down coroutine
+    }
 
     // Update is called once per frame
     void Update()
@@ -84,16 +97,11 @@ public class ScrollingBackgrounds : MonoBehaviour
         */
     }
 
-    IEnumerator Speedin()
-    {
 
-        yield return new WaitForSeconds(0.1f);
-
-    }
 
     IEnumerator SpeedOut()
     {
-
+        //decrease speed to base speed
         yield return new WaitForSeconds(0.1f);
 
     }

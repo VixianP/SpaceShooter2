@@ -143,9 +143,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Damage: 0
   MaxHealth: 100
-  speed: 15
+  speed: 25
   MaxDashDistance: 4.5
-  MaxSpeed: 30
+  MaxSpeed: 60
   IsDodging: 0
   _dashSlider: {fileID: 7288620581769200714}
   FiringSpeed: 0.3

@@ -18,10 +18,10 @@ TagManager:
   - PostProcessing
   - Water
   - UI
+  - Environment
+  - StageTransition
   - 
-  - 
-  - 
-  - 
+  - Environment
   - 
   - 
   - 
@@ -65,4 +65,7 @@ TagManager:
     locked: 0
   - name: OverHead
     uniqueID: 1588080453
+    locked: 0
+  - name: StageTransition
+    uniqueID: 2075743839
     locked: 0

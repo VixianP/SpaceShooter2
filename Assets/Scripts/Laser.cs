@@ -7,8 +7,8 @@ public class Laser : MonoBehaviour
     [SerializeField]
     int LaserSpeed;
 
-    [SerializeField]
-    int _laserDamageAmount = 5;
+   
+    public int _laserDamageAmount = 5;
 
 
     void Update()
@@ -21,7 +21,7 @@ public class Laser : MonoBehaviour
     {
         if(colli.tag == "Enemy")
         {
-            colli.SendMessage("EnemyTakeDamage", _laserDamageAmount);
+            colli.gameObject.SendMessage("EnemyTakeDamage", _laserDamageAmount);
         }
     }
 }

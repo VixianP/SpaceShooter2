@@ -97,58 +97,8 @@ public class Enemy : MonoBehaviour
         if (Time.time > timeBetweenShots)
         {
 
-
-            if (Down == false)
-            {
-                //if comming from above and alighned
-                if (_playerPosition.y > 0)
-                {
-                    if (transform.position.x > _playerPosition.x)
-                    {
-                        _firingDirection = new Vector3(0, 1, 0);
-                        GameObject _instantiatedBullet = Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.identity);
-                        _instantiatedBullet.GetComponent<EnemyProjectileScript>().moveDir_ = _firingDirection;
-                        timeBetweenShots = timeBetweenShots + _fireDelay;
-                    }
-                }
-
-                if (_playerPosition.y < 0)
-                {
-                    if (transform.position.x > _playerPosition.x)
-                    {
-                        _firingDirection = new Vector3(0, -1, 0);
-                        GameObject _instantiatedBullet = Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.identity);
-                        _instantiatedBullet.GetComponent<EnemyProjectileScript>().moveDir_ = _firingDirection;
-                        timeBetweenShots = timeBetweenShots + _fireDelay;
-                    }
-                }
-            }
-            else
-            {
-
-                //if on the sides of the player and lined up
-                if (transform.position.y < _playerPosition.y)
-                {
-                    if (transform.position.x > 0)
-                    {
-
-                        _firingDirection = new Vector3(-1, 0.1f, 0);
-
-                    }
-                    else
-                    {
-
-                        _firingDirection = new Vector3(1, 0.1f, 0);
-
-                    }
-
-                    GameObject _instantiatedBullet = Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.identity);
-                    _instantiatedBullet.GetComponent<EnemyProjectileScript>().moveDir_ = _firingDirection;
-                    timeBetweenShots = timeBetweenShots + _fireDelay;
-
-                }
-            }
-
+            Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.identity);
+            timeBetweenShots = Time.time + 0.1F;
             
         }
         
@@ -165,12 +115,12 @@ public class Enemy : MonoBehaviour
 
     void OutOfBounds()
     {
-        if (transform.position.x < -45 || transform.position.x > 40)
+        if (transform.position.x < -95 || transform.position.x > 95)
         {
             _spwnManager.ReSpawner(gameObject);
         }
 
-        if (transform.position.y < -25 || transform.position.y > 25)
+        if (transform.position.y < -55 || transform.position.y > 55)
         {
             _spwnManager.ReSpawner(gameObject);
         }

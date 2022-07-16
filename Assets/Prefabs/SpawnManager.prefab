@@ -298,7 +298,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1895132317
 Transform:
   m_ObjectHideFlags: 0
@@ -308,7 +308,7 @@ Transform:
   m_GameObject: {fileID: 1895132314}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 18.76, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 1.20655, y: 1.20655, z: 2.4131}
   m_Children: []
   m_Father: {fileID: 2286365955037996203}
   m_RootOrder: 1
@@ -605,6 +605,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyContainer: {fileID: 0}
   EnemySpawnTimer: 0.5
+  _maxNumberToSpawn: 0
+  _remainder: 0
   PlayerToSpawn: {fileID: 552074112313861267, guid: 4e8cec04e8ec0c74f91f33bbf7ede078, type: 3}
   PowerUpGameObject: {fileID: 8574808493367577513, guid: cf5ca0c1eada9f94da21da8f97044c01, type: 3}
   PowerUpTimer: 10
@@ -620,26 +622,16 @@ MonoBehaviour:
   _gameTimeText: {fileID: 765544431}
   _formationList:
   - Type: 1
-    MaxNumberToSpawn: 5
-    CurrentNumberToSpawn: 0
-    NumberToRespawn: 0
-    InPlay: 0
     CommonEnemy: {fileID: 3735273240401862461, guid: 5616cdf41cc9d2c42b882561004e551d, type: 3}
     EliteEnemy: {fileID: 0}
     CallMethod: Line
     SpawnPosition: {x: 30, y: 25, z: 0}
-    RepawnDirection: {x: 2, y: 1, z: 0}
     MovementDirection: {x: 0, y: -25, z: 0}
   - Type: 0
-    MaxNumberToSpawn: 5
-    CurrentNumberToSpawn: 0
-    NumberToRespawn: 0
-    InPlay: 0
     CommonEnemy: {fileID: 3735273240401862461, guid: 5616cdf41cc9d2c42b882561004e551d, type: 3}
     EliteEnemy: {fileID: 0}
     CallMethod: Line
     SpawnPosition: {x: -35, y: 12, z: 0}
-    RepawnDirection: {x: 1, y: 2, z: 0}
     MovementDirection: {x: 30, y: 0, z: 0}
   _fomartionSelection: 1
 --- !u!95 &882018010

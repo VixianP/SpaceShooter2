@@ -300,19 +300,22 @@ public class Player : MonoBehaviour
 
         float v = Input.GetAxis("Vertical") * speed * Time.deltaTime;
 
-        if(transform.position.x > 37)
+        /*
+        if(transform.position.x > 95)
         {
 
-            transform.position = new Vector3(-37, transform.position.y, 0);
+            transform.position = new Vector3(-95, transform.position.y, 0);
 
-        } else if (transform.position.x < -37)
+        } else if (transform.position.x < -95)
         {
 
-            transform.position = new Vector3(37, transform.position.y, 0);
+            transform.position = new Vector3(95, transform.position.y, 0);
 
         }
 
-        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -18, 19),0);
+        */
+
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x,-90,90), Mathf.Clamp(transform.position.y, -50,50),0);
 
         transform.Translate(h, v, 0);
     }
