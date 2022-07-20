@@ -98,7 +98,9 @@ public class Enemy : MonoBehaviour
         {
 
             Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.identity);
-            timeBetweenShots = Time.time + 0.1F;
+            Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0,0,-10));
+            Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0, 0, 10));
+            timeBetweenShots = Time.time + _fireDelay;
             
         }
         
@@ -117,12 +119,12 @@ public class Enemy : MonoBehaviour
     {
         if (transform.position.x < -95 || transform.position.x > 95)
         {
-            _spwnManager.ReSpawner(gameObject);
+            _spwnManager.ReSpawner(gameObject,_isElite);
         }
 
         if (transform.position.y < -55 || transform.position.y > 55)
         {
-            _spwnManager.ReSpawner(gameObject);
+            _spwnManager.ReSpawner(gameObject,_isElite);
         }
     }
 
@@ -166,13 +168,28 @@ public class Enemy : MonoBehaviour
 
     public void Death()
     {
+       
+        Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0, 0, -180));
+        Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0, 0, 180));
+        Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0, 0, -90));
+        Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0, 0, 90));
+        Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0, 0, -45));
+        Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0, 0, 45));
+        Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0, 0, -20));
+        Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0, 0, 20));
+
+
+
         Instantiate(Explosion, transform.position, Quaternion.identity);
+
+
+
         if(_isElite == true)
         {
             Instantiate(_powerUpDrops, transform.position, Quaternion.identity);
         }
 
-        _spwnManager.EnemyDeath(gameObject);
+        _spwnManager.EnemyDeath(gameObject,_isElite);
 
         PlayerValues.Score += PointValue;
 

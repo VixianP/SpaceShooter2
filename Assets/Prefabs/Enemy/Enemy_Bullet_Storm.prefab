@@ -102,9 +102,9 @@ MonoBehaviour:
   damage: 5
   moveDir_: {x: 0, y: -5}
   ObjectToFollow: {fileID: 0}
-  _isTracking: 0
+  _isTracking: 1
   _isHoming: 0
-  _isStorming: 1
+  _isStorming: 0
   _hasExpiration: 0
 --- !u!58 &5382664305519075512
 CircleCollider2D:

@@ -63,6 +63,8 @@ public class EnemyProjectileScript : MonoBehaviour
         if (_isTracking == true)
         {
             transform.Translate(_playerPositon * _bulletSpeed * Time.deltaTime);
+
+            //transform.position = _playerPositon * _bulletSpeed * Time.deltaTime;
         }
     }
 

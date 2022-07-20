@@ -4984,15 +4984,31 @@ PrefabInstance:
       value: 14.4
       objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
+      propertyPath: _maxWaves
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
+      propertyPath: _maxElites
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
       propertyPath: EnemyContainer
       value: 
       objectReference: {fileID: 457199533}
+    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
+      propertyPath: _maxElitesInPlay
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
       propertyPath: _spawnPosition.y
       value: 85
       objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
       propertyPath: _maxNumberToSpawn
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
+      propertyPath: _eliteSpawnCoolDown
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1523866238952749407, guid: a86231455529d0348a3432405a54e06f, type: 3}
@@ -10107,8 +10123,20 @@ PrefabInstance:
       value: 55
       objectReference: {fileID: 0}
     - target: {fileID: 2916636325294287979, guid: 7e805128f3a78624083e385b09845cd1, type: 3}
+      propertyPath: _fireDelay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2916636325294287979, guid: 7e805128f3a78624083e385b09845cd1, type: 3}
+      propertyPath: _enemyHealth
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2916636325294287979, guid: 7e805128f3a78624083e385b09845cd1, type: 3}
       propertyPath: _movementSpeed
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2916636325294287979, guid: 7e805128f3a78624083e385b09845cd1, type: 3}
+      propertyPath: _distanceToCharge
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 7222071860766108503, guid: 7e805128f3a78624083e385b09845cd1, type: 3}
       propertyPath: m_Name
@@ -10124,11 +10152,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7222071860766108504, guid: 7e805128f3a78624083e385b09845cd1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 91.4
+      value: -1.4
       objectReference: {fileID: 0}
     - target: {fileID: 7222071860766108504, guid: 7e805128f3a78624083e385b09845cd1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -52.8
+      value: 52.6
       objectReference: {fileID: 0}
     - target: {fileID: 7222071860766108504, guid: 7e805128f3a78624083e385b09845cd1, type: 3}
       propertyPath: m_LocalPosition.z

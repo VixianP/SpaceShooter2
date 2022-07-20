@@ -467,13 +467,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25e2c9c3c2c528a4d84d4d82d2c19963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementSpeed: 0
-  _offset: {x: 0, y: 0, z: 0}
+  _movementSpeed: 8
+  _offset: {x: 0, y: 60, z: 0}
   _enemyHealth: 50
   _shieldHealth: 100
   _shieldGameObject: {fileID: 304351295948411657}
   _fireDelay: 1
-  _bulletStormGameObj: {fileID: 7912205433854346896, guid: 630a58052ed283243a3d5a4b44198a65, type: 3}
+  _bullet: {fileID: 7993733017014561468, guid: 1c7d3f83860499f49a6b3b8b2cd5c3d5, type: 3}
   _distanceToCharge: 20
 --- !u!1 &7222071861324580889
 GameObject:

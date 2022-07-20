@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class EnemyHeavy : MonoBehaviour
 {
+
+    [SerializeField]
+    bool _isElite = true;
+
     [SerializeField]
     float _movementSpeed;
 
@@ -34,7 +38,7 @@ public class EnemyHeavy : MonoBehaviour
     float _fireTime;
 
     [SerializeField]
-    GameObject _bulletStormGameObj;
+    GameObject _bullet;
 
     #endregion
 
@@ -64,6 +68,8 @@ public class EnemyHeavy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _spawnManagerScript = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+
         _playerGameObject = PlayerValues.playerGameobject;
 
         _fireTime = Time.deltaTime + _fireDelay;
@@ -81,9 +87,13 @@ public class EnemyHeavy : MonoBehaviour
     {
         if(Time.time > _fireTime)
         {
-            GameObject _instantiatedBullet = Instantiate(_bulletStormGameObj, transform.position, Quaternion.identity);
-            _eProjectile = _instantiatedBullet.GetComponent<EnemyProjectileScript>();
+             Instantiate(_bullet, transform.position, Quaternion.identity);
+             Instantiate(_bullet, transform.position, Quaternion.Euler(0,0,20));
+            Instantiate(_bullet, transform.position, Quaternion.Euler(0, 0, -20));
+
+            /*_eProjectile = _instantiatedBullet.GetComponent<EnemyProjectileScript>();
             _eProjectile.ObjectToFollow = gameObject;
+            */
             _fireTime = Time.time + _fireDelay;
         }
     }
@@ -96,10 +106,14 @@ public class EnemyHeavy : MonoBehaviour
 
             _offset.y -= _movementSpeed * Time.deltaTime;
 
-            transform.position = Vector3.Lerp(transform.position, _positionToMoveTo, 5f);
+            transform.position = Vector3.Lerp(transform.position, _positionToMoveTo, 0.3f);
         } else if(_isCharging == true)
         {
-            transform.Translate(0, -_movementSpeed * 20 * Time.deltaTime, 0);
+            transform.Translate(0, -_movementSpeed * Time.deltaTime, 0);
+        }
+        if(transform.position.y < -95)
+        {
+            _spawnManagerScript.ReSpawner(gameObject, _isElite);
         }
     }
 
@@ -120,7 +134,7 @@ public class EnemyHeavy : MonoBehaviour
         }
         if(_enemyHealth <= 0)
         {
-            Destroy(gameObject);
+            _spawnManagerScript.EnemyDeath(gameObject, _isElite);
         }
     }
     
@@ -133,13 +147,6 @@ public class EnemyHeavy : MonoBehaviour
         }
     }
 
-    void SetSpawnManager(GameObject _spawnManagerGameObjsect)
-    {
-
-        _spawnManagerScript = _spawnManagerGameObjsect.GetComponent<SpawnManager>();
-
-    }
-
     private void OnTriggerEnter2D(Collider2D coll)
     {
         
@@ -150,7 +157,14 @@ public class EnemyHeavy : MonoBehaviour
             ShieldDamage(_laserScript._laserDamageAmount);
 
         }
-       
+ 
+        if(coll.tag == "Laser")
+        {
+
+            _laserScript = coll.gameObject.GetComponent<Laser>();
+            EnemyTakeDamage(_laserScript._laserDamageAmount);
+        }
+
         if(coll.tag == "Player")
         {
             coll.SendMessage("CollisionDmg", 100);
