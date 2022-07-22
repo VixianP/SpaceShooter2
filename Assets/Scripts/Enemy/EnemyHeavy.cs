@@ -43,8 +43,12 @@ public class EnemyHeavy : MonoBehaviour
     #endregion
 
     #region Charging
+
     [SerializeField]
     float _distanceToCharge;
+
+    [SerializeField]
+    int _chargingSpeed;
 
     float _chargeDistance;
 
@@ -88,8 +92,12 @@ public class EnemyHeavy : MonoBehaviour
         if(Time.time > _fireTime)
         {
              Instantiate(_bullet, transform.position, Quaternion.identity);
-             Instantiate(_bullet, transform.position, Quaternion.Euler(0,0,20));
-            Instantiate(_bullet, transform.position, Quaternion.Euler(0, 0, -20));
+            Instantiate(_bullet, transform.position, Quaternion.Euler(0, 0, 25));
+            Instantiate(_bullet, transform.position, Quaternion.Euler(0, 0, -25));
+            Instantiate(_bullet, transform.position, Quaternion.Euler(0, 0, 45));
+            Instantiate(_bullet, transform.position, Quaternion.Euler(0, 0, -45));
+            Instantiate(_bullet, transform.position, Quaternion.Euler(0,0,75));
+            Instantiate(_bullet, transform.position, Quaternion.Euler(0, 0, -75));
 
             /*_eProjectile = _instantiatedBullet.GetComponent<EnemyProjectileScript>();
             _eProjectile.ObjectToFollow = gameObject;
@@ -107,9 +115,11 @@ public class EnemyHeavy : MonoBehaviour
             _offset.y -= _movementSpeed * Time.deltaTime;
 
             transform.position = Vector3.Lerp(transform.position, _positionToMoveTo, 0.3f);
-        } else if(_isCharging == true)
+        } 
+        
+        if(_isCharging == true)
         {
-            transform.Translate(0, -_movementSpeed * Time.deltaTime, 0);
+            transform.Translate(0, -_chargingSpeed * Time.deltaTime, 0);
         }
         if(transform.position.y < -95)
         {

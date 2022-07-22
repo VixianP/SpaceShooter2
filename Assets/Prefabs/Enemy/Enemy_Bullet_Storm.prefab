@@ -98,12 +98,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f0a35606f0d7f1479a0015b69a1166a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletSpeed: 5
+  _bulletSpeed: -100
   damage: 5
   moveDir_: {x: 0, y: -5}
   ObjectToFollow: {fileID: 0}
-  _isTracking: 1
-  _isHoming: 0
+  _isTracking: 0
+  _isHoming: 1
   _isStorming: 0
   _hasExpiration: 0
 --- !u!58 &5382664305519075512

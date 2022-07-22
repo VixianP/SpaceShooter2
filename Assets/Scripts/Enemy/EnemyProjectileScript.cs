@@ -29,7 +29,7 @@ public class EnemyProjectileScript : MonoBehaviour
 
     private void Start()
     {
-        timer_ = Time.time + 2;
+        timer_ = Time.time + 1;
         _playerPositon = PlayerValues.playerGameobject.transform.position;
 
        
@@ -54,7 +54,7 @@ public class EnemyProjectileScript : MonoBehaviour
             if(ObjectToFollow != null)
             {
                 transform.RotateAround(transform.position, ObjectToFollow.transform.position, 20);
-                transform.Translate(Vector3.right * _bulletSpeed * Time.deltaTime);
+                transform.Translate(Vector3.down * _bulletSpeed * Time.deltaTime);
             }
         }
     }
@@ -74,13 +74,13 @@ public class EnemyProjectileScript : MonoBehaviour
         {
             if (Time.time < timer_)
             {
-                moveDir_ = Vector2.Lerp(transform.position, PlayerValues.playerGameobject.transform.position, 0.2f * Time.deltaTime);
+                moveDir_ = Vector2.Lerp(transform.position, PlayerValues.playerGameobject.transform.position, 0.4f * Time.deltaTime);
                 transform.position = moveDir_;
             }
             else
             {
-                transform.Translate(PlayerValues.playerGameobject.transform.position * 2 * Time.deltaTime);
-                Destroy(gameObject, 1.5f);
+                transform.Translate(0,_bulletSpeed * Time.deltaTime,0);
+                Destroy(gameObject, 2f);
 
                 //other effect, stop and explode
             }
