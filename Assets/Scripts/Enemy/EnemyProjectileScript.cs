@@ -7,7 +7,14 @@ public class EnemyProjectileScript : MonoBehaviour
     [SerializeField]
     float _bulletSpeed = 5;
     
+    [SerializeField]
     public int damage = 10;
+
+    [SerializeField]
+    float _lifeSpan;
+
+    [SerializeField]
+    float _flowerDelay;
 
     float timer_;
 
@@ -29,7 +36,7 @@ public class EnemyProjectileScript : MonoBehaviour
 
     private void Start()
     {
-        timer_ = Time.time + 1;
+        timer_ = Time.time + _flowerDelay;
         _playerPositon = PlayerValues.playerGameobject.transform.position;
 
        
@@ -40,10 +47,10 @@ public class EnemyProjectileScript : MonoBehaviour
         //randomize firing direction
         TrackPlayer();
         Homeplayer();
-
+        Storm();
         if (_hasExpiration == true)
         {
-            Destroy(gameObject, 6.5f);
+            Destroy(gameObject, _lifeSpan);
         }
     }
 
@@ -51,10 +58,17 @@ public class EnemyProjectileScript : MonoBehaviour
     {
         if(_isStorming == true)
         {
-            if(ObjectToFollow != null)
+            if (Time.time < timer_)
             {
-                transform.RotateAround(transform.position, ObjectToFollow.transform.position, 20);
-                transform.Translate(Vector3.down * _bulletSpeed * Time.deltaTime);
+                moveDir_ = Vector2.Lerp(transform.position, PlayerValues.playerGameobject.transform.position, 0.3f * Time.deltaTime);
+                transform.position = moveDir_;
+            }
+            else
+            {
+                transform.Translate(_playerPositon  * Time.deltaTime);
+                Destroy(gameObject, _lifeSpan);
+
+                //other effect, stop and explode
             }
         }
     }
@@ -74,13 +88,13 @@ public class EnemyProjectileScript : MonoBehaviour
         {
             if (Time.time < timer_)
             {
-                moveDir_ = Vector2.Lerp(transform.position, PlayerValues.playerGameobject.transform.position, 0.4f * Time.deltaTime);
+                moveDir_ = Vector2.Lerp(transform.position, PlayerValues.playerGameobject.transform.position, 1f * Time.deltaTime);
                 transform.position = moveDir_;
             }
             else
             {
                 transform.Translate(0,_bulletSpeed * Time.deltaTime,0);
-                Destroy(gameObject, 2f);
+                Destroy(gameObject, _lifeSpan);
 
                 //other effect, stop and explode
             }

@@ -34,23 +34,65 @@ public class PowerUpScript : MonoBehaviour
     public List<PowerUps> PowerUp = new List<PowerUps>();
     
     public int PowerUpSelector = 2;
+
     [SerializeField]
     int PowerUpMoveDownSpeed = 3;
 
+    [SerializeField]
+    GameObject _player;
+
+    Vector3 _moveDir;
+
+    bool _isCollecting;
+
+    [SerializeField]
+    float _distance;
     private void Start()
     {
-        //PowerUpSelector = Random.Range(0, PowerUp.Count);
+        _moveDir = new Vector3(0, -PowerUpMoveDownSpeed, 0);
+
+        PowerUpSelector = Random.Range(0, PowerUp.Count);
         if(gameObject.GetComponent<SpriteRenderer>().sprite == null && PowerUp[PowerUpSelector].PowerUpImage != null)
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = PowerUp[PowerUpSelector].PowerUpImage;
         }
+
+        if(_player == null)
+        {
+            _player = GameObject.FindWithTag("Player");
+        }
     }
     private void Update()
     {
+        _distance = Vector3.Distance(transform.position, _player.transform.position);
         MoveDown();
+        Collect();
     }
     void MoveDown()
     {
-        transform.Translate(0, -PowerUpMoveDownSpeed * Time.deltaTime, 0);
+        if (_isCollecting == false)
+        {
+            transform.Translate(_moveDir * Time.deltaTime);
+        } else
+        {
+            transform.position = _moveDir;
+        }
+        Collect();
+    }
+    void Collect()
+    {
+        if (Input.GetKey(KeyCode.C))
+        {
+            if(_player != null && Vector3.Distance(transform.position,_player.transform.position) < 30)
+            {
+                _isCollecting = true;
+                _moveDir = Vector3.Lerp(transform.position, _player.transform.position, 0.005f);
+            }
+        }
+        else
+        {
+            _isCollecting = false;
+            _moveDir = new Vector3(0, -PowerUpMoveDownSpeed, 0);
+        }
     }
 }

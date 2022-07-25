@@ -127,7 +127,7 @@ MonoBehaviour:
     CallMethod: Heal
     PowerUpImage: {fileID: 21300000, guid: 3869e48181024c9458fea43098561e33, type: 3}
   PowerUpSelector: 2
-  PowerUpMoveDownSpeed: 2
+  PowerUpMoveDownSpeed: 10
 --- !u!50 &6958498216029273272
 Rigidbody2D:
   serializedVersion: 4

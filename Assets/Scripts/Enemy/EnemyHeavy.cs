@@ -144,8 +144,21 @@ public class EnemyHeavy : MonoBehaviour
         }
         if(_enemyHealth <= 0)
         {
+            Flower();
             _spawnManagerScript.EnemyDeath(gameObject, _isElite);
         }
+    }
+
+    void Flower()
+    {
+        Instantiate(_bullet, transform.position, Quaternion.Euler(0, 0, -180));
+        Instantiate(_bullet, transform.position, Quaternion.Euler(0, 0, 180));
+        Instantiate(_bullet, transform.position, Quaternion.Euler(0, 0, -90));
+        Instantiate(_bullet, transform.position, Quaternion.Euler(0, 0, 90));
+        Instantiate(_bullet, transform.position, Quaternion.Euler(0, 0, -45));
+        Instantiate(_bullet, transform.position, Quaternion.Euler(0, 0, 45));
+        Instantiate(_bullet, transform.position, Quaternion.Euler(0, 0, -20));
+        Instantiate(_bullet, transform.position, Quaternion.Euler(0, 0, 20));
     }
     
     void ShieldDamage(int dmg)
@@ -180,6 +193,11 @@ public class EnemyHeavy : MonoBehaviour
             coll.SendMessage("CollisionDmg", 100);
         }
 
+        if(coll.tag == "PowerUp")
+        {
+            Flower();
+            Destroy(coll.gameObject);
+        }
     }
 
 }

@@ -166,9 +166,8 @@ public class Enemy : MonoBehaviour
 
     }
 
-    public void Death()
+    void Flower()
     {
-       
         Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0, 0, -180));
         Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0, 0, 180));
         Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0, 0, -90));
@@ -177,7 +176,13 @@ public class Enemy : MonoBehaviour
         Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0, 0, 45));
         Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0, 0, -20));
         Instantiate(enemyProjetileGameobject_, transform.position, Quaternion.Euler(0, 0, 20));
+    }
 
+    public void Death()
+    {
+
+
+        Flower();
 
 
         Instantiate(Explosion, transform.position, Quaternion.identity);
@@ -210,6 +215,11 @@ public class Enemy : MonoBehaviour
             other.GetComponent<Player>().CollisionDmg(CollsionDamage * 50);
 
             Death();
+        }
+        if(_isElite == true && other.tag == "PowerUp")
+        {
+            Flower();
+            Destroy(other.gameObject);
         }
     }
 }
