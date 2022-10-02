@@ -13,19 +13,18 @@ public class LootEnemy : MonoBehaviour
     [SerializeField]
     GameObject _powerUpToDrop;
 
-
-
-
     [SerializeField]
     int _dodgeDistance;
 
     bool _isDodging;
     bool _isboosting;
 
+    SpawnManager _spawnManagerScript;
+
 
     void Start()
     {
-
+        _spawnManagerScript = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _baseSpeed = _movementSpeed;
 
     }
@@ -34,6 +33,7 @@ public class LootEnemy : MonoBehaviour
     void Update()
     {
         MovementFunction();
+        Boundaries();
 
     }
 
@@ -113,7 +113,7 @@ public class LootEnemy : MonoBehaviour
 
     void onDeath()
     {
-        Destroy(gameObject);
+        _spawnManagerScript.EnemyDeath(gameObject, true);
     }
 
     private void OnTriggerEnter2D(Collider2D coll)

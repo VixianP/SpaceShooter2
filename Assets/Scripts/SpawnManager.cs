@@ -43,17 +43,17 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     float EnemySpawnTimer = 5;
 
+    [SerializeField]
     int _enemiesInPlay;
 
     [SerializeField]
-    int _maxNumberToSpawn;
-
+    int _maxNumberToSpawn; 
 
     [SerializeField]
-    int _remainder;
+    int _spawnPool; //how many that can be currently spawned in this wave
 
-    int _currentNumberToSpawn;
-
+    [SerializeField]
+    int _currentNumberToSpawn; // how many that can be spawned per set
 
 
     //elites
@@ -71,14 +71,19 @@ public class SpawnManager : MonoBehaviour
 
     float _eliteSpawntimer;
 
-
+    //boss
+    bool _isBoss;
 
 
     //waves
     [SerializeField]
     int _maxWaves;
 
+    [SerializeField]
     int _currentWave;
+
+    [SerializeField]
+    int _enemyWaveIncrement;
 
     int _beginLevel;
     int _midLevel;
@@ -133,11 +138,13 @@ public class SpawnManager : MonoBehaviour
     #endregion
 
     #region GameTimer
+
+    //ror mechanic
     float seconds;
     float minutes;
     float hours;
 
-
+    
     float Seconds
     {
         get
@@ -178,22 +185,19 @@ public class SpawnManager : MonoBehaviour
 
     #region Spawn positions
 
-    //initial spawing
+    //the list of enemies to spawn
     public List<Formation> _formationList = new List<Formation>();
 
+    //selects from list of enemies to spawn. It will always begin at 0.
     [SerializeField]
     int _fomartionSelection;
-
 
     //respawning
     Vector3 _currentSpawnPosition;
 
-
     #endregion
 
 
-
-    // Start is called before the first frame update
     void Start()
     {
 
@@ -276,124 +280,302 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    //initial start of the game spawn
     void SpawnEnemy()
     {
-
-        //for initial start of the game
-        if (_formationList[_fomartionSelection].CommonEnemy != null)
-        {
-            _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
-
-
-            _currentNumberToSpawn = Random.Range(1, _maxNumberToSpawn);
-
-            if (_currentNumberToSpawn > 5)
-            {
-                _currentNumberToSpawn = 5;
-            }
-
-            _remainder = _maxNumberToSpawn - _currentNumberToSpawn;
-
-
-
-            if (_formationList[_fomartionSelection].EliteEnemy != null)
-            {
-                if (_currentNumberToSpawn == 5 & _eliteCoutner < _maxElites)
-                {
-                    if (_eliteCoutner < _maxElites)
-                    {
-                        _elitesToSpawn ++;
-                        _currentNumberToSpawn -= 1;
-                    }
-                }
-            }
-        }
+        RerollSet();
 
         StartCoroutine(SpawnCoroutine(_fomartionSelection));
     }
 
-    void WaveSpawner()
+    void SpawnElite(int Selection)
     {
-        print("Wave is Done");
-        if (_currentWave < _maxWaves)
+
+        if (_formationList[_fomartionSelection].CallMethod == "Line")
         {
-            _currentWave++;
-            _fomartionSelection = Random.Range(0, _formationList.Count);
-            StartCoroutine(WaveSpawnDelay());
+            GameObject _instantiatedEliteEnemy = Instantiate(_formationList[_fomartionSelection].EliteEnemy, _currentSpawnPosition, Quaternion.identity);
+
+            //injection
+            Enemy _spawnedEnemyScript = _instantiatedEliteEnemy.GetComponent<Enemy>();
+
+            _spawnedEnemyScript.MveDirection = _formationList[Selection].MovementDirection;
+
+            _spawnedEnemyScript._spwnManager = this.GetComponent<SpawnManager>();
+
+            _spawnedEnemyScript.FormationID = Selection;
+
+            _spawnedEnemyScript.Down = _formationList[Selection].Type;
+
+            _enemiesInPlay++;
+            _eliteCoutner++;
+            _elitesToSpawn--;
+            _eliteSpawntimer = Time.time + _eliteSpawnCoolDown;
         }
 
+        if (_formationList[_fomartionSelection].CallMethod == "Stagger")
+        {
+
+            GameObject _instantiatedEliteEnemy = Instantiate(_formationList[_fomartionSelection].EliteEnemy, _currentSpawnPosition, Quaternion.identity);
+
+            _enemiesInPlay++;
+            _eliteCoutner++;
+            _elitesToSpawn--;
+            _eliteSpawntimer = Time.time + _eliteSpawnCoolDown;
+
+        }
+
+        _eliteSpawntimer = Time.time + _eliteSpawnCoolDown;
+
+    }
+
+    void SpecialSpawn()
+    {
+
+
+        if (Time.time > _eliteSpawntimer && _isBoss == false)
+        {
+            if (_formationList[_fomartionSelection].CallMethod == "Special")
+            {
+                print("spawn special");
+                _currentNumberToSpawn = 0;
+                _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
+
+                GameObject _instantiatedEliteEnemy = Instantiate(_formationList[_fomartionSelection].EliteEnemy, _currentSpawnPosition, Quaternion.identity);
+
+                _enemiesInPlay++;
+
+                _eliteCoutner++;
+                _elitesToSpawn--;
+                _eliteSpawntimer = Time.time + _eliteSpawnCoolDown;
+
+            }
+        } else if (Time.time > _eliteSpawntimer && _isBoss == false)
+        {
+            RerollSet();
+        }
+
+        if(_isBoss == true)
+        {
+
+        }
+
+    }
+
+    //starts a new wave
+    void WaveSpawner()
+    {
+        if (_currentWave < _maxWaves)
+        {
+            print("Wave is Done");
+            _currentWave++;
+
+            _maxNumberToSpawn += _enemyWaveIncrement;
+            _spawnPool = 0;
+            _currentNumberToSpawn = 0;
+
+            RerollSet();
+
+            StartCoroutine(SpawnCoroutine(_fomartionSelection));
+        }
+
+        if(_currentWave >= _maxWaves)
+        {
+            print("End Reached");
+        }
+
+        //wave transition start
+
+        //stage counter = max waves 1% / 50% / 75% / 100% segemnts. round to int
+        //wave transition end
+
+
+        //if currentwave > maxwave
         //call boss
 
     }
 
-    IEnumerator WaveSpawnDelay()
+    //randomizes and choose from spawning list (formation list)
+    void RerollSet() 
     {
-        if (_formationList[_fomartionSelection].CommonEnemy != null)
+
+        //if its a fresh wave
+        if ( _spawnPool == 0)
         {
-            _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
+            //set
+            _spawnPool = _maxNumberToSpawn;
 
+            //selects from list of enemies to spawn
+            _fomartionSelection = Random.Range(0, _formationList.Count);
 
-            _currentNumberToSpawn = Random.Range(5, _maxNumberToSpawn);
+        
 
-            if (_currentNumberToSpawn > 5)
+            if (_formationList[_fomartionSelection].CallMethod == "Special"  && Time.time > _eliteSpawntimer)
             {
-                _currentNumberToSpawn = 5;
+                print("called");
+                SpecialSpawn();
+                return;
             }
-
-            _remainder = _maxNumberToSpawn - _currentNumberToSpawn;
-
-
-
-            if (_formationList[_fomartionSelection].EliteEnemy != null)
+            else
             {
-                if (_currentNumberToSpawn == 5)
+                //selects from list of enemies to spawn
+                _fomartionSelection = Random.Range(0, _formationList.Count - Random.Range(1,_formationList.Count));
+
+                if (_formationList[_fomartionSelection].CommonEnemy != null)
                 {
-                    if (_eliteCoutner < _maxElites)
+
+                    _currentNumberToSpawn = Random.Range(1, _maxNumberToSpawn);
+
+                    _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
+
+                    //max amount of enemies to spawn at once is 5.
+                    if (_currentNumberToSpawn > 5)
                     {
-                        _elitesToSpawn++;
-                        _currentNumberToSpawn -= 1;
+                        _currentNumberToSpawn = 5;
+                    }
+
+
+                    //if it rolls 5, itll spawn an elite too
+                    if (_formationList[_fomartionSelection].EliteEnemy != null && Time.time > _eliteSpawntimer)
+                    {
+                        if (_currentNumberToSpawn == 5)
+                        {
+                            if (_eliteCoutner < _maxElites)
+                            {
+                                _elitesToSpawn++;
+                                _currentNumberToSpawn -= 1;
+                            }
+                        }
                     }
                 }
             }
+
+
+            //keeps track of the amount of enemies that can be spawned for this wave.
+            _spawnPool -= _currentNumberToSpawn;
+
+            StartCoroutine(SpawnCoroutine(_fomartionSelection));
+
+        }
+        else if (_spawnPool > 0 ) //if its not a fresh wave
+        {
+            //selects from list of enemies to spawn
+
+            if (_formationList[_fomartionSelection].CallMethod == "Special" && Time.time > _eliteSpawntimer)
+            {
+                print("called");
+                SpecialSpawn();
+                return;
+            }
+            else
+            {
+                _fomartionSelection = Random.Range(0, _formationList.Count - 1);
+                _currentNumberToSpawn = Random.Range(1, _maxNumberToSpawn);
+
+                if (_formationList[_fomartionSelection].CommonEnemy != null)
+                {
+                    _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
+
+                    //max amount of enemies to spawn at once is 5.
+                    if (_currentNumberToSpawn > 5)
+                    {
+                        _currentNumberToSpawn = 5;
+                    }
+
+
+                    //if it rolls 5, itll spawn an elite too
+                    if (_formationList[_fomartionSelection].EliteEnemy != null && Time.time > _eliteSpawntimer)
+                    {
+                        if (_currentNumberToSpawn == 5)
+                        {
+                            if (_eliteCoutner < _maxElites)
+                            {
+                                _elitesToSpawn++;
+                                _currentNumberToSpawn -= 1;
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            //keeps track of the amount of enemies that can be spawned for this wave.
+            _spawnPool -= _currentNumberToSpawn;
+
         }
 
-        _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
-        //wave transition start
-
-        //stage counter = max waves 1% / 50% / 75% / 100% segemnts. round to int
-        yield return new WaitForSeconds(3);
-        //wave transition end
         StartCoroutine(SpawnCoroutine(_fomartionSelection));
     }
 
+    //called when enemies go out of bounds
     public void ReSpawner(GameObject EnemyGameObject,bool Elite)
     {
         _enemiesInPlay--;
-        _remainder++;
-        if(Elite == true)
-        {
-            _eliteCoutner--;
-            _elitesToSpawn++;
-        }
+        _spawnPool++;
         Destroy(EnemyGameObject);
+
+        if (_enemiesInPlay == 0 && _currentNumberToSpawn == 0 && _spawnPool > 0)
+        {
+            RerollSet();
+        }
+
     }
 
     public void EnemyDeath(GameObject enemyGameobject, bool Elite)
     {
 
         _enemiesInPlay--;
-      if(Elite == true)
+
+        if (Elite == true)
         {
             _eliteCoutner--;
             _elitesToSpawn++;
-            
+
+            if (_enemiesInPlay == 0  && _spawnPool > 0)
+            {
+                print("special dead, rerolling");
+                RerollSet();
+            }
+
         }
 
-        if (_enemiesInPlay == 0 && _currentNumberToSpawn == 0 && _remainder == 0)
+        Destroy(enemyGameobject);
+
+        if (_currentNumberToSpawn < 0)
         {
+            _currentNumberToSpawn = 0;
+            print(_currentNumberToSpawn + " Correction");
+        }
+
+        if (_spawnPool < 0)
+        {
+            _spawnPool = 0;
+        }
+
+        if(_enemiesInPlay < 0)
+        {
+            _enemiesInPlay = 0;
+        }
+
+        if (_enemiesInPlay == 0 && _currentNumberToSpawn == 0 && _spawnPool > 0)
+        {
+         
+
+            RerollSet();
+        }
+
+        if (_enemiesInPlay == 0 && _currentNumberToSpawn == 0 && _spawnPool <= 0)
+        {
+
             WaveSpawner();
         }
-        Destroy(enemyGameobject);
+
+        //first check if _currentnumbertospawn is zero!
+
+        // *special elite situation*
+        //if enemies in play is zero, but _currentNumberToSpawn is greater than zero, or remainder not equal to zero
+        //set new formation selection
+        //spawn again
+
     }
 
 
@@ -430,117 +612,65 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnCoroutine(int Selection)
     {
-        yield return new WaitForSeconds(3);
-
-
-        //formation call methods
-        Invoke(_formationList[_fomartionSelection].CallMethod, 0);
-
-
-        //regular enemy spawn
-        while (_currentNumberToSpawn > 0 && SpawnedPlayer != null && PlayerValues.PlayerIsDead != true)
+        if (SpawnedPlayer != null && PlayerValues.PlayerIsDead != true)
         {
-            yield return new WaitForSeconds(EnemySpawnTimer);
+            //pause bettween sets
+            yield return new WaitForSeconds(3);
 
-            GameObject SpawnedEnemy = Instantiate(_formationList[Selection].CommonEnemy, _currentSpawnPosition, Quaternion.identity);
-
-            //injection
-            Enemy _spawnedEnemyScript = SpawnedEnemy.GetComponent<Enemy>();
-
-            _spawnedEnemyScript.MveDirection = _formationList[Selection].MovementDirection;
-
-            _spawnedEnemyScript._spwnManager = this.GetComponent<SpawnManager>();
-
-            _spawnedEnemyScript.FormationID = Selection;
-
-            _spawnedEnemyScript.Down = _formationList[Selection].Type;
-
-            if (EnemyContainer != null)
+            if (_formationList[_fomartionSelection].CommonEnemy != null)
             {
 
-                SpawnedEnemy.transform.parent = EnemyContainer.transform;
-
-            }
-
-            _currentNumberToSpawn--;
-
-            _enemiesInPlay++;
-        }
-
-        //spawn elite
-        if (_currentNumberToSpawn == 0 &&  _eliteCoutner < _maxElites && _elitesToSpawn > 0 && Time.time > _eliteSpawntimer)
-        {
-
-
-            if (_formationList[_fomartionSelection].CallMethod == "Line")
-            {
-                GameObject _instantiatedEliteEnemy = Instantiate(_formationList[_fomartionSelection].EliteEnemy, _currentSpawnPosition, Quaternion.identity);
-
-                //injection
-                Enemy _spawnedEnemyScript = _instantiatedEliteEnemy.GetComponent<Enemy>();
-
-                _spawnedEnemyScript.MveDirection = _formationList[Selection].MovementDirection;
-
-                _spawnedEnemyScript._spwnManager = this.GetComponent<SpawnManager>();
-
-                _spawnedEnemyScript.FormationID = Selection;
-
-                _spawnedEnemyScript.Down = _formationList[Selection].Type;
-
-                _enemiesInPlay++;
-                _eliteCoutner++;
-                _elitesToSpawn--;
-                _eliteSpawntimer = Time.time + _eliteSpawnCoolDown;
-            }
-
-            if (_formationList[_fomartionSelection].CallMethod == "Stagger")
-            {
-
-                GameObject _instantiatedEliteEnemy = Instantiate(_formationList[_fomartionSelection].EliteEnemy, _currentSpawnPosition, Quaternion.identity);
-
-                _enemiesInPlay++;
-                _eliteCoutner++;
-                _elitesToSpawn--;
-                _eliteSpawntimer = Time.time + _eliteSpawnCoolDown;
-
-            }
-
-            
-
-        }
-
-
-        //continue to spawn until _currentnumbertospawn = 0
-        if (_remainder > 0)
-        {
-            print("spawn again");
-
-            _fomartionSelection = Random.Range(0, _formationList.Count);
-
-            _currentNumberToSpawn = Random.Range(1, _remainder);
-            if (_currentNumberToSpawn > 5)
-
-            {
-                _currentNumberToSpawn = 5;
-
-                if (_formationList[_fomartionSelection].EliteEnemy != null)
+                //regular enemy spawn
+                while (_currentNumberToSpawn > 0)
                 {
-                    if (_currentNumberToSpawn == 5 && _eliteCoutner < _maxElites)
+                    _enemiesInPlay++;
+                    //space in bettween spawns
+                    yield return new WaitForSeconds(EnemySpawnTimer);
+
+                    GameObject SpawnedEnemy = Instantiate(_formationList[Selection].CommonEnemy, _currentSpawnPosition, Quaternion.identity);
+
+                    //injection
+                    Enemy _spawnedEnemyScript = SpawnedEnemy.GetComponent<Enemy>();
+
+                    _spawnedEnemyScript.MveDirection = _formationList[Selection].MovementDirection;
+
+                    _spawnedEnemyScript._spwnManager = this.GetComponent<SpawnManager>();
+
+                    _spawnedEnemyScript.FormationID = Selection;
+
+                    _spawnedEnemyScript.Down = _formationList[Selection].Type;
+
+
+
+                    if (EnemyContainer != null)
                     {
-                        _elitesToSpawn ++;
-                        _currentNumberToSpawn -= 1;
+
+                        SpawnedEnemy.transform.parent = EnemyContainer.transform;
 
                     }
+                    if(_currentNumberToSpawn > 0)
+                    {
+                        _currentNumberToSpawn--;
+                        print(_currentNumberToSpawn);
+                    }
+                    
                 }
-
             }
-            _remainder -= _currentNumberToSpawn;
 
-            _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
-            StartCoroutine(SpawnCoroutine(_fomartionSelection));
+            //spawn elite
+            if (_elitesToSpawn > 0 && Time.time > _eliteSpawntimer)
+            {
+                SpawnElite(Selection);
+            }
+
+
+            //special / boss spawn
+
         }
-
     }
+    
+
+    //where the game begins
     public IEnumerator StartGameCounter()
     {
         SpawnUI[0].gameObject.SetActive(true);

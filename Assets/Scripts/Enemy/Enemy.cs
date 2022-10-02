@@ -76,11 +76,14 @@ public class Enemy : MonoBehaviour
 
     public SpawnManager _spwnManager;
 
+    Collider2D _enemyColldier;
+
     private void Start()
     {
 
         //timeBetweenShots += Time.deltaTime + 2;
         _playerPosition = PlayerValues.playerGameobject.transform.position;
+        _enemyColldier = GetComponent<Collider2D>();
 
     }
 
@@ -181,6 +184,7 @@ public class Enemy : MonoBehaviour
     public void Death()
     {
 
+        _enemyColldier.enabled = false;
 
         Flower();
 
@@ -198,7 +202,6 @@ public class Enemy : MonoBehaviour
 
         PlayerValues.Score += PointValue;
 
-        Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

@@ -298,7 +298,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1895132317
 Transform:
   m_ObjectHideFlags: 0
@@ -307,7 +307,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1895132314}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 18.76, z: 0}
+  m_LocalPosition: {x: 0, y: 14.4, z: 0}
   m_LocalScale: {x: 1.20655, y: 1.20655, z: 2.4131}
   m_Children: []
   m_Father: {fileID: 2286365955037996203}
@@ -605,16 +605,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyContainer: {fileID: 0}
   EnemySpawnTimer: 0.5
-  _maxNumberToSpawn: 0
+  _maxNumberToSpawn: 20
   _remainder: 0
+  _maxElites: 1
+  _eliteSpawnCoolDown: 30
+  _maxWaves: 2
   PlayerToSpawn: {fileID: 552074112313861267, guid: 4e8cec04e8ec0c74f91f33bbf7ede078, type: 3}
   PowerUpGameObject: {fileID: 8574808493367577513, guid: cf5ca0c1eada9f94da21da8f97044c01, type: 3}
   PowerUpTimer: 10
   _WarningIndicator: {fileID: 1895132314}
   _obstaclesToSpawn:
   - {fileID: 1407102171510161711, guid: 959b4f76616a7224fa0e1fdd517ee0b9, type: 3}
-  _spawnPosition: {x: 20, y: 40, z: 0}
-  _obstacleSpawnDelay: 7
+  _spawnPosition: {x: 20, y: 85, z: 0}
+  _obstacleSpawnDelay: 10
   StartDelayTimer: 6
   SpawnUI:
   - {fileID: 1177642240}
@@ -622,18 +625,36 @@ MonoBehaviour:
   _gameTimeText: {fileID: 765544431}
   _formationList:
   - Type: 1
-    CommonEnemy: {fileID: 3735273240401862461, guid: 5616cdf41cc9d2c42b882561004e551d, type: 3}
-    EliteEnemy: {fileID: 0}
+    CommonEnemy: {fileID: 8442692564202904067, guid: 679d012836cba73449ed06fc153c4dcd, type: 3}
+    EliteEnemy: {fileID: 2108941113338980787, guid: 28aa26b0dd0c3544598e1ee9efe02f68, type: 3}
     CallMethod: Line
-    SpawnPosition: {x: 30, y: 25, z: 0}
-    MovementDirection: {x: 0, y: -25, z: 0}
+    SpawnPosition: {x: 35, y: 55, z: 0}
+    MovementDirection: {x: 0, y: -35, z: 0}
   - Type: 0
-    CommonEnemy: {fileID: 3735273240401862461, guid: 5616cdf41cc9d2c42b882561004e551d, type: 3}
-    EliteEnemy: {fileID: 0}
+    CommonEnemy: {fileID: 8442692564202904067, guid: 679d012836cba73449ed06fc153c4dcd, type: 3}
+    EliteEnemy: {fileID: 2108941113338980787, guid: 28aa26b0dd0c3544598e1ee9efe02f68, type: 3}
     CallMethod: Line
-    SpawnPosition: {x: -35, y: 12, z: 0}
-    MovementDirection: {x: 30, y: 0, z: 0}
-  _fomartionSelection: 1
+    SpawnPosition: {x: -90, y: 30, z: 0}
+    MovementDirection: {x: 45, y: 0, z: 0}
+  - Type: 0
+    CommonEnemy: {fileID: 8442692564202904067, guid: 679d012836cba73449ed06fc153c4dcd, type: 3}
+    EliteEnemy: {fileID: 7222071860766108503, guid: 7e805128f3a78624083e385b09845cd1, type: 3}
+    CallMethod: Stagger
+    SpawnPosition: {x: -35, y: 55, z: 0}
+    MovementDirection: {x: 0, y: -35, z: 0}
+  - Type: 0
+    CommonEnemy: {fileID: 8442692564202904067, guid: 679d012836cba73449ed06fc153c4dcd, type: 3}
+    EliteEnemy: {fileID: 7222071860766108503, guid: 7e805128f3a78624083e385b09845cd1, type: 3}
+    CallMethod: Stagger
+    SpawnPosition: {x: 0, y: 55, z: 0}
+    MovementDirection: {x: 0, y: -35, z: 0}
+  - Type: 0
+    CommonEnemy: {fileID: 0}
+    EliteEnemy: {fileID: 6247740647209094148, guid: ba2fdf08a3214c8419e8edf8c7e9ffcd, type: 3}
+    CallMethod: Special
+    SpawnPosition: {x: -90, y: 45, z: 0}
+    MovementDirection: {x: 0, y: -35, z: 0}
+  _fomartionSelection: 4
 --- !u!95 &882018010
 Animator:
   serializedVersion: 3

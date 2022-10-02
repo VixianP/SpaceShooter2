@@ -29,7 +29,7 @@ public class EnemyProjectileScript : MonoBehaviour
 
     //switches
     [SerializeField]
-    bool _isTracking, _isHoming, _isStorming;
+    bool _isTracking, _isHoming, _isStorming, _isFan;
 
     [SerializeField]
     bool _hasExpiration;
@@ -48,6 +48,7 @@ public class EnemyProjectileScript : MonoBehaviour
         TrackPlayer();
         Homeplayer();
         Storm();
+        Fan();
         if (_hasExpiration == true)
         {
             Destroy(gameObject, _lifeSpan);
@@ -98,6 +99,13 @@ public class EnemyProjectileScript : MonoBehaviour
 
                 //other effect, stop and explode
             }
+        }
+    }
+    void Fan()
+    {
+        if (_isFan)
+        {
+            transform.Translate(moveDir_ *_bulletSpeed * Time.deltaTime);
         }
     }
 }

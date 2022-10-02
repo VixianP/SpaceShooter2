@@ -123,7 +123,7 @@ public class EnemyHeavy : MonoBehaviour
         }
         if(transform.position.y < -95)
         {
-            _spawnManagerScript.ReSpawner(gameObject, _isElite);
+            _spawnManagerScript.EnemyDeath(gameObject,true);
         }
     }
 

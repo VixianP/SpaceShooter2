@@ -146,4 +146,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementSpeed: 20
   _powerUpToDrop: {fileID: 8574808493367577513, guid: cf5ca0c1eada9f94da21da8f97044c01, type: 3}
-  _dodgeDistance: 5
+  _dodgeDistance: 50
