@@ -183,9 +183,11 @@ public class EnemyHeavy : MonoBehaviour
  
         if(coll.tag == "Laser")
         {
-
-            _laserScript = coll.gameObject.GetComponent<Laser>();
-            EnemyTakeDamage(_laserScript._laserDamageAmount);
+            if (coll.gameObject.GetComponent<Laser>() != null)
+            {
+                _laserScript = coll.gameObject.GetComponent<Laser>();
+                EnemyTakeDamage(_laserScript._laserDamageAmount);
+            }
         }
 
         if(coll.tag == "Player")

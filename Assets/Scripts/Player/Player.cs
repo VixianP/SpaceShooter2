@@ -3,13 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//always lock on 0
+
+// 0 is the highest threat
+
+//list will sort based on proxmity
+
+//competitive system of range
+//if enemy reaches a certain range threshold, it will decrement itself in the list and increment the object
 
 public class Player : MonoBehaviour
 {
     static GameObject PlayerGameObject; //will be used for later
     #region Player Stats
     [SerializeField]
-    private int Damage;
+    public float _PlayerDmg = 1;
+
+
     [SerializeField]
     private int MaxHealth;
     private int PlayerCurrentHealth;
@@ -82,11 +92,16 @@ public class Player : MonoBehaviour
     #endregion
     #region Projectile
 
+    //fire delay
     [SerializeField]
     float FiringSpeed;
 
     float FiringTimer = -1f;
 
+
+
+
+    //regular shot and charged shot
     [SerializeField]
     GameObject[] BaseProjectile;
 
@@ -104,6 +119,8 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     Slider _chargedShotCoolDownTimerSlider;
+
+
 
 
     //timer for temporary power ups
@@ -129,6 +146,28 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     GameObject _instandReloadBarDisplay;
+
+
+
+
+    //Chance to Activate Ability on hit
+    [SerializeField]
+    bool isHoming;
+
+    [SerializeField]
+    float _homingRocketCoolDown;
+    float _homingRocketCoolDownTime;
+    [SerializeField]
+    int _roll;
+
+
+
+
+    //Targeting For Homing Shot
+    public GameObject _lockOn;
+    [SerializeField]
+    GameObject _homingShot;
+
 
     bool _instantReloadAttempt;
 
@@ -436,6 +475,8 @@ public class Player : MonoBehaviour
 
     }
 
+
+
     public void TakeDamage(int value)
     {
         if (IsDodging == false)
@@ -571,6 +612,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //assigns the power up
     void ProjectilePowerUp(GameObject Projectile, int Timer)
     {
         WeaponTimer = Timer + Time.time;
@@ -584,6 +626,7 @@ public class Player : MonoBehaviour
         _ammoText.text = _currentAmmoCount.ToString() + "/" + _maxAmmo;
     }
 
+    //keeps track of the Power up duration
     void TemporaryPowerUptimer()
     {
         if(Time.time > WeaponTimer)
@@ -754,7 +797,38 @@ public class Player : MonoBehaviour
 
     }
 
-     void OnTriggerEnter2D(Collider2D collision)
+    #region Abilities
+
+    public void Targeting(GameObject EnemyToTarget)
+    {
+        _lockOn = EnemyToTarget;
+    }
+
+    public void RollDice()
+    {
+        _roll = Random.Range(0, 100);
+        TestShot(_roll);
+
+    }
+
+    void TestShot(int roll)
+    {
+        if (isHoming == true)
+        {
+            if (roll > 50)
+            {
+                //spawn homing bullet aka Create it and link it to LockOm
+                Instantiate(_homingShot, new Vector3(transform.position.x, transform.position.y + 2, 0), Quaternion.identity);
+
+
+            }
+        }
+    }
+
+
+    #endregion
+
+    void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "EnemyBullet" && IsDodging == false)
         {
@@ -772,6 +846,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //checks what kind of power up it is
     void CallPowerUp(GameObject PowerUpGameObject)
     {
         PowerUpScript PowUp = PowerUpGameObject.gameObject.GetComponent<PowerUpScript>();

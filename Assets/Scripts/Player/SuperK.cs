@@ -60,6 +60,9 @@ public class SuperK : MonoBehaviour
 
     void Update()
     {
+
+        _positionToMoveTo = PlayerGameObject.transform.position;
+        _positionToMoveTo.y = PlayerGameObject.transform.position.y + 5;
         Attached();
         SuperKInputs();
         SendOut();

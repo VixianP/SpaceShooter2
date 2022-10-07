@@ -46,12 +46,19 @@ public class PowerUpScript : MonoBehaviour
     bool _isCollecting;
 
     [SerializeField]
+    bool _testMode;
+
+    [SerializeField]
     float _distance;
     private void Start()
     {
         _moveDir = new Vector3(0, -PowerUpMoveDownSpeed, 0);
 
-        PowerUpSelector = Random.Range(0, PowerUp.Count);
+        if (_testMode == false)
+        {
+            PowerUpSelector = Random.Range(0, PowerUp.Count);
+        }
+
         if(gameObject.GetComponent<SpriteRenderer>().sprite == null && PowerUp[PowerUpSelector].PowerUpImage != null)
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = PowerUp[PowerUpSelector].PowerUpImage;

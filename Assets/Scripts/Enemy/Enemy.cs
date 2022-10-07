@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
+using TMPro;
+
 
 public class Enemy : MonoBehaviour
 {
@@ -24,8 +28,10 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     float _fireDelay = 5;
 
-
     float timeBetweenShots = 0;
+
+    [SerializeField]
+    GameObject _oneShotBullet;
 
     #endregion
 
@@ -72,15 +78,39 @@ public class Enemy : MonoBehaviour
 
     #endregion
 
+    #region Enemy UI
+
+    [SerializeField]
+    Slider _healthSlider;
+
+    [SerializeField]
+    TextMesh DamageText;
+
+    #endregion
+
     public int FormationID;
 
     public SpawnManager _spwnManager;
 
     Collider2D _enemyColldier;
 
+    [SerializeField]
+    GameObject _dmgTextToShow;
+
+    [SerializeField]
+    Transform DmgTextPos;
+
+    [SerializeField]
+    Canvas _enemyCanvas;
+
+    
+
     private void Start()
     {
-
+        if (_healthSlider != null)
+        {
+            _healthSlider.maxValue = _enemyHealth;
+        }
         //timeBetweenShots += Time.deltaTime + 2;
         _playerPosition = PlayerValues.playerGameobject.transform.position;
         _enemyColldier = GetComponent<Collider2D>();
@@ -107,6 +137,11 @@ public class Enemy : MonoBehaviour
             
         }
         
+    }
+
+    void Oneshot()
+    {
+
     }
 
     void EnemyMovement()
@@ -136,6 +171,22 @@ public class Enemy : MonoBehaviour
         if (_hasShield == false)
         {
             _enemyHealth -= _damageAmount;
+            if (_healthSlider != null)
+            {
+                _healthSlider.gameObject.SetActive(true);
+                _healthSlider.value = _enemyHealth;
+
+                if (_dmgTextToShow != null)
+                {
+                    //showDamage
+                    GameObject _newText = Instantiate(_dmgTextToShow, DmgTextPos.position, Quaternion.identity);
+                    TextMeshProUGUI _text = _newText.GetComponent<TextMeshProUGUI>();
+                    _text.text = _damageAmount.ToString();
+
+                    _newText.transform.SetParent(_enemyCanvas.transform);
+                }
+
+            }
             if (_enemyHealth <= 0)
             {
                 Death();
@@ -206,12 +257,6 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-
-        if(other.tag == "Laser")
-        {
-            Destroy(other.gameObject);
-
-        }
 
         if(other.tag == "Player")
         {

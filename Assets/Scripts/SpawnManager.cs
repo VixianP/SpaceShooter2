@@ -16,17 +16,20 @@ public class Formation
 
     public string CallMethod;
 
+    public string Description;
+
     public Vector3 SpawnPosition;
 
 
     public Vector3 MovementDirection;
 
-    public Formation(bool Type, int NumberToSRespawn, GameObject CommonEnemy,GameObject EliteEnemy,string CallMethod, Vector3 SpawnPosition, Vector3 MovementDirection)
+    public Formation(bool Type, int NumberToSRespawn, GameObject CommonEnemy,GameObject EliteEnemy,string CallMethod,string Description, Vector3 SpawnPosition, Vector3 MovementDirection)
     {
         this.Type = Type;
         this.CommonEnemy = CommonEnemy;
         this.EliteEnemy = EliteEnemy;
         this.CallMethod = CallMethod;
+        this.Description = Description;
         this.SpawnPosition = SpawnPosition;
         this.MovementDirection = MovementDirection;
     }
@@ -40,8 +43,6 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     GameObject EnemyContainer;
 
-    [SerializeField]
-    float EnemySpawnTimer = 5;
 
     [SerializeField]
     int _enemiesInPlay;
@@ -66,10 +67,6 @@ public class SpawnManager : MonoBehaviour
 
     int _numberToRespawn;
 
-    [SerializeField]
-    float _eliteSpawnCoolDown = 20;
-
-    float _eliteSpawntimer;
 
     //boss
     bool _isBoss;
@@ -124,9 +121,27 @@ public class SpawnManager : MonoBehaviour
     #endregion
 
     #region Game Timer
+
+
+    //Game Start Delay
     [SerializeField]
     float StartDelayTimer = 6;
     float StartTime;
+
+    //elite CD
+    [SerializeField]
+    float _eliteSpawnCoolDown = 20;
+
+    float _eliteSpawntimer;
+
+    //Special Spawn timers
+    float _SpecialSpawnCoolDown = 20;
+
+    float _Speicaltime;
+
+    //interval bettween regular enemy spawn
+    [SerializeField]
+    float EnemySpawnTimer = 5;
     #endregion
 
     #region SpawnManagerUI
@@ -137,7 +152,7 @@ public class SpawnManager : MonoBehaviour
     Text _gameTimeText;
     #endregion
 
-    #region GameTimer
+    #region GameClock
 
     //ror mechanic
     float seconds;
@@ -203,6 +218,7 @@ public class SpawnManager : MonoBehaviour
 
         _obstacleTime = Time.time + _obstacleSpawnDelay;
         PowerUpTime = Time.time + PowerUpTimer;
+        _eliteSpawntimer = Time.time + _eliteSpawnCoolDown;
         _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
         StartCoroutine(StartGameCounter());
 
@@ -332,7 +348,7 @@ public class SpawnManager : MonoBehaviour
     {
 
 
-        if (Time.time > _eliteSpawntimer && _isBoss == false)
+        if (Time.time > _Speicaltime && _isBoss == false)
         {
             if (_formationList[_fomartionSelection].CallMethod == "Special")
             {
@@ -344,12 +360,10 @@ public class SpawnManager : MonoBehaviour
 
                 _enemiesInPlay++;
 
-                _eliteCoutner++;
-                _elitesToSpawn--;
-                _eliteSpawntimer = Time.time + _eliteSpawnCoolDown;
+                _Speicaltime = Time.time + _SpecialSpawnCoolDown;
 
             }
-        } else if (Time.time > _eliteSpawntimer && _isBoss == false)
+        } else if (Time.time < _Speicaltime && _isBoss == false)
         {
             RerollSet();
         }
@@ -378,8 +392,15 @@ public class SpawnManager : MonoBehaviour
             StartCoroutine(SpawnCoroutine(_fomartionSelection));
         }
 
-        if(_currentWave >= _maxWaves)
+        if(_currentWave > _maxWaves)
         {
+            _currentWave = _maxWaves;
+        }
+
+        if(_currentWave == _maxWaves)
+        {
+            _spawnPool = 0;
+            _currentNumberToSpawn = 0;
             print("End Reached");
         }
 
@@ -409,7 +430,7 @@ public class SpawnManager : MonoBehaviour
 
         
 
-            if (_formationList[_fomartionSelection].CallMethod == "Special"  && Time.time > _eliteSpawntimer)
+            if (_formationList[_fomartionSelection].CallMethod == "Special"  && Time.time > _Speicaltime)
             {
                 print("called");
                 SpecialSpawn();
@@ -419,13 +440,12 @@ public class SpawnManager : MonoBehaviour
             {
                 //selects from list of enemies to spawn
                 _fomartionSelection = Random.Range(0, _formationList.Count - Random.Range(1,_formationList.Count));
+                _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
 
                 if (_formationList[_fomartionSelection].CommonEnemy != null)
                 {
 
                     _currentNumberToSpawn = Random.Range(1, _maxNumberToSpawn);
-
-                    _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
 
                     //max amount of enemies to spawn at once is 5.
                     if (_currentNumberToSpawn > 5)
@@ -460,7 +480,7 @@ public class SpawnManager : MonoBehaviour
         {
             //selects from list of enemies to spawn
 
-            if (_formationList[_fomartionSelection].CallMethod == "Special" && Time.time > _eliteSpawntimer)
+            if (_formationList[_fomartionSelection].CallMethod == "Special" && Time.time > _Speicaltime)
             {
                 print("called");
                 SpecialSpawn();
@@ -470,10 +490,10 @@ public class SpawnManager : MonoBehaviour
             {
                 _fomartionSelection = Random.Range(0, _formationList.Count - 1);
                 _currentNumberToSpawn = Random.Range(1, _maxNumberToSpawn);
+                _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
 
                 if (_formationList[_fomartionSelection].CommonEnemy != null)
                 {
-                    _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
 
                     //max amount of enemies to spawn at once is 5.
                     if (_currentNumberToSpawn > 5)
@@ -629,25 +649,27 @@ public class SpawnManager : MonoBehaviour
 
                     GameObject SpawnedEnemy = Instantiate(_formationList[Selection].CommonEnemy, _currentSpawnPosition, Quaternion.identity);
 
-                    //injection
-                    Enemy _spawnedEnemyScript = SpawnedEnemy.GetComponent<Enemy>();
+                   
+                        //injection
+                        Enemy _spawnedEnemyScript = SpawnedEnemy.GetComponent<Enemy>();
 
-                    _spawnedEnemyScript.MveDirection = _formationList[Selection].MovementDirection;
+                        _spawnedEnemyScript.MveDirection = _formationList[Selection].MovementDirection;
 
-                    _spawnedEnemyScript._spwnManager = this.GetComponent<SpawnManager>();
+                        _spawnedEnemyScript._spwnManager = this.GetComponent<SpawnManager>();
 
-                    _spawnedEnemyScript.FormationID = Selection;
+                        _spawnedEnemyScript.FormationID = Selection;
 
-                    _spawnedEnemyScript.Down = _formationList[Selection].Type;
+                        _spawnedEnemyScript.Down = _formationList[Selection].Type;
 
 
 
-                    if (EnemyContainer != null)
-                    {
+                        if (EnemyContainer != null)
+                        {
 
-                        SpawnedEnemy.transform.parent = EnemyContainer.transform;
+                            SpawnedEnemy.transform.parent = EnemyContainer.transform;
 
-                    }
+                        }
+                    
                     if(_currentNumberToSpawn > 0)
                     {
                         _currentNumberToSpawn--;

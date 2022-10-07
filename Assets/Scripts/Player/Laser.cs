@@ -7,9 +7,24 @@ public class Laser : MonoBehaviour
     [SerializeField]
     int LaserSpeed;
 
-   
-    public int _laserDamageAmount = 5;
+    public int _laserDamageAmount;
 
+    //critical strike
+    int _crtRoll;
+    int _crtThreshold = 92;
+    float _crtMultiplier = 1.5f;
+    public float CrtDamage;
+
+
+    Player _player;
+    private void Awake()
+    {
+        if(PlayerValues.PlayerIsDead == false)
+        {
+            _player = PlayerValues.playerGameobject.GetComponent<Player>();
+            _laserDamageAmount = Mathf.FloorToInt( _player._PlayerDmg);
+        }
+    }
 
     void Update()
     {
@@ -17,11 +32,32 @@ public class Laser : MonoBehaviour
         Destroy(gameObject, 1.5f);
     }
 
+    void Damage(GameObject Coll)
+    {
+        _player.RollDice();
+        CrticialStike();
+        _player.Targeting(Coll.gameObject);
+        Coll.gameObject.SendMessage("EnemyTakeDamage", _laserDamageAmount);
+        Destroy(gameObject);
+    }
+
+    void CrticialStike()
+    {
+        _crtRoll = Random.Range(0, 100);
+        if (_crtRoll >= _crtThreshold)
+        {
+            CrtDamage = Mathf.FloorToInt(_player._PlayerDmg * _crtMultiplier);
+            print("Critical Hit For :" + CrtDamage);
+            print("Roll " + _crtRoll);
+        }
+    }
+
+
     private void OnTriggerEnter2D(Collider2D colli)
     {
         if(colli.tag == "Enemy")
         {
-            colli.gameObject.SendMessage("EnemyTakeDamage", _laserDamageAmount);
+            Damage(colli.gameObject);
         }
     }
 }

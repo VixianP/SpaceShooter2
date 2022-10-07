@@ -141,13 +141,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a88c2f05ba5f0cc4086da82e02c7326e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 0
+  Damage: 2
   MaxHealth: 100
   speed: 25
   MaxDashDistance: 4.5
   MaxSpeed: 60
   IsDodging: 0
   _dashSlider: {fileID: 7288620581769200714}
+  _PlayerDmg: 2
   FiringSpeed: 0.3
   BaseProjectile:
   - {fileID: 9122776032926891870, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
@@ -160,6 +161,11 @@ MonoBehaviour:
   _reloadBar: {fileID: 4554700375424023015}
   _reloadTimerBar: {fileID: 6228665814888502716}
   _instandReloadBarDisplay: {fileID: 2913170440890879275}
+  isHoming: 1
+  _homingRocketCoolDown: 0
+  _roll: 0
+  _lockOn: {fileID: 0}
+  _homingShot: {fileID: 5261757186283112642, guid: b6587aaaa1952974e98b753823927bc3, type: 3}
   PlayerShield: {fileID: 737280675068913805}
   MaxShieldHealth: 0
   shieldSlider: {fileID: 8151585587982195846}

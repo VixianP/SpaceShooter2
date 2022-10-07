@@ -10,18 +10,10 @@ public class HomingShotScript : MonoBehaviour
     public int _laserDamageAmount = 5;
 
     #region Targeting
-    private GameObject _player;
+    private Player _player;
 
-    private GameObject _target;
+    bool _locked;
 
-    Collider2D[] _enemiesInRange;
-
-    private int _selection;
-    
-    [SerializeField]
-    Vector2 _detectionRange;
-
-    bool _checked;
     #endregion
 
     #region Movement
@@ -29,51 +21,55 @@ public class HomingShotScript : MonoBehaviour
     Vector3 _rotDir;
     #endregion
 
+    private void Awake()
+    {
+        if(PlayerValues.PlayerIsDead == false)
+        {
+            _player = PlayerValues.playerGameobject.GetComponent<Player>();
+        }
+    }
+
     void Update()
     {
-        LockOn();
+        Retarget();
         Movement();
         Destroy(gameObject, 2.5f);
     }
 
-    void LockOn()
+    void Retarget()
     {
-        if (_target == null)
-        {
-            if (_checked == false)
-            {
-                _enemiesInRange = Physics2D.OverlapCapsuleAll(transform.position, _detectionRange, CapsuleDirection2D.Horizontal, 0);
-                //for loop to check if enemy is less than X range of player. if it is, then choose whatever comes first. if its dead, rechoose
-            }
-            if(_enemiesInRange[_selection] != null)
-            {
-
-                _target = _enemiesInRange[_selection].gameObject;
-
-                _selection = 0;
-
-                _checked = true;
-
-            }
-            else
-            {
-                _selection++;
-            }
-            //if loop, increment is not in range or alive
-        }
+        //if no target
+        //retarget
+        
     }
+
+
 
     void Movement()
     {
-        if (_checked == true)
+        if (_player._lockOn != null && _player != null && _locked == false)
         {
-            _player = PlayerValues.playerGameobject;
-            _dir = _player.transform.position - transform.position;
-            _rotDir = Vector3.RotateTowards(transform.forward, _dir, LaserSpeed * Time.deltaTime, 0.0f);
 
-            transform.rotation = Quaternion.LookRotation(_rotDir);
+            transform.position = Vector3.MoveTowards(transform.position, _player._lockOn.transform.position, LaserSpeed * Time.deltaTime);
 
-            //move towards _target
+            _dir = _player._lockOn.transform.position - transform.position;
+
+            Debug.DrawRay(transform.position, _dir, Color.green);
+
+            float angle = Mathf.Atan2(_dir.y, _dir.x) * Mathf.Rad2Deg + 90; 
+
+            Quaternion _angleAxis = Quaternion.AngleAxis(angle, Vector3.forward);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, _angleAxis, Time.deltaTime * 50);
+
+            
+        } else
+        {
+            //cannot retarget to what player is shooting, find a different target
+            _locked = true;
+            transform.rotation = Quaternion.EulerAngles(0, 0, 0);
+            transform.Translate(Vector3.up * LaserSpeed * Time.deltaTime);
+
         }
 
 
