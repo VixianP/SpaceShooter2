@@ -16,6 +16,9 @@ public class EnemyHeavy : MonoBehaviour
     [SerializeField]
     Vector3 _offset;
 
+    [SerializeField]
+    int _expToYield = 20;
+
 
     #region Health and Shields
 
@@ -59,7 +62,7 @@ public class EnemyHeavy : MonoBehaviour
 
     #endregion
 
-    #region Scripts
+    #region External Scripts
 
     Laser _laserScript;
 
@@ -123,7 +126,7 @@ public class EnemyHeavy : MonoBehaviour
         }
         if(transform.position.y < -95)
         {
-            _spawnManagerScript.EnemyDeath(gameObject,true);
+            _spawnManagerScript.EnemyDeath(gameObject,true, _expToYield);
         }
     }
 
@@ -145,7 +148,7 @@ public class EnemyHeavy : MonoBehaviour
         if(_enemyHealth <= 0)
         {
             Flower();
-            _spawnManagerScript.EnemyDeath(gameObject, _isElite);
+            _spawnManagerScript.EnemyDeath(gameObject, _isElite,_expToYield);
         }
     }
 

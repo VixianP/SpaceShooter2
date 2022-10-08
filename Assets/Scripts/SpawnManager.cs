@@ -92,6 +92,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     GameObject PlayerToSpawn;
     GameObject SpawnedPlayer;
+
+    Player _player;
     #endregion
 
     #region PowerUp
@@ -289,6 +291,8 @@ public class SpawnManager : MonoBehaviour
         if (PlayerToSpawn != null)
         {
             SpawnedPlayer = Instantiate(PlayerToSpawn, new Vector3(0, -20, 0), Quaternion.identity);
+
+            _player = SpawnedPlayer.GetComponent<Player>();
         }
         else
         {
@@ -540,10 +544,11 @@ public class SpawnManager : MonoBehaviour
 
     }
 
-    public void EnemyDeath(GameObject enemyGameobject, bool Elite)
+    public void EnemyDeath(GameObject enemyGameobject, bool Elite, int exp)
     {
 
         _enemiesInPlay--;
+        _player.Experience += exp;
 
         if (Elite == true)
         {
@@ -673,7 +678,6 @@ public class SpawnManager : MonoBehaviour
                     if(_currentNumberToSpawn > 0)
                     {
                         _currentNumberToSpawn--;
-                        print(_currentNumberToSpawn);
                     }
                     
                 }
@@ -682,6 +686,7 @@ public class SpawnManager : MonoBehaviour
             //spawn elite
             if (_elitesToSpawn > 0 && Time.time > _eliteSpawntimer)
             {
+                yield return new WaitForSeconds(EnemySpawnTimer);
                 SpawnElite(Selection);
             }
 
@@ -707,11 +712,11 @@ public class SpawnManager : MonoBehaviour
 
         PowerUpTime = Time.time + PowerUpTimer;
 
-        SpawnEnemy();
-
         yield return new WaitForSeconds(2);
 
         SpawnUI[1].gameObject.SetActive(false);
+
+        SpawnEnemy();
     }
 
 

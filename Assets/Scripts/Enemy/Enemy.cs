@@ -9,8 +9,12 @@ using TMPro;
 public class Enemy : MonoBehaviour
 {
     #region EnemyStats
+
     [SerializeField]
     private int _enemyHealth;
+
+    [SerializeField]
+    int _experienceToYield = 5;
 
     [SerializeField]
     int _enemyShieldHealth;
@@ -84,7 +88,13 @@ public class Enemy : MonoBehaviour
     Slider _healthSlider;
 
     [SerializeField]
-    TextMesh DamageText;
+    GameObject _dmgTextToShow;
+
+    [SerializeField]
+    Transform DmgTextPos;
+
+    [SerializeField]
+    Canvas _enemyCanvas;
 
     #endregion
 
@@ -94,14 +104,6 @@ public class Enemy : MonoBehaviour
 
     Collider2D _enemyColldier;
 
-    [SerializeField]
-    GameObject _dmgTextToShow;
-
-    [SerializeField]
-    Transform DmgTextPos;
-
-    [SerializeField]
-    Canvas _enemyCanvas;
 
     
 
@@ -137,11 +139,6 @@ public class Enemy : MonoBehaviour
             
         }
         
-    }
-
-    void Oneshot()
-    {
-
     }
 
     void EnemyMovement()
@@ -249,9 +246,10 @@ public class Enemy : MonoBehaviour
             Instantiate(_powerUpDrops, transform.position, Quaternion.identity);
         }
 
-        _spwnManager.EnemyDeath(gameObject,_isElite);
-
         PlayerValues.Score += PointValue;
+
+        _spwnManager.EnemyDeath(gameObject,_isElite,_experienceToYield);
+
 
     }
 

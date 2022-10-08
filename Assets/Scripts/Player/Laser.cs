@@ -7,6 +7,9 @@ public class Laser : MonoBehaviour
     [SerializeField]
     int LaserSpeed;
 
+    [SerializeField]
+    float _projectileLifeSpan = 1.5f;
+
     public int _laserDamageAmount;
 
     //critical strike
@@ -22,14 +25,14 @@ public class Laser : MonoBehaviour
         if(PlayerValues.PlayerIsDead == false)
         {
             _player = PlayerValues.playerGameobject.GetComponent<Player>();
-            _laserDamageAmount = Mathf.FloorToInt( _player._PlayerDmg);
+            _laserDamageAmount = Mathf.FloorToInt( _player._PlayerDmg + _laserDamageAmount);
         }
     }
 
     void Update()
     {
         transform.Translate(0, LaserSpeed * Time.deltaTime, 0);
-        Destroy(gameObject, 1.5f);
+        Destroy(gameObject, _projectileLifeSpan);
     }
 
     void Damage(GameObject Coll)

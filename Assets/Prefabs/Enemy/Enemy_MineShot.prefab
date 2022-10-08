@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 2120774500099485827}
   - component: {fileID: 7953105814280885153}
   - component: {fileID: 3080096056581869395}
-  - component: {fileID: 7101913346341224522}
+  - component: {fileID: 6085784890919965162}
   m_Layer: 0
-  m_Name: Enemy_Mine
+  m_Name: Enemy_MineShot
   m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105,7 +105,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 3
---- !u!114 &7101913346341224522
+--- !u!114 &6085784890919965162
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -114,6 +114,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 9212679370048202271}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36e83813c6a66e04884bbea3ce7c33b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d2dff0edb8f4554585eeed7dc142f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _PlayerposOffset: {x: 3, y: 3}
+  _mineGameObject: {fileID: 2959377919334516957, guid: dbf8ce1f130ee924e9e8689952ab6500, type: 3}

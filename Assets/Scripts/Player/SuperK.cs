@@ -186,12 +186,12 @@ public class SuperK : MonoBehaviour
 
             if (Input.GetMouseButton(0) && _isattached == true)
             {
-                Instantiate(fireMode[1], transform.position, Quaternion.identity);
+                Instantiate(fireMode[0], transform.position, Quaternion.identity);
                 _fireTime = Time.time + _fireDelay;
             }
             if (Input.GetMouseButtonDown(0) && _isattached == false)
             {
-                Instantiate(fireMode[0], transform.position, Quaternion.identity);
+                Instantiate(fireMode[1], transform.position, Quaternion.identity);
                 _fireTime = Time.time + _fireDelay;
             }
         }

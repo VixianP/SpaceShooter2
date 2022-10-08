@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using TMPro;
+
 //always lock on 0
 
 // 0 is the highest threat
@@ -15,6 +17,7 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     static GameObject PlayerGameObject; //will be used for later
+
     #region Player Stats
     [SerializeField]
     public float _PlayerDmg = 1;
@@ -64,6 +67,7 @@ public class Player : MonoBehaviour
     }
 
     #endregion
+
     #region Speed and Dodging
 
     [SerializeField]
@@ -90,6 +94,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     Slider _dashSlider;
     #endregion
+
     #region Projectile
 
     //fire delay
@@ -172,6 +177,7 @@ public class Player : MonoBehaviour
     bool _instantReloadAttempt;
 
     #endregion
+
     #region Abilities
     [SerializeField]
 
@@ -190,11 +196,25 @@ public class Player : MonoBehaviour
     Slider shieldSlider;
 
     #endregion
+
     #region Experience and Level up
+
     [SerializeField]
-    private int experience;
+    Slider _experienceBar;
+
+    [SerializeField]
+    TextMeshProUGUI _experienceText;
+
+    [SerializeField]
+    TextMeshProUGUI _playerCurrentLevelText;
+
+    [SerializeField]
+    int _experienceScaler;
+
+    [SerializeField]
     private int ExperienceToLevel;
-    int ExperienceScaler;
+
+    private int experience;
     int CurrentLevel = 1;
 
     public int LevelUp
@@ -206,15 +226,28 @@ public class Player : MonoBehaviour
         }
         set
         {
+            _levelUpText.gameObject.GetComponent<LevelUpNotification>().StartNotification();
+            _statIncreaseText.GetComponent<LevelUpNotification>().StartNotification();
             //stat increases ie health,damage, and power up carrry capacity
+
+            _PlayerDmg += 1;
+
             //heals the player to full health
             MaxHealth += 5;
             PlayerCurrentHealth = MaxHealth;
+
+            PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + _shieldHealth + ")" + "/" + MaxHealth;
+            PlayerHpBar.value = PlayerCurrentHealth;
+
             CurrentLevel = value;
+
+            ExperienceToLevel += _experienceScaler ;
+
+            _experienceBar.maxValue = ExperienceToLevel;
+
         }
     }
 
-    //level up
     public  int Experience
     {
         get
@@ -223,20 +256,65 @@ public class Player : MonoBehaviour
         }
         set
         {
-            if (value == ExperienceToLevel)
-            {
-                ExperienceToLevel = ExperienceScaler + value;
-                CurrentLevel++;
-            }
+         
             experience = value;
-        }
 
+
+            if (value >= ExperienceToLevel)
+            {
+
+               
+
+                //level up
+                if (value == ExperienceToLevel)
+                {
+                    LevelUp += 1;
+
+                    experience = 0;
+
+                    _experienceBar.value = 0;
+
+                    _playerCurrentLevelText.text = "LvL " + CurrentLevel.ToString();
+
+                } 
+
+
+                //over level
+                while (experience> ExperienceToLevel)
+                {
+                        LevelUp += 1;
+
+                        experience = value - ExperienceToLevel;
+
+                    if (value < 0)
+                    {
+                        value = 0;
+                    }
+
+                    _experienceText.text = experience + "/" + ExperienceToLevel;
+                    _experienceBar.value = experience;
+                }
+
+
+
+            } 
+            
+            if (value < ExperienceToLevel)
+            {
+
+                _experienceText.text = experience + "/" + ExperienceToLevel;
+                _experienceBar.value = experience;
+            }
+
+        }
     }
     #endregion
+
     #region Colliders,Components,Other Scripts
     Collider2D PlayerCollider;
     SpriteRenderer PlayerSpriteRenderer;
     #endregion
+
     #region PlayerUI
     [SerializeField]
     Text PlayerHP;
@@ -247,7 +325,20 @@ public class Player : MonoBehaviour
     Text _powerUpDescription;
 
     Image _powerUpImage;
+
+
+    //Level Up Notificiations
+
+
+    [SerializeField]
+    TextMeshProUGUI _levelUpText;
+
+    [SerializeField]
+    TextMeshProUGUI _statIncreaseText;
+
+
     #endregion
+
     #region Audio
     AudioSource PlayerAudio;
     [SerializeField]
@@ -260,6 +351,7 @@ public class Player : MonoBehaviour
     /// 5 = Player Death
     /// </summary>
     #endregion
+
     #region Visuals and Aniation
 
     //the damage visuals
@@ -282,7 +374,7 @@ public class Player : MonoBehaviour
     //when death, destroy the super k
     #endregion
 
-    //level property where it alters other stats
+ 
 
     private void Awake()
     {
@@ -331,6 +423,10 @@ public class Player : MonoBehaviour
         PlayerHpBar.value = MaxHealth;
 
         _cameraAnim = Camera.main.GetComponent<Animator>();
+
+        _experienceText.text = experience + "/" + ExperienceToLevel;
+        _experienceBar.value = experience;
+        _experienceBar.maxValue = ExperienceToLevel;
     }
 
     void Movement()
@@ -474,8 +570,6 @@ public class Player : MonoBehaviour
         SK._isattached = true;
 
     }
-
-
 
     public void TakeDamage(int value)
     {

@@ -21,19 +21,24 @@ public class HomingShotScript : MonoBehaviour
     Vector3 _rotDir;
     #endregion
 
+    [SerializeField]
+    float _lockOnDelay = 3f;
+    float _lockOnTimer;
+
     private void Awake()
     {
         if(PlayerValues.PlayerIsDead == false)
         {
             _player = PlayerValues.playerGameobject.GetComponent<Player>();
         }
+        _lockOnTimer = Time.time + _lockOnDelay;
     }
 
     void Update()
     {
         Retarget();
         Movement();
-        Destroy(gameObject, 2.5f);
+        Destroy(gameObject, 4f);
     }
 
     void Retarget()
@@ -47,31 +52,32 @@ public class HomingShotScript : MonoBehaviour
 
     void Movement()
     {
-        if (_player._lockOn != null && _player != null && _locked == false)
-        {
 
-            transform.position = Vector3.MoveTowards(transform.position, _player._lockOn.transform.position, LaserSpeed * Time.deltaTime);
+            if (_player._lockOn != null && _player != null && _locked == false)
+            {
 
-            _dir = _player._lockOn.transform.position - transform.position;
+                transform.position = Vector3.MoveTowards(transform.position, _player._lockOn.transform.position, LaserSpeed * Time.deltaTime);
 
-            Debug.DrawRay(transform.position, _dir, Color.green);
+                _dir = _player._lockOn.transform.position - transform.position;
 
-            float angle = Mathf.Atan2(_dir.y, _dir.x) * Mathf.Rad2Deg + 90; 
+                Debug.DrawRay(transform.position, _dir, Color.green);
 
-            Quaternion _angleAxis = Quaternion.AngleAxis(angle, Vector3.forward);
+                float angle = Mathf.Atan2(_dir.y, _dir.x) * Mathf.Rad2Deg + 90;
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, _angleAxis, Time.deltaTime * 50);
+                Quaternion _angleAxis = Quaternion.AngleAxis(angle, Vector3.forward);
 
-            
-        } else
-        {
-            //cannot retarget to what player is shooting, find a different target
-            _locked = true;
-            transform.rotation = Quaternion.EulerAngles(0, 0, 0);
-            transform.Translate(Vector3.up * LaserSpeed * Time.deltaTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, _angleAxis, Time.deltaTime * 50);
 
-        }
 
+            }
+            else
+            {
+                //cannot retarget to what player is shooting, find a different target
+                _locked = true;
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+                transform.Translate(Vector3.up * LaserSpeed * Time.deltaTime);
+
+            }
 
     }
 

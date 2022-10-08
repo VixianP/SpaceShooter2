@@ -404,6 +404,7 @@ GameObject:
   - component: {fileID: 588801270510582684}
   - component: {fileID: 5148821172145262887}
   - component: {fileID: 2333431705985730092}
+  - component: {fileID: -1166861103108423688}
   m_Layer: 0
   m_Name: EnemyLine
   m_TagString: Enemy
@@ -439,6 +440,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyHealth: 10
+  _experienceToYield: 5
   _enemyShieldHealth: 1
   CollsionDamage: 1
   enemyProjetileGameobject_: {fileID: 3507301718163591161, guid: a7e4a00a3176d374dbcba7bbc56b143c, type: 3}
@@ -453,12 +455,11 @@ MonoBehaviour:
   MveDirection: {x: 0, y: 0, z: 0}
   Down: 0
   _healthSlider: {fileID: 3132484179584874048}
-  DamageText: {fileID: 0}
-  FormationID: 0
-  _spwnManager: {fileID: 0}
   _dmgTextToShow: {fileID: 6466799008758828345, guid: 2c36b6cc9282f0746b72f22a8655f77e, type: 3}
   DmgTextPos: {fileID: 659866145942602411}
   _enemyCanvas: {fileID: 7158161518004693853}
+  FormationID: 0
+  _spwnManager: {fileID: 0}
 --- !u!212 &588801270510582684
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -557,6 +558,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &-1166861103108423688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8442692564202904067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2edfe4ae5bf7dc34da4312b1f95e2f70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trapBulletGameobject: {fileID: 9212679370048202271, guid: 287c938cc1296ee448c15ff7dfbd6e9c, type: 3}
 --- !u!1 &8488545295945289838
 GameObject:
   m_ObjectHideFlags: 0

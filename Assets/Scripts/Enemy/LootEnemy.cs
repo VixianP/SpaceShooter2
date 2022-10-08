@@ -11,6 +11,9 @@ public class LootEnemy : MonoBehaviour
     float _baseSpeed;
 
     [SerializeField]
+    int _expToYield = 100;
+
+    [SerializeField]
     GameObject _powerUpToDrop;
 
     [SerializeField]
@@ -103,17 +106,11 @@ public class LootEnemy : MonoBehaviour
     void EnemyTakeDamage(int dmg)
     {
         Dodge();
-        if (_isDodging == false)
-        {
-            Instantiate(_powerUpToDrop, transform.position, Quaternion.identity);
-            onDeath();
-        }
-        
     }
 
     void onDeath()
     {
-        _spawnManagerScript.EnemyDeath(gameObject, true);
+        _spawnManagerScript.EnemyDeath(gameObject, true, _expToYield);
     }
 
     private void OnTriggerEnter2D(Collider2D coll)
