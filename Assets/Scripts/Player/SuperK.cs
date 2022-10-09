@@ -100,12 +100,23 @@ public class SuperK : MonoBehaviour
     {
         if (_isReturning == true && _returnLock == false)
         {
+            // if directly above the player
             if(transform.position.y > PlayerGameObject.transform.position.y)
             {
                 _positionToMoveTo = PlayerGameObject.transform.position;
                 _positionToMoveTo.y += _attachedPositionOffset;
                 _returnLock = true;
             }
+
+            //if below the player
+            if (transform.position.y < PlayerGameObject.transform.position.y)
+            {
+                _positionToMoveTo = PlayerGameObject.transform.position;
+                _positionToMoveTo.y = -PlayerGameObject.transform.position.y - -_attachedPositionOffset;
+                _returnLock = true;
+            }
+
+
         }
         if(_returnLock == true)
         {

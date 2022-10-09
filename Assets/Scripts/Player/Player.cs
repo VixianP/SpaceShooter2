@@ -233,9 +233,10 @@ public class Player : MonoBehaviour
             _PlayerDmg += 1;
 
             //heals the player to full health
-            MaxHealth += 5;
+            MaxHealth += 10;
             PlayerCurrentHealth = MaxHealth;
 
+            _playerCurrentLevelText.text = "LvL " + CurrentLevel.ToString();
             PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + _shieldHealth + ")" + "/" + MaxHealth;
             PlayerHpBar.value = PlayerCurrentHealth;
 
@@ -291,6 +292,7 @@ public class Player : MonoBehaviour
                         value = 0;
                     }
 
+                    _playerCurrentLevelText.text = "LvL " + CurrentLevel.ToString();
                     _experienceText.text = experience + "/" + ExperienceToLevel;
                     _experienceBar.value = experience;
                 }
@@ -301,7 +303,7 @@ public class Player : MonoBehaviour
             
             if (value < ExperienceToLevel)
             {
-
+                _playerCurrentLevelText.text = "LvL " + CurrentLevel.ToString();
                 _experienceText.text = experience + "/" + ExperienceToLevel;
                 _experienceBar.value = experience;
             }
@@ -909,7 +911,7 @@ public class Player : MonoBehaviour
     {
         if (isHoming == true)
         {
-            if (roll > 50)
+            if (roll > 0)
             {
                 //spawn homing bullet aka Create it and link it to LockOm
                 Instantiate(_homingShot, new Vector3(transform.position.x, transform.position.y + 2, 0), Quaternion.identity);

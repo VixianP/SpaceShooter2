@@ -9,8 +9,16 @@ public class HomingShotScript : MonoBehaviour
 
     public int _laserDamageAmount = 5;
 
+    [SerializeField]
+    float _lifetime = 8;
+
     #region Targeting
+
+    //initial player target
     private Player _player;
+
+    //retarget
+    private GameObject _newTarget;
 
     bool _locked;
 
@@ -21,9 +29,7 @@ public class HomingShotScript : MonoBehaviour
     Vector3 _rotDir;
     #endregion
 
-    [SerializeField]
-    float _lockOnDelay = 3f;
-    float _lockOnTimer;
+
 
     private void Awake()
     {
@@ -31,14 +37,13 @@ public class HomingShotScript : MonoBehaviour
         {
             _player = PlayerValues.playerGameobject.GetComponent<Player>();
         }
-        _lockOnTimer = Time.time + _lockOnDelay;
     }
 
     void Update()
     {
         Retarget();
         Movement();
-        Destroy(gameObject, 4f);
+        Destroy(gameObject, _lifetime);
     }
 
     void Retarget()
@@ -47,7 +52,6 @@ public class HomingShotScript : MonoBehaviour
         //retarget
         
     }
-
 
 
     void Movement()
@@ -72,14 +76,20 @@ public class HomingShotScript : MonoBehaviour
             }
             else
             {
-                //cannot retarget to what player is shooting, find a different target
+
+            //cannot target to what player is shooting, find a different target
+            if (_newTarget == null)
+            {
                 _locked = true;
                 transform.rotation = Quaternion.Euler(0, 0, 0);
                 transform.Translate(Vector3.up * LaserSpeed * Time.deltaTime);
+            } 
 
             }
 
     }
+
+ 
 
     private void OnTriggerEnter2D(Collider2D colli)
     {

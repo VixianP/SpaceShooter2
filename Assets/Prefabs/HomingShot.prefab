@@ -232,3 +232,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LaserSpeed: 60
   _laserDamageAmount: 5
+  _lifetime: 8
+  _lockOnDelay: 3

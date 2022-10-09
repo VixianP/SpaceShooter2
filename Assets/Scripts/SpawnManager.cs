@@ -214,6 +214,12 @@ public class SpawnManager : MonoBehaviour
 
     #endregion
 
+    #region External Scripts
+
+    PlayerTargeting _targeting;
+
+    #endregion
+
 
     void Start()
     {
@@ -293,6 +299,7 @@ public class SpawnManager : MonoBehaviour
             SpawnedPlayer = Instantiate(PlayerToSpawn, new Vector3(0, -20, 0), Quaternion.identity);
 
             _player = SpawnedPlayer.GetComponent<Player>();
+            _targeting = _player.GetComponent<PlayerTargeting>();
         }
         else
         {
@@ -305,7 +312,6 @@ public class SpawnManager : MonoBehaviour
     {
         RerollSet();
 
-        StartCoroutine(SpawnCoroutine(_fomartionSelection));
     }
 
     void SpawnElite(int Selection)
@@ -314,6 +320,7 @@ public class SpawnManager : MonoBehaviour
         if (_formationList[_fomartionSelection].CallMethod == "Line")
         {
             GameObject _instantiatedEliteEnemy = Instantiate(_formationList[_fomartionSelection].EliteEnemy, _currentSpawnPosition, Quaternion.identity);
+            _targeting._enemiesToTarget.Add(_instantiatedEliteEnemy);
 
             //injection
             Enemy _spawnedEnemyScript = _instantiatedEliteEnemy.GetComponent<Enemy>();
@@ -336,6 +343,7 @@ public class SpawnManager : MonoBehaviour
         {
 
             GameObject _instantiatedEliteEnemy = Instantiate(_formationList[_fomartionSelection].EliteEnemy, _currentSpawnPosition, Quaternion.identity);
+            _targeting._enemiesToTarget.Add(_instantiatedEliteEnemy);
 
             _enemiesInPlay++;
             _eliteCoutner++;
@@ -356,11 +364,13 @@ public class SpawnManager : MonoBehaviour
         {
             if (_formationList[_fomartionSelection].CallMethod == "Special")
             {
-                print("spawn special");
+
                 _currentNumberToSpawn = 0;
                 _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
 
                 GameObject _instantiatedEliteEnemy = Instantiate(_formationList[_fomartionSelection].EliteEnemy, _currentSpawnPosition, Quaternion.identity);
+
+                _targeting._enemiesToTarget.Add(_instantiatedEliteEnemy);
 
                 _enemiesInPlay++;
 
@@ -478,7 +488,7 @@ public class SpawnManager : MonoBehaviour
             _spawnPool -= _currentNumberToSpawn;
 
             StartCoroutine(SpawnCoroutine(_fomartionSelection));
-
+            return;
         }
         else if (_spawnPool > 0 ) //if its not a fresh wave
         {
@@ -535,6 +545,13 @@ public class SpawnManager : MonoBehaviour
     {
         _enemiesInPlay--;
         _spawnPool++;
+
+        if (_enemiesInPlay < 0)
+        {
+            _enemiesInPlay = 0;
+        }
+
+        _targeting._enemiesToTarget.Remove(EnemyGameObject);
         Destroy(EnemyGameObject);
 
         if (_enemiesInPlay == 0 && _currentNumberToSpawn == 0 && _spawnPool > 0)
@@ -548,6 +565,12 @@ public class SpawnManager : MonoBehaviour
     {
 
         _enemiesInPlay--;
+
+        if(_enemiesInPlay < 0)
+        {
+            _enemiesInPlay = 0;
+        }
+
         _player.Experience += exp;
 
         if (Elite == true)
@@ -562,6 +585,8 @@ public class SpawnManager : MonoBehaviour
             }
 
         }
+
+        _targeting._enemiesToTarget.Remove(enemyGameobject);
 
         Destroy(enemyGameobject);
 
@@ -654,6 +679,7 @@ public class SpawnManager : MonoBehaviour
 
                     GameObject SpawnedEnemy = Instantiate(_formationList[Selection].CommonEnemy, _currentSpawnPosition, Quaternion.identity);
 
+                    _targeting._enemiesToTarget.Add(SpawnedEnemy);
                    
                         //injection
                         Enemy _spawnedEnemyScript = SpawnedEnemy.GetComponent<Enemy>();
