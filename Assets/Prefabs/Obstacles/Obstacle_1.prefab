@@ -10,11 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 9021902915562442023}
   - component: {fileID: 8915552889957895292}
-  - component: {fileID: 2710963846778640004}
   - component: {fileID: 8430600168361899467}
+  - component: {fileID: 587100176589484455}
+  - component: {fileID: 2851370851185255101}
   m_Layer: 0
   m_Name: Obstacle_1
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -86,24 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2710963846778640004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1407102171510161711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91b72d0653e4cf74cbf6bd2a3d33e169, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Limit: -95
-  _spawnPoint: 130
-  _initalSpeed: 0
-  MovementSpeed: 155
-  _isOverHead: 0
-  ToDestroy: 1
 --- !u!58 &8430600168361899467
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -120,6 +103,42 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 10.56
+--- !u!50 &587100176589484455
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407102171510161711}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &2851370851185255101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407102171510161711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53faa0fc648934a4896266c0fca33c6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _destoyedPowerUp: {fileID: 0}
+  _spawnPoint: 200
+  MovementSpeed: 65
 --- !u!1 &2819001004207605507
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,6 +19,8 @@ public class Laser : MonoBehaviour
     public float CrtDamage;
 
 
+
+
     Player _player;
     private void Awake()
     {
@@ -41,7 +43,10 @@ public class Laser : MonoBehaviour
         CrticialStike();
         _player.Targeting(Coll.gameObject);
         Coll.gameObject.SendMessage("EnemyTakeDamage", _laserDamageAmount);
-        Destroy(gameObject);
+        if (gameObject.tag != "ChargedShot")
+        {
+            Destroy(gameObject);
+        }
     }
 
     void CrticialStike()

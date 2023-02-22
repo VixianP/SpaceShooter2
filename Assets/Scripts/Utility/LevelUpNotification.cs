@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class LevelUpNotification : MonoBehaviour
 {
@@ -9,6 +10,11 @@ public class LevelUpNotification : MonoBehaviour
     float _timer;
 
     bool _counting;
+    [SerializeField]
+    bool _adding;
+
+    public int OverAllEXPGain;
+
 
     Animator _animator;
 
@@ -24,6 +30,10 @@ public class LevelUpNotification : MonoBehaviour
     {
         NotifyExpire();
 
+        if(_adding == true)
+        {
+            gameObject.GetComponent<TextMeshProUGUI>().text = "+ " + OverAllEXPGain;
+        }
     }
 
     void NotifyExpire()
@@ -34,6 +44,7 @@ public class LevelUpNotification : MonoBehaviour
             {
                 _animator.SetBool("Notify", false);
                 _counting = false;
+                OverAllEXPGain = 0;
             }
         }
     }

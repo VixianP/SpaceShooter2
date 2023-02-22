@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4427020482893315779}
   - component: {fileID: 4006846958393783616}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 7222071859359501065}
   - component: {fileID: 7222071859359501071}
   - component: {fileID: 7222071859359501070}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 7222071859509449487}
   - component: {fileID: 7222071859509449485}
   - component: {fileID: 7222071859509449484}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -242,7 +242,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7222071860727067052}
   - component: {fileID: 7222071860727067055}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -334,7 +334,7 @@ GameObject:
   - component: {fileID: 7222071860766108506}
   - component: {fileID: 7222071860766108501}
   - component: {fileID: 2916636325294287979}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EnemyHeavy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -470,6 +470,7 @@ MonoBehaviour:
   _isElite: 1
   _movementSpeed: 6
   _offset: {x: 0, y: 60, z: 0}
+  _expOrbSpawner: {fileID: 3500084144215859602, guid: 2c44b9809ee53524999a6ddd6d60aa0d, type: 3}
   _enemyHealth: 50
   _shieldHealth: 100
   _shieldGameObject: {fileID: 304351295948411657}
@@ -486,7 +487,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7222071861324580894}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -525,7 +526,7 @@ GameObject:
   - component: {fileID: 7222071861344563226}
   - component: {fileID: 7222071861344563221}
   - component: {fileID: 7222071861344563220}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}

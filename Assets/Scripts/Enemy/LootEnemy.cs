@@ -11,7 +11,7 @@ public class LootEnemy : MonoBehaviour
     float _baseSpeed;
 
     [SerializeField]
-    int _expToYield = 100;
+    GameObject _expOrbSpawner;
 
     [SerializeField]
     GameObject _powerUpToDrop;
@@ -21,6 +21,8 @@ public class LootEnemy : MonoBehaviour
 
     bool _isDodging;
     bool _isboosting;
+
+    bool _outOfBounds;
 
     SpawnManager _spawnManagerScript;
 
@@ -49,6 +51,7 @@ public class LootEnemy : MonoBehaviour
     {
         if(transform.position.x > 90)
         {
+            _outOfBounds = true;
             onDeath();
         }
     }
@@ -110,7 +113,20 @@ public class LootEnemy : MonoBehaviour
 
     void onDeath()
     {
-        _spawnManagerScript.EnemyDeath(gameObject, true, _expToYield);
+        //if killed, award exp
+        if (_outOfBounds == false)
+        {
+            if (_expOrbSpawner != null)
+            {
+                Instantiate(_expOrbSpawner, transform.position, Quaternion.identity);
+            }
+            _spawnManagerScript.EnemyDeath(gameObject, true);
+        } else
+        {
+            //if not and went out of bounds, award nothing
+            _spawnManagerScript.EnemyDeath(gameObject, true);
+        }
+
     }
 
     private void OnTriggerEnter2D(Collider2D coll)

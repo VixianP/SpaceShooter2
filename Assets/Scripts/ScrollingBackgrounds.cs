@@ -4,105 +4,106 @@ using UnityEngine;
 
 public class ScrollingBackgrounds : MonoBehaviour
 {
-    [SerializeField]
-    int Limit = -70;
+
+    float _currentSpeed;
+
 
     [SerializeField]
-    int _spawnPoint = 70;
+    float _baseSpeed = -10;
 
     [SerializeField]
-    float _initalSpeed;
+    float _rushSpeed;
 
-    public float MovementSpeed =5;
 
-    float _baseSpeed;
+    #region Spawing
+
+    bool _isSpawning = true;
 
     [SerializeField]
-    bool _isOverHead;
+    Vector2 _startPos;
 
-    bool _canMove = true;
+    [SerializeField]
+    Vector2 _endPos;
 
-    public bool ToDestroy;
+    [SerializeField]
+    int Limit = -200;
+
+    #endregion
+    #region Timer
+
+    [SerializeField]
+    private float SpawnDelay;
+    private float DelayTimer;
+
+    #endregion
+
 
     private void Start()
     {
-        _baseSpeed = MovementSpeed;
-
-        //MovementSpeed = _initalSpeed;
-
-        //start speed down coroutine
+        DelayTimer = Time.time + SpawnDelay;
+        transform.position = _startPos;
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        OverHeadReposition();
-        if (_canMove == true)
-        {
-            transform.Translate(0, -MovementSpeed * Time.deltaTime, 0);
 
-            Boundary();
+        SpawnIn();
+        transform.Translate(0, _currentSpeed* Time.deltaTime, 0);
+        OutofBounds();
 
-        }
     }
-    //create spawn behind, down the road
 
-    void OverHeadReposition()
+    public void Respawn()
     {
-        if (_isOverHead)
-        {
-            if (transform.position.x == 0)
-            {
-                transform.position = new Vector2(Random.Range(Mathf.Max(-60, -40), Mathf.Max(60, 40)), _spawnPoint);
-            }
 
-            transform.Translate(0, -MovementSpeed * Time.deltaTime, 0);
+        //speed out of bounds
+        //wait
+        //speed in
 
-            if (transform.position.y < Limit)
+            transform.position = _startPos;
+            if (transform.position.y > _endPos.y)
             {
-                transform.position = new Vector2(Random.Range(Mathf.Max(-60,-40), Mathf.Max(60, 40)), _spawnPoint);
-                return;
+                if (_currentSpeed > _rushSpeed)
+                {
+                    _currentSpeed -= 80;
+                }
             }
-        }
+            else
+            {
+                _currentSpeed = _baseSpeed;
+            }
+        
     }
 
-    void Boundary()
+    void SpawnIn()
     {
-        if (ToDestroy == false)
+        if (_isSpawning == true && Time.time > DelayTimer)
         {
-            if (transform.position.y < Limit)
+            if (transform.position.y > _endPos.y)
             {
-                transform.position = new Vector2(transform.position.x, _spawnPoint);
-            }
-        } else
-        {
-            if (transform.position.y < Limit)
+                if(_currentSpeed > _rushSpeed)
+                {
+                    _currentSpeed -= 80;
+                }
+            } else
             {
-                Destroy(gameObject);
+                _isSpawning = false;
+                _currentSpeed = _baseSpeed;
             }
-        }
+        } 
+        
+            
+        
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void OutofBounds()
     {
-        if(collision.tag == "Player")
+        if (transform.position.y < Limit)
         {
-            collision.SendMessage("TakeDamage", 100);
+            transform.position = _startPos;
         }
-        /*
-        if(collision.tag == "SuperKamio")
-        {
-            Destroy(collision.gameObject);
-        }
-        */
     }
 
 
-
-    IEnumerator SpeedOut()
-    {
-        //decrease speed to base speed
-        yield return new WaitForSeconds(0.1f);
-
-    }
 }

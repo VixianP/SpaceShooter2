@@ -233,4 +233,4 @@ MonoBehaviour:
   LaserSpeed: 60
   _laserDamageAmount: 5
   _lifetime: 8
-  _lockOnDelay: 3
+  _size: {x: 120, y: 120}

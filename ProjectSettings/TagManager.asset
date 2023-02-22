@@ -12,6 +12,7 @@ TagManager:
   - Obstacle
   - SuperKamio
   - EliteBullet
+  - ExpOrb
   layers:
   - Default
   - TransparentFX
@@ -21,10 +22,10 @@ TagManager:
   - UI
   - Environment
   - StageTransition
-  - 
+  - Enemy
   - Environment
-  - 
-  - 
+  - Player
+  - Exp
   - 
   - 
   - 

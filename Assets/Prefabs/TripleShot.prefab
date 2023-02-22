@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -7526959945927108869}
   m_Layer: 0
   m_Name: TripleShot
-  m_TagString: Untagged
+  m_TagString: Laser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,6 +47,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LaserSpeed: 75
+  _projectileLifeSpan: 1.5
+  _laserDamageAmount: 0
+  CrtDamage: 0
 --- !u!1001 &1794547095012338759
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54,17 +57,29 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5033916641209799979}
     m_Modifications:
+    - target: {fileID: -6692415220149385856, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
+      propertyPath: LaserSpeed
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.23
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
       propertyPath: m_LocalPosition.z
@@ -100,10 +115,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9122776032926891870, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
       propertyPath: m_Name
-      value: Laser
+      value: Tri2
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: -6692415220149385856, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
 --- !u!4 &4533808692562215901 stripped
 Transform:
@@ -117,17 +131,29 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5033916641209799979}
     m_Modifications:
+    - target: {fileID: -6692415220149385856, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
+      propertyPath: LaserSpeed
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2
+      value: -4
       objectReference: {fileID: 0}
     - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.23
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
       propertyPath: m_LocalPosition.z
@@ -163,10 +189,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9122776032926891870, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
       propertyPath: m_Name
-      value: Laser (2)
+      value: Tri3
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: -6692415220149385856, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
 --- !u!4 &1700991914693744285 stripped
 Transform:
@@ -180,9 +205,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5033916641209799979}
     m_Modifications:
+    - target: {fileID: -6692415220149385856, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
+      propertyPath: LaserSpeed
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 2741797098215485338, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
       propertyPath: m_LocalPosition.x
@@ -226,10 +263,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9122776032926891870, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
       propertyPath: m_Name
-      value: Laser (1)
+      value: Tri1
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: -6692415220149385856, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
 --- !u!4 &7229956156130651082 stripped
 Transform:

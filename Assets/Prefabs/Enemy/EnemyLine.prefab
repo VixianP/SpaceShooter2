@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2690370185925741828}
   - component: {fileID: 3132484179584874048}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 8223672130641189189}
   - component: {fileID: 8991547475761178100}
   - component: {fileID: 5318559245878056697}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4891265487403289360}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Handle Slide Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 5457131569363239160}
   - component: {fileID: 545709599344613374}
   - component: {fileID: 6287910299970416253}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: DamageTextPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -364,7 +364,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1484562999212935728}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -405,7 +405,7 @@ GameObject:
   - component: {fileID: 5148821172145262887}
   - component: {fileID: 2333431705985730092}
   - component: {fileID: -1166861103108423688}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EnemyLine
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -440,7 +440,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyHealth: 10
-  _experienceToYield: 5
+  _expOrbSpawner: {fileID: 3500084144215859602, guid: 2c44b9809ee53524999a6ddd6d60aa0d, type: 3}
   _enemyShieldHealth: 1
   CollsionDamage: 1
   enemyProjetileGameobject_: {fileID: 3507301718163591161, guid: a7e4a00a3176d374dbcba7bbc56b143c, type: 3}
@@ -583,7 +583,7 @@ GameObject:
   - component: {fileID: 7158161518004693853}
   - component: {fileID: 161274722273305489}
   - component: {fileID: 3527721272449089038}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}

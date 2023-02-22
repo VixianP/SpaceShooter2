@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7271728659175900960}
   - component: {fileID: 287127452816658475}
   - component: {fileID: 6978513052936456349}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LootEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -145,5 +145,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movementSpeed: 20
+  _expOrbSpawner: {fileID: 3500084144215859602, guid: 2c44b9809ee53524999a6ddd6d60aa0d, type: 3}
   _powerUpToDrop: {fileID: 8574808493367577513, guid: cf5ca0c1eada9f94da21da8f97044c01, type: 3}
   _dodgeDistance: 50

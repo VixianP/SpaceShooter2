@@ -16,9 +16,13 @@ using TMPro;
 
 public class Player : MonoBehaviour
 {
+
     static GameObject PlayerGameObject; //will be used for later
 
     #region Player Stats
+    [Header("   [Player Stats]")]
+    [Space(15)]
+
     [SerializeField]
     public float _PlayerDmg = 1;
 
@@ -66,9 +70,13 @@ public class Player : MonoBehaviour
         }
     }
 
+
+
     #endregion
 
     #region Speed and Dodging
+    [Header("   [Speed And Dodging]")]
+    [Space(15)]
 
     [SerializeField]
     private float speed;
@@ -96,13 +104,14 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Projectile
+    [Header("   [Projectile]")]
+    [Space(15)]
 
     //fire delay
     [SerializeField]
     float FiringSpeed;
 
     float FiringTimer = -1f;
-
 
 
 
@@ -153,36 +162,25 @@ public class Player : MonoBehaviour
     GameObject _instandReloadBarDisplay;
 
 
-
-
-    //Chance to Activate Ability on hit
-    [SerializeField]
-    bool isHoming;
-
-    [SerializeField]
-    float _homingRocketCoolDown;
-    float _homingRocketCoolDownTime;
-    [SerializeField]
-    int _roll;
-
-
-
-
-    //Targeting For Homing Shot
-    public GameObject _lockOn;
-    [SerializeField]
-    GameObject _homingShot;
-
-
     bool _instantReloadAttempt;
 
     #endregion
 
     #region Abilities
-    [SerializeField]
+    [Header("   [Abilities]")]
+    [Space(15)]
 
+    int _roll;
+
+
+    //shields
+    [SerializeField]
     GameObject PlayerShield;
 
+
+
+
+    //Shield Stats and UI
     [SerializeField]
     int MaxShieldHealth;
 
@@ -195,19 +193,58 @@ public class Player : MonoBehaviour
     [SerializeField]
     Slider shieldSlider;
 
+
+
+
+
+    [Space(10)]
+
+    //Targeting For Homing Shot
+    public GameObject _lockOn;
+    [SerializeField]
+    GameObject _homingShot;
+
+
+    //homing Rockets
+    int _maxAmountOfRockets;
+
+    int _currentAmountOfRockets;
+
+    [SerializeField]
+    float _rocketFireDelay = 0.4f;
+
+    float _rocketFireTimer;
+
     #endregion
 
     #region Experience and Level up
+    [Header("   [Level Up]")]
+    [Space(15)]
 
+    
+    //Level Up UI
     [SerializeField]
     Slider _experienceBar;
 
     [SerializeField]
     TextMeshProUGUI _experienceText;
 
+    public TextMeshProUGUI _experianceNotification;
+
     [SerializeField]
     TextMeshProUGUI _playerCurrentLevelText;
 
+
+    float _killTimeOffset;
+    float _killTime = 3; //for every kill + 0.2f and reset the timer. _killtime = time.time + killtimeOffset. add 1 to counter and multiply the amount of exp earned when picking up exp orbs
+
+    //add a new system to delay exp and score tally
+    //execute after time.time > _killTime
+
+    int _killCounter;
+
+
+    //Level Up System
     [SerializeField]
     int _experienceScaler;
 
@@ -216,6 +253,7 @@ public class Player : MonoBehaviour
 
     private int experience;
     int CurrentLevel = 1;
+
 
     public int LevelUp
     {
@@ -226,21 +264,31 @@ public class Player : MonoBehaviour
         }
         set
         {
-            _levelUpText.gameObject.GetComponent<LevelUpNotification>().StartNotification();
-            _statIncreaseText.GetComponent<LevelUpNotification>().StartNotification();
-            //stat increases ie health,damage, and power up carrry capacity
 
-            _PlayerDmg += 1;
+            CurrentLevel = value;
 
-            //heals the player to full health
-            MaxHealth += 10;
+            //_levelUpText.gameObject.GetComponent<LevelUpNotification>().StartNotification();
+            //_statIncreaseText.GetComponent<LevelUpNotification>().StartNotification();
+
+
+            //_PlayerDmg += 1;
+            //MaxHealth += 10;
+
+            if(SkillPointToSpend < 0)
+            {
+                SkillPointToSpend = 0;
+            }
+
+            //activate Skillpoint
+            SkillPointToSpend++;
+            
+
             PlayerCurrentHealth = MaxHealth;
 
-            _playerCurrentLevelText.text = "LvL " + CurrentLevel.ToString();
+            _playerCurrentLevelText.text = "[LvL " + CurrentLevel.ToString();
             PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + _shieldHealth + ")" + "/" + MaxHealth;
             PlayerHpBar.value = PlayerCurrentHealth;
 
-            CurrentLevel = value;
 
             ExperienceToLevel += _experienceScaler ;
 
@@ -260,7 +308,8 @@ public class Player : MonoBehaviour
          
             experience = value;
 
-
+            _experianceNotification.GetComponent<LevelUpNotification>().StartNotification();
+            
             if (value >= ExperienceToLevel)
             {
 
@@ -275,7 +324,7 @@ public class Player : MonoBehaviour
 
                     _experienceBar.value = 0;
 
-                    _playerCurrentLevelText.text = "LvL " + CurrentLevel.ToString();
+                    _playerCurrentLevelText.text = "[LvL " + CurrentLevel.ToString();
 
                 } 
 
@@ -283,17 +332,17 @@ public class Player : MonoBehaviour
                 //over level
                 while (experience> ExperienceToLevel)
                 {
-                        LevelUp += 1;
+                    experience = Mathf.Abs(value - ExperienceToLevel);
 
-                        experience = value - ExperienceToLevel;
+                    LevelUp += 1;
 
                     if (value < 0)
                     {
                         value = 0;
                     }
 
-                    _playerCurrentLevelText.text = "LvL " + CurrentLevel.ToString();
-                    _experienceText.text = experience + "/" + ExperienceToLevel;
+                    _playerCurrentLevelText.text = "[LvL " + CurrentLevel.ToString();
+                    _experienceText.text = experience + "/" + ExperienceToLevel + "]";
                     _experienceBar.value = experience;
                 }
 
@@ -303,13 +352,33 @@ public class Player : MonoBehaviour
             
             if (value < ExperienceToLevel)
             {
-                _playerCurrentLevelText.text = "LvL " + CurrentLevel.ToString();
-                _experienceText.text = experience + "/" + ExperienceToLevel;
+                _playerCurrentLevelText.text = "[LvL " + CurrentLevel.ToString();
+                _experienceText.text = experience + "/" + ExperienceToLevel + "]";
                 _experienceBar.value = experience;
             }
 
         }
     }
+    #endregion
+
+    #region SkillPoint
+
+    int _skillpoint;
+    public int SkillPointToSpend
+    {
+        get
+        {
+            return _skillpoint;
+        }
+        set
+        {
+            _displaySpendingUI.SetActive(true);
+            _skillpoint = value;
+        }
+    }
+    
+
+
     #endregion
 
     #region Colliders,Components,Other Scripts
@@ -318,20 +387,20 @@ public class Player : MonoBehaviour
     #endregion
 
     #region PlayerUI
+    [Header("   [PlayerUI]")]
+    [Space(15)]
+
+
+    //HP
     [SerializeField]
     Text PlayerHP;
 
     [SerializeField]
     Slider PlayerHpBar;
 
-    Text _powerUpDescription;
-
-    Image _powerUpImage;
 
 
     //Level Up Notificiations
-
-
     [SerializeField]
     TextMeshProUGUI _levelUpText;
 
@@ -339,10 +408,20 @@ public class Player : MonoBehaviour
     TextMeshProUGUI _statIncreaseText;
 
 
+    //skill point
+    [SerializeField]
+    GameObject _displaySpendingUI;
+
+
+    //Stats
+
     #endregion
 
     #region Audio
-    AudioSource PlayerAudio;
+    [Header("   [Audio]")]
+    [Space(15)]
+
+
     [SerializeField]
     AudioClip[] SoundClips;
     /// <summary> Sound Clip Index
@@ -352,9 +431,14 @@ public class Player : MonoBehaviour
     /// 4 = Player Dash
     /// 5 = Player Death
     /// </summary>
+    /// 
+    AudioSource PlayerAudio;
+
     #endregion
 
-    #region Visuals and Aniation
+    #region Visuals and Animation
+    [Header("   [Visuals and Animation]")]
+    [Space(15)]
 
     //the damage visuals
     [SerializeField]
@@ -364,6 +448,9 @@ public class Player : MonoBehaviour
     #endregion
 
     #region The Super K
+    [Header("   [SuperK]")]
+    [Space(15)]
+
 
     [SerializeField]
     GameObject _superKGameObjectToSpawn;
@@ -399,6 +486,12 @@ public class Player : MonoBehaviour
             Movement();
 
             TemporaryPowerUptimer();
+
+            //abilities
+
+            HomingShot();
+
+            SpendSkillPoint();
         }
     }
 
@@ -426,7 +519,7 @@ public class Player : MonoBehaviour
 
         _cameraAnim = Camera.main.GetComponent<Animator>();
 
-        _experienceText.text = experience + "/" + ExperienceToLevel;
+        _experienceText.text = experience + "/" + ExperienceToLevel + "]";
         _experienceBar.value = experience;
         _experienceBar.maxValue = ExperienceToLevel;
     }
@@ -550,7 +643,7 @@ public class Player : MonoBehaviour
         }
 
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             if (_dashSlider.value == 0)
             {
@@ -562,6 +655,40 @@ public class Player : MonoBehaviour
 
             }
         }
+
+        if (Input.GetKey(KeyCode.C))
+        {
+
+        }
+    }
+
+    public void SpendSkillPoint()
+    {
+        if (SkillPointToSpend > 0)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                SpeedBoost();
+                //show current stats
+                SkillPointToSpend--;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                PlayerHealth += 25;
+                //show current stats
+                SkillPointToSpend--;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                _PlayerDmg++;
+                //show current stats
+                SkillPointToSpend--;
+            }
+        } else if (SkillPointToSpend < 1)
+        {
+            _displaySpendingUI.SetActive(false);
+        }
+
     }
 
     void SpawnSuperK()
@@ -692,6 +819,9 @@ public class Player : MonoBehaviour
         }
     }
 
+
+    #region PowerUp Methods
+
     void ShieldEffects()
     {
         if (_shieldHealth < MaxShieldHealth * .7)
@@ -708,7 +838,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    //assigns the power up
+    //assigns new projectile
     void ProjectilePowerUp(GameObject Projectile, int Timer)
     {
         WeaponTimer = Timer + Time.time;
@@ -743,12 +873,16 @@ public class Player : MonoBehaviour
 
     void SpeedBoost()
     {
-        if (speed < MaxSpeed)
+        if (BaseSpeed < MaxSpeed)
         {
-            speed++;
+            BaseSpeed++;
+            if(IsBoosting == false)
+            {
+                speed = BaseSpeed;
+            }
         } else
         {
-            speed = MaxSpeed;
+            BaseSpeed = MaxSpeed;
             ActivateShield();
         }
     }
@@ -768,11 +902,15 @@ public class Player : MonoBehaviour
         }
     }
 
-    void HealthBoost()
+    public void HomingPowerUp()
     {
-
+        _maxAmountOfRockets++;
     }
 
+    #endregion
+
+
+    #region Coroutines
     IEnumerator ChargeShotCoolDown()
     {
         while (_chargedShotCoolDownTimerSlider.value > 0)
@@ -893,6 +1031,10 @@ public class Player : MonoBehaviour
 
     }
 
+    #endregion
+
+
+    //homing missle, critical strike
     #region Abilities
 
     public void Targeting(GameObject EnemyToTarget)
@@ -903,46 +1045,47 @@ public class Player : MonoBehaviour
     public void RollDice()
     {
         _roll = Random.Range(0, 100);
-        TestShot(_roll);
-
+        HomeShotrefill();
     }
 
-    void TestShot(int roll)
+    void HomeShotrefill()
     {
-        if (isHoming == true)
+        if(_roll > 70)
         {
-            if (roll > 0)
+            _currentAmountOfRockets = _maxAmountOfRockets;
+        }
+    }
+
+    void HomingShot()
+    {
+        if (_maxAmountOfRockets > 0 && _currentAmountOfRockets > 0)
+        {
+            if (Time.time > _rocketFireTimer)
             {
-                //spawn homing bullet aka Create it and link it to LockOm
                 Instantiate(_homingShot, new Vector3(transform.position.x, transform.position.y + 2, 0), Quaternion.identity);
-
-
+                _rocketFireTimer = Time.time + _rocketFireDelay;
+                _currentAmountOfRockets--;
             }
+
+
+            
         }
     }
 
 
     #endregion
 
-    void OnTriggerEnter2D(Collider2D collision)
+    public void KillMultiplier()
     {
-        if (collision.tag == "EnemyBullet" && IsDodging == false)
-        {
-            
-            EnemyProjectileScript Bullet = collision.gameObject.GetComponent<EnemyProjectileScript>();
-            if(Bullet != null)
-            {
-                TakeDamage(Bullet.damage);
-                Destroy(collision.gameObject);
-            }
-        }
-        if (collision.tag == "PowerUp")
-        {
-            CallPowerUp(collision.gameObject);
-        }
+        //make a timer
+        //if the time is less than the max time, hold multiplier
+        //whenever the player kills, add a value to max time
+        //add to multiplier
+        //calculate after multiplier is dropped
     }
 
-    //checks what kind of power up it is
+
+    //checks what kind of power up it is and assigns is appropriately
     void CallPowerUp(GameObject PowerUpGameObject)
     {
         PowerUpScript PowUp = PowerUpGameObject.gameObject.GetComponent<PowerUpScript>();
@@ -963,6 +1106,8 @@ public class Player : MonoBehaviour
         
     }
 
+
+    //resets all values related to player on death or reset
     void ResetPlayer()
     {
         PlayerValues.PlayerIsDead = false;
@@ -973,4 +1118,27 @@ public class Player : MonoBehaviour
     }
 
 
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "EnemyBullet" && IsDodging == false)
+        {
+
+            EnemyProjectileScript Bullet = collision.gameObject.GetComponent<EnemyProjectileScript>();
+            if (Bullet != null)
+            {
+                TakeDamage(Bullet.damage);
+                Destroy(collision.gameObject);
+            }
+        }
+        if (collision.tag == "PowerUp")
+        {
+            CallPowerUp(collision.gameObject);
+        }
+        if(collision.tag == "ExpOrb")
+        {
+            Experience += collision.gameObject.GetComponent<ExpOrbScript>().ExpValue;
+            _experianceNotification.GetComponent<LevelUpNotification>().OverAllEXPGain += collision.gameObject.GetComponent<ExpOrbScript>().ExpValue;
+            Destroy(collision.gameObject);
+        }
+    }
 }

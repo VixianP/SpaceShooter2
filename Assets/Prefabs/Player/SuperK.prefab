@@ -55,8 +55,8 @@ MonoBehaviour:
   PlayerGameObject: {fileID: 0}
   fireMode:
   - {fileID: 3132326051426714754, guid: 646f969032c886c47b93808e812a064a, type: 3}
-  - {fileID: 9122776032926891870, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
-  - {fileID: 9122776032926891870, guid: b37b917c2f47aae49b46b3ce42232c57, type: 3}
+  - {fileID: 3132326051426714754, guid: 646f969032c886c47b93808e812a064a, type: 3}
+  - {fileID: 3132326051426714754, guid: 646f969032c886c47b93808e812a064a, type: 3}
   _fireDelay: 0.2
   SKHealth: 10
 --- !u!212 &-7524474695815140014
@@ -156,4 +156,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4

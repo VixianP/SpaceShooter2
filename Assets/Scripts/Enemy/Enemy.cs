@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
     private int _enemyHealth;
 
     [SerializeField]
-    int _experienceToYield = 5;
+    GameObject _expOrbSpawner;
 
     [SerializeField]
     int _enemyShieldHealth;
@@ -248,7 +248,12 @@ public class Enemy : MonoBehaviour
 
         PlayerValues.Score += PointValue;
 
-        _spwnManager.EnemyDeath(gameObject,_isElite,_experienceToYield);
+        if(_expOrbSpawner != null)
+        {
+            Instantiate(_expOrbSpawner, transform.position, Quaternion.identity);
+        }
+
+        _spwnManager.EnemyDeath(gameObject,_isElite);
 
 
     }

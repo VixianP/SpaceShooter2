@@ -216,8 +216,14 @@ public class SpawnManager : MonoBehaviour
 
     #region External Scripts
 
-    PlayerTargeting _targeting;
+    #endregion
 
+    #region Boss
+
+    [SerializeField]
+    GameObject _boss;
+
+    bool _bossActive;
     #endregion
 
 
@@ -267,28 +273,28 @@ public class SpawnManager : MonoBehaviour
 
         //this flips on early because its being called constantly by the next object.
 
-        if (Time.time > _obstacleTime * .9f && _WarningIndicator.activeInHierarchy == false)
+        if (_bossActive == false)
         {
-            _spawnPosition = new Vector3(Random.Range(-60, 55), _spawnPosition.y, _spawnPosition.z);
+            if (Time.time > _obstacleTime * .9f && _WarningIndicator.activeInHierarchy == false)
+            {
+                _spawnPosition = new Vector3(Random.Range(-60, 55), _spawnPosition.y, _spawnPosition.z);
 
-            _WarningIndicator.transform.position = new Vector2(_spawnPosition.x, 35);
+                _WarningIndicator.transform.position = new Vector2(_spawnPosition.x, 35);
 
-            _WarningIndicator.SetActive(true);
-        }
+                _WarningIndicator.SetActive(true);
+            }
 
-        if (Time.time > _obstacleTime)
-        {
-            GameObject _newObstacle = Instantiate(_obstaclesToSpawn[0], _spawnPosition, Quaternion.identity);
+            if (Time.time > _obstacleTime)
+            {
+                GameObject _newObstacle = Instantiate(_obstaclesToSpawn[0], _spawnPosition, Quaternion.identity);
 
-            ScrollingBackgrounds _obstacleVaryingSpeed = _newObstacle.GetComponent<ScrollingBackgrounds>();
 
-            _obstacleVaryingSpeed.MovementSpeed = Random.Range(50, 70);
+                _spawnPosition = new Vector3(Random.Range(-22, 22), _spawnPosition.y, _spawnPosition.z);
 
-            _spawnPosition = new Vector3(Random.Range(-22, 22), _spawnPosition.y, _spawnPosition.z);
+                _WarningIndicator.SetActive(false);
 
-            _WarningIndicator.SetActive(false);
-
-            _obstacleTime = Time.time + _obstacleSpawnDelay;
+                _obstacleTime = Time.time + _obstacleSpawnDelay;
+            }
         }
     }
 
@@ -299,7 +305,6 @@ public class SpawnManager : MonoBehaviour
             SpawnedPlayer = Instantiate(PlayerToSpawn, new Vector3(0, -20, 0), Quaternion.identity);
 
             _player = SpawnedPlayer.GetComponent<Player>();
-            _targeting = _player.GetComponent<PlayerTargeting>();
         }
         else
         {
@@ -320,7 +325,6 @@ public class SpawnManager : MonoBehaviour
         if (_formationList[_fomartionSelection].CallMethod == "Line")
         {
             GameObject _instantiatedEliteEnemy = Instantiate(_formationList[_fomartionSelection].EliteEnemy, _currentSpawnPosition, Quaternion.identity);
-            _targeting._enemiesToTarget.Add(_instantiatedEliteEnemy);
 
             //injection
             Enemy _spawnedEnemyScript = _instantiatedEliteEnemy.GetComponent<Enemy>();
@@ -343,7 +347,6 @@ public class SpawnManager : MonoBehaviour
         {
 
             GameObject _instantiatedEliteEnemy = Instantiate(_formationList[_fomartionSelection].EliteEnemy, _currentSpawnPosition, Quaternion.identity);
-            _targeting._enemiesToTarget.Add(_instantiatedEliteEnemy);
 
             _enemiesInPlay++;
             _eliteCoutner++;
@@ -370,7 +373,6 @@ public class SpawnManager : MonoBehaviour
 
                 GameObject _instantiatedEliteEnemy = Instantiate(_formationList[_fomartionSelection].EliteEnemy, _currentSpawnPosition, Quaternion.identity);
 
-                _targeting._enemiesToTarget.Add(_instantiatedEliteEnemy);
 
                 _enemiesInPlay++;
 
@@ -382,12 +384,14 @@ public class SpawnManager : MonoBehaviour
             RerollSet();
         }
 
-        if(_isBoss == true)
+        if (_isBoss == true && _boss != null && _bossActive == false) 
         {
-
+            Instantiate(_boss, new Vector3(0, 120, 0), Quaternion.identity);
+            _bossActive = true;
         }
 
     }
+
 
     //starts a new wave
     void WaveSpawner()
@@ -406,17 +410,20 @@ public class SpawnManager : MonoBehaviour
             StartCoroutine(SpawnCoroutine(_fomartionSelection));
         }
 
-        if(_currentWave > _maxWaves)
+        if(_currentWave > _maxWaves || _currentWave == _maxWaves)
         {
+            _isBoss = true;
             _currentWave = _maxWaves;
-        }
 
-        if(_currentWave == _maxWaves)
-        {
             _spawnPool = 0;
             _currentNumberToSpawn = 0;
+            _elitesToSpawn = 0;
+            _maxNumberToSpawn = 0;
+            _numberToRespawn = 0;
             print("End Reached");
+            SpecialSpawn();
         }
+
 
         //wave transition start
 
@@ -551,7 +558,6 @@ public class SpawnManager : MonoBehaviour
             _enemiesInPlay = 0;
         }
 
-        _targeting._enemiesToTarget.Remove(EnemyGameObject);
         Destroy(EnemyGameObject);
 
         if (_enemiesInPlay == 0 && _currentNumberToSpawn == 0 && _spawnPool > 0)
@@ -561,7 +567,7 @@ public class SpawnManager : MonoBehaviour
 
     }
 
-    public void EnemyDeath(GameObject enemyGameobject, bool Elite, int exp)
+    public void EnemyDeath(GameObject enemyGameobject, bool Elite)
     {
 
         _enemiesInPlay--;
@@ -570,8 +576,6 @@ public class SpawnManager : MonoBehaviour
         {
             _enemiesInPlay = 0;
         }
-
-        _player.Experience += exp;
 
         if (Elite == true)
         {
@@ -586,14 +590,12 @@ public class SpawnManager : MonoBehaviour
 
         }
 
-        _targeting._enemiesToTarget.Remove(enemyGameobject);
 
         Destroy(enemyGameobject);
 
         if (_currentNumberToSpawn < 0)
         {
             _currentNumberToSpawn = 0;
-            print(_currentNumberToSpawn + " Correction");
         }
 
         if (_spawnPool < 0)
@@ -679,7 +681,6 @@ public class SpawnManager : MonoBehaviour
 
                     GameObject SpawnedEnemy = Instantiate(_formationList[Selection].CommonEnemy, _currentSpawnPosition, Quaternion.identity);
 
-                    _targeting._enemiesToTarget.Add(SpawnedEnemy);
                    
                         //injection
                         Enemy _spawnedEnemyScript = SpawnedEnemy.GetComponent<Enemy>();
