@@ -56,6 +56,7 @@ MonoBehaviour:
   _PlayerDmg: 1
   MaxHealth: 100
   speed: 25
+  BaseSpeed: 0
   MaxDashDistance: 4.5
   MaxSpeed: 60
   IsDodging: 0
@@ -528,6 +529,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2214546287509639576, guid: d4a182ce909792a4ca3d0d40ce1cd4c2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 137.52997
+      objectReference: {fileID: 0}
     - target: {fileID: 2544383266299893634, guid: d4a182ce909792a4ca3d0d40ce1cd4c2, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -544,6 +549,14 @@ PrefabInstance:
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 552074112313861267}
+    - target: {fileID: 5257782112498408417, guid: d4a182ce909792a4ca3d0d40ce1cd4c2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -27
+      objectReference: {fileID: 0}
+    - target: {fileID: 5656421261546383648, guid: d4a182ce909792a4ca3d0d40ce1cd4c2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -157.30002
+      objectReference: {fileID: 0}
     - target: {fileID: 5691712109755743294, guid: d4a182ce909792a4ca3d0d40ce1cd4c2, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -592,14 +605,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5715019275948440737, guid: d4a182ce909792a4ca3d0d40ce1cd4c2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -159.42001
+      objectReference: {fileID: 0}
     - target: {fileID: 6228665814888502716, guid: d4a182ce909792a4ca3d0d40ce1cd4c2, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 552074112313861267}
-    - target: {fileID: 7702884518428256870, guid: d4a182ce909792a4ca3d0d40ce1cd4c2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7788607549448344111, guid: d4a182ce909792a4ca3d0d40ce1cd4c2, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -611,6 +624,14 @@ PrefabInstance:
     - target: {fileID: 8440222963458115769, guid: d4a182ce909792a4ca3d0d40ce1cd4c2, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472319557234744617, guid: d4a182ce909792a4ca3d0d40ce1cd4c2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 137.53033
+      objectReference: {fileID: 0}
+    - target: {fileID: 9106197350388385198, guid: d4a182ce909792a4ca3d0d40ce1cd4c2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -27
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4a182ce909792a4ca3d0d40ce1cd4c2, type: 3}

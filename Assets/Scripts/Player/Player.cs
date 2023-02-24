@@ -27,8 +27,8 @@ public class Player : MonoBehaviour
     public float _PlayerDmg = 1;
 
 
-    [SerializeField]
-    private int MaxHealth;
+    
+    public int MaxHealth;
     private int PlayerCurrentHealth;
     public int PlayerHealth
     {
@@ -78,10 +78,11 @@ public class Player : MonoBehaviour
     [Header("   [Speed And Dodging]")]
     [Space(15)]
 
-    [SerializeField]
-    private float speed;
+    [HideInInspector]
+    public float speed;
 
-    private float BaseSpeed;
+    [HideInInspector]
+    public float BaseSpeed;
 
     [SerializeField]
     float MaxDashDistance;
@@ -372,7 +373,7 @@ public class Player : MonoBehaviour
         }
         set
         {
-            _displaySpendingUI.SetActive(true);
+            _skillPointUIScript.ShowAll();
             _skillpoint = value;
         }
     }
@@ -463,7 +464,11 @@ public class Player : MonoBehaviour
     //when death, destroy the super k
     #endregion
 
- 
+    #region External Scripts
+
+    SkillPointUIScript _skillPointUIScript;
+
+    #endregion
 
     private void Awake()
     {
@@ -513,6 +518,7 @@ public class Player : MonoBehaviour
         PlayerCollider = gameObject.GetComponent<Collider2D>();
         PlayerSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         PlayerAudio = GetComponent<AudioSource>();
+        _skillPointUIScript = _displaySpendingUI.GetComponent<SkillPointUIScript>();
         PlayerHP.text = "HP " + PlayerCurrentHealth + "(" + _shieldHealth + ")" + "/" + MaxHealth;
         PlayerHpBar.maxValue = MaxHealth;
         PlayerHpBar.value = MaxHealth;
@@ -566,7 +572,7 @@ public class Player : MonoBehaviour
         }
 
 
-        if (SK._isattached == false)
+        if (SK._isFrontAttached == false  && SK._isBackAttached == false)
         {
             if (_chargedShotCoolDownTimerSlider.value == 0 && Time.timeScale == 1 && _currentAmmoCount > 0)
             {
@@ -642,7 +648,6 @@ public class Player : MonoBehaviour
             }
         }
 
-
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             if (_dashSlider.value == 0)
@@ -669,36 +674,43 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 SpeedBoost();
-                //show current stats
+                
                 SkillPointToSpend--;
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                PlayerHealth += 25;
-                //show current stats
+                MaxHealth += 50;
+
+                PlayerHP.text = PlayerCurrentHealth.ToString() + '/' + MaxHealth.ToString();
+                PlayerHpBar.maxValue = MaxHealth;
+
                 SkillPointToSpend--;
             }
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
                 _PlayerDmg++;
-                //show current stats
+                
                 SkillPointToSpend--;
             }
         } else if (SkillPointToSpend < 1)
         {
-            _displaySpendingUI.SetActive(false);
+            _skillPointUIScript.CloseAll();
         }
 
     }
 
+    #region Super K
     void SpawnSuperK()
     {
-        _theSuperKObject = Instantiate(_superKGameObjectToSpawn, new Vector3(transform.position.x, transform.position.y + 6, transform.position.z),Quaternion.identity);
+        _theSuperKObject = Instantiate(_superKGameObjectToSpawn, new Vector3(transform.position.x, transform.position.y + 6, transform.position.z), Quaternion.identity);
         SK = _theSuperKObject.GetComponent<SuperK>();
         SK.PlayerGameObject = gameObject;
         SK._isattached = true;
 
     }
+
+    #endregion
+
 
     public void TakeDamage(int value)
     {
@@ -875,7 +887,7 @@ public class Player : MonoBehaviour
     {
         if (BaseSpeed < MaxSpeed)
         {
-            BaseSpeed++;
+            BaseSpeed += 2;
             if(IsBoosting == false)
             {
                 speed = BaseSpeed;

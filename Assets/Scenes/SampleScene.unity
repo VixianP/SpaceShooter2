@@ -15470,7 +15470,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4276120765810327075, guid: a4b86963db11b584d9db2a5022ba2adf, type: 3}
       propertyPath: SpawnDelay
-      value: 4.2
+      value: 4.1
       objectReference: {fileID: 0}
     - target: {fileID: 4276120765810327075, guid: a4b86963db11b584d9db2a5022ba2adf, type: 3}
       propertyPath: _rushSpeed
@@ -15566,7 +15566,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4276120766901076263, guid: a4b86963db11b584d9db2a5022ba2adf, type: 3}
       propertyPath: SpawnDelay
-      value: 4.1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4276120766901076263, guid: a4b86963db11b584d9db2a5022ba2adf, type: 3}
       propertyPath: _rushSpeed

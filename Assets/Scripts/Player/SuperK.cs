@@ -4,23 +4,44 @@ using UnityEngine;
 
 public class SuperK : MonoBehaviour
 {
+
+    #region Attachement
+    [HideInInspector]
+    public bool _isFrontAttached = true;
+
+    [HideInInspector]
+    public bool _isBackAttached;
+
+    [HideInInspector]
+    public bool _isSideAttached;
+
+    [HideInInspector]
     public bool _isattached;
 
+    [HideInInspector]
+    public bool _front,_back,_side;
+
     bool _movementLock = false;
+
+    public bool _PoweredUp;
+
+    #endregion
 
     #region Movement And Positioning
     [SerializeField]
     int MovementSpeed;
 
+    Vector3 _playerPos;
+    
     Vector3 _positionToMoveTo;
+
+    [SerializeField]
+    Vector3 _positionOffset;
 
     [SerializeField]
     float _sendOutDistance;
 
     Vector3 _distanceToCover;
-
-    [SerializeField]
-    int _attachedPositionOffset = 7;
 
 
     [SerializeField]
@@ -35,12 +56,19 @@ public class SuperK : MonoBehaviour
 
     public GameObject PlayerGameObject;
 
-    Vector3 PlayerPosition;
+    Player _playerScript;
+
     #endregion
 
     #region FireModes
     [SerializeField]
-    GameObject[] fireMode;  // 0 = solo firing, 1 = combined, 2 Combined ChargeShot
+    GameObject[] fireMode;  // 0 = solo firing, 1 back attach, 2 side attach
+
+    [SerializeField]
+    GameObject[] _poweredUpFireModes;
+
+    //what superk will be shooting
+    GameObject _inChamber;
 
     [SerializeField]
     float _fireDelay;
@@ -56,13 +84,34 @@ public class SuperK : MonoBehaviour
     float RegenTimer; //for health or death
     #endregion
 
+    #region Collsion
 
+    [SerializeField]
+    Collider2D _leftCollider;
+
+    #endregion
+
+    void Start()
+    {
+        _isFrontAttached = true;
+        PlayerGameObject = PlayerValues.playerGameobject;
+        if(PlayerGameObject != null)
+        {
+            _playerScript = PlayerGameObject.GetComponent<Player>();
+        }
+        _inChamber = fireMode[0];
+    }
 
     void Update()
     {
 
-        _positionToMoveTo = PlayerGameObject.transform.position;
-        _positionToMoveTo.y = PlayerGameObject.transform.position.y + 5;
+        //this does not get modified my other commands. its a reference of where the players position is in real time.
+        _playerPos = PlayerGameObject.transform.position;
+
+        //this gets modified by other commands
+        _positionToMoveTo = new Vector3(_playerPos.x + _positionOffset.x, _playerPos.y + _positionOffset.y, 0);
+        
+
         Attached();
         SuperKInputs();
         SendOut();
@@ -82,6 +131,15 @@ public class SuperK : MonoBehaviour
         if (_isMoving == true)
         {
                 _isattached = false;
+                _isFrontAttached = false;
+                _isBackAttached = false;
+                _isSideAttached = false;
+
+                if(_PoweredUp == false)
+            {
+                _inChamber = fireMode[0];
+            }
+
                 _movementLock = true;
             if (transform.position.y < _distanceToCover.y)
             {
@@ -100,30 +158,115 @@ public class SuperK : MonoBehaviour
     {
         if (_isReturning == true && _returnLock == false)
         {
+
+            
             // if directly above the player
-            if(transform.position.y > PlayerGameObject.transform.position.y)
+            if(transform.position.y > PlayerGameObject.transform.position.y + 4)
             {
-                _positionToMoveTo = PlayerGameObject.transform.position;
-                _positionToMoveTo.y += _attachedPositionOffset;
+                _positionOffset.x = 0;
+                _positionOffset.y = 7;
                 _returnLock = true;
-            }
+                _front = true;
+                _back = false;
 
+                if (_PoweredUp == false)
+                {
+                    _inChamber = fireMode[0];
+                }
+                
+            }
+            
             //if below the player
-            if (transform.position.y < PlayerGameObject.transform.position.y)
+            if (transform.position.y < PlayerGameObject.transform.position.y - 4)
             {
-                _positionToMoveTo = PlayerGameObject.transform.position;
-                _positionToMoveTo.y = -PlayerGameObject.transform.position.y - -_attachedPositionOffset;
+                _positionOffset.x = 0;
+                _positionOffset.y = -7;
+                _front = false;
+                _back = true;
+                //movement speed increase
+
+
+                _inChamber = fireMode[1];
+
+                _returnLock = true;
+            }
+            
+            //if on the sides of the player
+            if (transform.position.x > PlayerGameObject.transform.position.x && transform.position.y < _playerPos.y + 2 && transform.position.y > _playerPos.y - 2)
+            {
+                 print("right");
+
+                _positionOffset.y = 0;
+                _positionOffset.x = 7;
+
+                _side = true;
+                _front = false;
+                _back = false;
+
+                _inChamber = fireMode[2];
+
                 _returnLock = true;
             }
 
+            if (transform.position.x < PlayerGameObject.transform.position.x && transform.position.y < _playerPos.y + 2 && transform.position.y > _playerPos.y - 2)
+            {
+                print("Left");
+
+                _positionOffset.y = 0;
+                _positionOffset.x = -7;
+
+                _side = true;
+                _front = false;
+                _back = false;
+
+                _inChamber = fireMode[2];
+
+                _returnLock = true;
+            }
 
         }
+
+        //attaching.....
         if(_returnLock == true)
         {
             transform.position = Vector3.MoveTowards(transform.position, _positionToMoveTo, 0.7f);
             if(Vector3.Distance(transform.position,_positionToMoveTo) == 0)
             {
                 _isattached = true;
+
+                //front attachment
+                if(_front == true)
+                {
+                    _isFrontAttached = true;
+                } else if (_front == false)
+                {
+                    _isFrontAttached = false;
+                }
+
+                //back attachement
+                if(_back == true)
+                {
+                    _isBackAttached = true;
+                }
+                else
+                {
+                    _back = false;
+                    _isBackAttached = false;
+                }
+
+                
+                if(_side == true)
+                {
+                    _isSideAttached = true;
+                }
+                else
+                {
+                    _isSideAttached = false;
+                    _side = false;
+                }
+
+                
+
                 _isReturning = false;
                 _returnLock = false;
             }
@@ -181,9 +324,11 @@ public class SuperK : MonoBehaviour
     {
         if(_isattached == true)
         {
-            transform.position = new Vector3(PlayerGameObject.transform.position.x, PlayerGameObject.transform.position.y + _attachedPositionOffset, 0);
+            //transform.position = new Vector3(PlayerGameObject.transform.position.x, PlayerGameObject.transform.position.y + _attachedPositionOffset, 0);
+            transform.position = new Vector3(_positionToMoveTo.x, _positionToMoveTo.y,0);
         }
     }
+
 
     void FireInput()
     {
@@ -191,20 +336,33 @@ public class SuperK : MonoBehaviour
         {
             if(_autoFire == true)
             {
-                Instantiate(fireMode[1], transform.position, Quaternion.identity);
+                Instantiate(_inChamber, transform.position, Quaternion.identity);
                 _fireTime = Time.time + _fireDelay;
             }
 
-            if (Input.GetMouseButton(0) && _isattached == true)
+            if (Input.GetMouseButton(0) && _isFrontAttached == true)
             {
-                Instantiate(fireMode[0], transform.position, Quaternion.identity);
+                Instantiate(_inChamber, transform.position, Quaternion.identity);
                 _fireTime = Time.time + _fireDelay;
             }
+            if (Input.GetMouseButton(0) && _isBackAttached == true)
+            {
+                Instantiate(_inChamber, _playerPos, Quaternion.identity);
+                _fireTime = Time.time + _fireDelay;
+            }
+
             if (Input.GetMouseButtonDown(0) && _isattached == false)
             {
-                Instantiate(fireMode[1], transform.position, Quaternion.identity);
+                Instantiate(_inChamber, transform.position, Quaternion.identity);
                 _fireTime = Time.time + _fireDelay;
             }
+
+            if (Input.GetMouseButtonDown(0) && _isSideAttached == true)
+            {
+                Instantiate(_inChamber, transform.position, Quaternion.identity);
+                _fireTime = Time.time + _fireDelay;
+            }
+
         }
     }
 
