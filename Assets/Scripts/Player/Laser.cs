@@ -5,12 +5,16 @@ using UnityEngine;
 public class Laser : MonoBehaviour
 {
     [SerializeField]
-    int LaserSpeed;
+    float LaserSpeed;
 
     [SerializeField]
     float _projectileLifeSpan = 1.5f;
 
     public int _laserDamageAmount;
+
+    [SerializeField]
+    bool _isflak;
+
 
     //critical strike
     int _crtRoll;
@@ -66,6 +70,14 @@ public class Laser : MonoBehaviour
         if(colli.tag == "Enemy")
         {
             Damage(colli.gameObject);
+        }
+
+        if (colli.tag == "EnemyBullet")
+        {
+            if (_isflak == true)
+            {
+                Destroy(colli.gameObject);
+            }
         }
     }
 }

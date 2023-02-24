@@ -111,6 +111,7 @@ MonoBehaviour:
   _front: 0
   _back: 0
   _side: 0
+  _PoweredUp: 0
   MovementSpeed: 20
   _positionOffset: {x: 0, y: 7, z: 0}
   _sendOutDistance: 20
@@ -121,6 +122,11 @@ MonoBehaviour:
   - {fileID: 3132326051426714754, guid: 646f969032c886c47b93808e812a064a, type: 3}
   - {fileID: 1077510514370183822, guid: 4b3c0543f8ba06744908f32e47fa6925, type: 3}
   - {fileID: 8413531317082214860, guid: 3f7a9c020caae894983902900c88159d, type: 3}
+  _PowerUpShot: {fileID: 0}
+  _ComboBullet: {fileID: 0}
+  _FrontBullet: {fileID: 0}
+  PairBullet: {fileID: 0}
+  FlakBullets: {fileID: 8784766223432903186, guid: 48e1c5af1bb165f40b50cb1ecbb1814a, type: 3}
   _fireDelay: 0.2
   SKHealth: 10
   _leftCollider: {fileID: 0}

@@ -379,7 +379,6 @@ public class Player : MonoBehaviour
     }
     
 
-
     #endregion
 
     #region Colliders,Components,Other Scripts
@@ -851,10 +850,17 @@ public class Player : MonoBehaviour
     }
 
     //assigns new projectile
-    void ProjectilePowerUp(GameObject Projectile, int Timer)
+    void ProjectilePowerUp(GameObject Projectile, int Timer, GameObject SKPowerUpShot, GameObject SKFrontShot, GameObject SKComboShot, GameObject SKPairLaser)
     {
+
         WeaponTimer = Timer + Time.time;
         Laser = Projectile;
+
+        SK._PoweredUp = true;
+        SK._PowerUpShot = SKPowerUpShot;
+        SK._FrontBullet = SKFrontShot;
+        SK._ComboBullet = SKComboShot;
+        SK.PairBullet = SKPairLaser;
     }
 
     public void IncreaseAmmo()
@@ -870,6 +876,7 @@ public class Player : MonoBehaviour
         if(Time.time > WeaponTimer)
         {
             Laser = BaseProjectile[0];
+            SK._PoweredUp = false;
         }
     }
 
@@ -1104,7 +1111,12 @@ public class Player : MonoBehaviour
 
         if (PowUp.PowerUp[PowUp.PowerUpSelector].Category == "Weapon" && PowUp.PowerUp[PowUp.PowerUpSelector].Type == "Temp")
         {
-            ProjectilePowerUp(PowUp.PowerUp[PowUp.PowerUpSelector].Projectile, PowUp.PowerUp[PowUp.PowerUpSelector].PowerUpDuration);
+            ProjectilePowerUp(PowUp.PowerUp[PowUp.PowerUpSelector].Projectile, 
+                              PowUp.PowerUp[PowUp.PowerUpSelector].PowerUpDuration,
+                              PowUp.PowerUp[PowUp.PowerUpSelector].SuperKProjectile,
+                              PowUp.PowerUp[PowUp.PowerUpSelector].SuperKFrontProjectile,
+                              PowUp.PowerUp[PowUp.PowerUpSelector].SuperKComboProjectile,
+                              PowUp.PowerUp[PowUp.PowerUpSelector].SuperKPairProjectile);
         }
         if (PowUp.PowerUp[PowUp.PowerUpSelector].Category == "Weapon" && PowUp.PowerUp[PowUp.PowerUpSelector].Type == "Perm")
         {

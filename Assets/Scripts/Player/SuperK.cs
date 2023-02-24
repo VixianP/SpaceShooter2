@@ -23,6 +23,7 @@ public class SuperK : MonoBehaviour
 
     bool _movementLock = false;
 
+    [SerializeField]
     public bool _PoweredUp;
 
     #endregion
@@ -64,12 +65,27 @@ public class SuperK : MonoBehaviour
     [SerializeField]
     GameObject[] fireMode;  // 0 = solo firing, 1 back attach, 2 side attach
 
-    [SerializeField]
-    GameObject[] _poweredUpFireModes;
+    //Power Up Shots
+    [HideInInspector]
+    public GameObject _PowerUpShot;
+
+    [HideInInspector]
+    public GameObject _ComboBullet;
+
+    [HideInInspector]
+    public GameObject _FrontBullet;
+
+    [HideInInspector]
+    public GameObject PairBullet;
 
     //what superk will be shooting
     GameObject _inChamber;
 
+    //abilities
+    [SerializeField]
+    GameObject FlakBullets;
+
+    //timing
     [SerializeField]
     float _fireDelay;
 
@@ -116,6 +132,7 @@ public class SuperK : MonoBehaviour
         SuperKInputs();
         SendOut();
         Return();
+        Chamber();
         FireInput();
 
         //temporary
@@ -134,11 +151,9 @@ public class SuperK : MonoBehaviour
                 _isFrontAttached = false;
                 _isBackAttached = false;
                 _isSideAttached = false;
-
-                if(_PoweredUp == false)
-            {
-                _inChamber = fireMode[0];
-            }
+                _front = false;
+                _back = false;
+                _side = false;
 
                 _movementLock = true;
             if (transform.position.y < _distanceToCover.y)
@@ -161,6 +176,7 @@ public class SuperK : MonoBehaviour
 
             
             // if directly above the player
+            //shielding
             if(transform.position.y > PlayerGameObject.transform.position.y + 4)
             {
                 _positionOffset.x = 0;
@@ -169,10 +185,6 @@ public class SuperK : MonoBehaviour
                 _front = true;
                 _back = false;
 
-                if (_PoweredUp == false)
-                {
-                    _inChamber = fireMode[0];
-                }
                 
             }
             
@@ -185,16 +197,13 @@ public class SuperK : MonoBehaviour
                 _back = true;
                 //movement speed increase
 
-
-                _inChamber = fireMode[1];
-
                 _returnLock = true;
             }
             
             //if on the sides of the player
             if (transform.position.x > PlayerGameObject.transform.position.x && transform.position.y < _playerPos.y + 2 && transform.position.y > _playerPos.y - 2)
             {
-                 print("right");
+                 
 
                 _positionOffset.y = 0;
                 _positionOffset.x = 7;
@@ -203,14 +212,12 @@ public class SuperK : MonoBehaviour
                 _front = false;
                 _back = false;
 
-                _inChamber = fireMode[2];
-
                 _returnLock = true;
             }
 
             if (transform.position.x < PlayerGameObject.transform.position.x && transform.position.y < _playerPos.y + 2 && transform.position.y > _playerPos.y - 2)
             {
-                print("Left");
+               
 
                 _positionOffset.y = 0;
                 _positionOffset.x = -7;
@@ -219,7 +226,6 @@ public class SuperK : MonoBehaviour
                 _front = false;
                 _back = false;
 
-                _inChamber = fireMode[2];
 
                 _returnLock = true;
             }
@@ -329,6 +335,66 @@ public class SuperK : MonoBehaviour
         }
     }
 
+    void Chamber()
+    {
+        //powered up
+        if (_PoweredUp == true)
+        {
+            if(_isFrontAttached == true)
+            {
+                if(_FrontBullet != null)
+                {
+                    _inChamber = _FrontBullet;
+                }
+            }
+
+            if(_isBackAttached == true)
+            {
+                if(_ComboBullet != null)
+                {
+                    _inChamber = _ComboBullet;
+                }
+            }
+
+            if(_isSideAttached == true)
+            {
+                if(_PowerUpShot != null)
+                {
+                    _inChamber = _PowerUpShot;
+                }
+            }
+
+            if(_isattached == false)
+            {
+                if(_PowerUpShot != null)
+                {
+                    _inChamber = _PowerUpShot;
+                }
+            }
+
+        }
+
+        if(_PoweredUp == false)
+        {
+            //no power ups
+            if (_isFrontAttached == true)
+            {
+   
+               _inChamber = fireMode[0];
+                
+            }
+
+            if (_isBackAttached == true)
+            {
+                _inChamber = fireMode[1];
+            }
+
+            if(_isSideAttached == true)
+            {
+                _inChamber = fireMode[2];
+            }
+        }
+    }
 
     void FireInput()
     {
@@ -342,11 +408,13 @@ public class SuperK : MonoBehaviour
 
             if (Input.GetMouseButton(0) && _isFrontAttached == true)
             {
+               
                 Instantiate(_inChamber, transform.position, Quaternion.identity);
                 _fireTime = Time.time + _fireDelay;
             }
             if (Input.GetMouseButton(0) && _isBackAttached == true)
             {
+
                 Instantiate(_inChamber, _playerPos, Quaternion.identity);
                 _fireTime = Time.time + _fireDelay;
             }
@@ -359,6 +427,7 @@ public class SuperK : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0) && _isSideAttached == true)
             {
+
                 Instantiate(_inChamber, transform.position, Quaternion.identity);
                 _fireTime = Time.time + _fireDelay;
             }
@@ -366,7 +435,17 @@ public class SuperK : MonoBehaviour
         }
     }
 
-
+    void Flak()
+    {
+        int _timesToFlak = 3;
+        int _timestoFlakPowerUp = 10;
+        while(_timesToFlak > 0)
+        {
+            Instantiate(FlakBullets, transform.position, Quaternion.identity);
+            _timesToFlak--;
+        }
+        _timesToFlak = 0;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -375,7 +454,12 @@ public class SuperK : MonoBehaviour
             Destroy(collision.gameObject);
         }
 
-        //if collide with laser, take damage
+        if(collision.name == "ChargedShot(Clone)")
+        {
+            Flak();
+            Destroy(collision.gameObject);
+        }
+        
 
     }
 }

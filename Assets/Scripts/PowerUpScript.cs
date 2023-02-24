@@ -5,7 +5,13 @@ using UnityEngine;
 [System.Serializable]
 public class PowerUps
 {
+    
     public GameObject Projectile;
+    public GameObject SuperKProjectile;
+    public GameObject SuperKComboProjectile;
+    public GameObject SuperKFrontProjectile;
+    public GameObject SuperKPairProjectile;
+
     public int PowerUpDuration;
     public int Damage;
     public string Category;
@@ -16,9 +22,14 @@ public class PowerUps
     //type temp or perm
     //sprite to show on sprite renderer
 
-    public PowerUps(GameObject Projectile, int PowerUpDuration, int Damage,string Category,string Type,string CallMethod, Sprite PowerUpImage)
+    public PowerUps(GameObject Projectile, GameObject SuperKProjectile, GameObject SuperKComboProjectile,GameObject SuperKFrontProjectile, GameObject SuperKPairProjectile, int PowerUpDuration, int Damage,string Category,string Type,string CallMethod, Sprite PowerUpImage)
     {
         this.Projectile = Projectile;
+        this.SuperKProjectile = SuperKProjectile;
+        this.SuperKComboProjectile = SuperKComboProjectile;
+        this.SuperKFrontProjectile = SuperKFrontProjectile;
+        this.SuperKPairProjectile = SuperKPairProjectile;
+
         this.PowerUpDuration = PowerUpDuration;
         this.Damage = Damage;
         this.Category = Category;

@@ -100,13 +100,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PowerUp:
   - Projectile: {fileID: 6173254773618768059, guid: f5472abb187941a448bf3bf891270693, type: 3}
-    PowerUpDuration: 5
+    SuperKProjectile: {fileID: 4205666636852513943, guid: 5a2caeb0159161c44bab284ba448da19, type: 3}
+    SuperKComboProjectile: {fileID: 2089690460786790137, guid: f69b203be9d398848bdc789743be6009, type: 3}
+    SuperKFrontProjectile: {fileID: 1735939121709779736, guid: 7901b8bd620cca846962e917c3c8d9d1, type: 3}
+    SuperKPairProjectile: {fileID: 7920380899514789757, guid: d32d9c0ab485e754599dffcea5d6883f, type: 3}
+    PowerUpDuration: 10
     Damage: 0
     Category: Weapon
     Type: Temp
     CallMethod: 
     PowerUpImage: {fileID: 21300000, guid: d1c3cc7e98ac75242ad2d83d7cea8579, type: 3}
   - Projectile: {fileID: 0}
+    SuperKProjectile: {fileID: 0}
+    SuperKComboProjectile: {fileID: 0}
+    SuperKFrontProjectile: {fileID: 0}
+    SuperKPairProjectile: {fileID: 0}
     PowerUpDuration: 0
     Damage: 0
     Category: Utility
@@ -114,6 +122,10 @@ MonoBehaviour:
     CallMethod: ActivateShield
     PowerUpImage: {fileID: 21300000, guid: cc577af7639d03d4e923d25a33be55c9, type: 3}
   - Projectile: {fileID: 0}
+    SuperKProjectile: {fileID: 0}
+    SuperKComboProjectile: {fileID: 0}
+    SuperKFrontProjectile: {fileID: 0}
+    SuperKPairProjectile: {fileID: 0}
     PowerUpDuration: 0
     Damage: 0
     Category: Utility
@@ -121,6 +133,10 @@ MonoBehaviour:
     CallMethod: IncreaseAmmo
     PowerUpImage: {fileID: 21300000, guid: ec65f885d1fbcc34a8aae49608824c13, type: 3}
   - Projectile: {fileID: 0}
+    SuperKProjectile: {fileID: 0}
+    SuperKComboProjectile: {fileID: 0}
+    SuperKFrontProjectile: {fileID: 0}
+    SuperKPairProjectile: {fileID: 0}
     PowerUpDuration: 0
     Damage: 0
     Category: Utility
@@ -128,13 +144,17 @@ MonoBehaviour:
     CallMethod: Heal
     PowerUpImage: {fileID: 21300000, guid: a0138346e0746174c833dad89b1c6fac, type: 3}
   - Projectile: {fileID: 0}
+    SuperKProjectile: {fileID: 0}
+    SuperKComboProjectile: {fileID: 0}
+    SuperKFrontProjectile: {fileID: 0}
+    SuperKPairProjectile: {fileID: 0}
     PowerUpDuration: 10
     Damage: 0
     Category: Utility
     Type: 
     CallMethod: HomingPowerUp
     PowerUpImage: {fileID: 21300000, guid: 141fc3968833cf840ae0b0acbebf8476, type: 3}
-  PowerUpSelector: 2
+  PowerUpSelector: 0
   PowerUpMoveDownSpeed: 10
   _player: {fileID: 0}
   _testMode: 0

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3733852666390155853}
   m_Layer: 0
   m_Name: Shrapnel Left
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -152,7 +152,7 @@ GameObject:
   - component: {fileID: 5570436659457743028}
   m_Layer: 0
   m_Name: Shrapnel Up Right
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: 6302127509468332297}
   m_Layer: 0
   m_Name: Shrapnel Down Right
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 1299189520380926256}
   m_Layer: 0
   m_Name: Circle
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -569,7 +569,7 @@ GameObject:
   - component: {fileID: 2864104892595159047}
   m_Layer: 0
   m_Name: Shrapnel Down
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -706,7 +706,7 @@ GameObject:
   - component: {fileID: 4876218353307237207}
   m_Layer: 0
   m_Name: Shrapnel Up
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -843,7 +843,7 @@ GameObject:
   - component: {fileID: 5420162961403490404}
   m_Layer: 0
   m_Name: Shrapnel Right
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -980,7 +980,7 @@ GameObject:
   - component: {fileID: 6474575005847348944}
   m_Layer: 0
   m_Name: Shrapnel Up Right
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1117,7 +1117,7 @@ GameObject:
   - component: {fileID: 1744455072000151363}
   m_Layer: 0
   m_Name: Shrapnel Down
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1254,7 +1254,7 @@ GameObject:
   - component: {fileID: 7404064892431769572}
   m_Layer: 0
   m_Name: Circle (1)
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1397,7 +1397,7 @@ GameObject:
   - component: {fileID: 6739178652452903808}
   m_Layer: 0
   m_Name: Shrapnel Right
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1534,7 +1534,7 @@ GameObject:
   - component: {fileID: 8867005434783000368}
   m_Layer: 0
   m_Name: Shrapnel Down Left
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1671,7 +1671,7 @@ GameObject:
   - component: {fileID: 1936653209565946958}
   m_Layer: 0
   m_Name: Shrapnel Left
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1808,7 +1808,7 @@ GameObject:
   - component: {fileID: 8421436515283802338}
   m_Layer: 0
   m_Name: Shrapnel Up Left
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1945,7 +1945,7 @@ GameObject:
   - component: {fileID: 5980743865358772658}
   m_Layer: 0
   m_Name: Shrapnel Up Left
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2082,7 +2082,7 @@ GameObject:
   - component: {fileID: 633525401457269865}
   m_Layer: 0
   m_Name: Shrapnel Up
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2219,7 +2219,7 @@ GameObject:
   - component: {fileID: 6267282559855282912}
   m_Layer: 0
   m_Name: Shrapnel Right
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2356,7 +2356,7 @@ GameObject:
   - component: {fileID: 1426351338874544097}
   m_Layer: 0
   m_Name: Shrapnel Left
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2493,7 +2493,7 @@ GameObject:
   - component: {fileID: 6150317402394799369}
   m_Layer: 0
   m_Name: Shrapnel Down Left
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2630,7 +2630,7 @@ GameObject:
   - component: {fileID: 1380344499689874540}
   m_Layer: 0
   m_Name: Shrapnel Up Right
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2767,7 +2767,7 @@ GameObject:
   - component: {fileID: 7980476786723628614}
   m_Layer: 0
   m_Name: Shrapnel Up
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2904,7 +2904,7 @@ GameObject:
   - component: {fileID: 1774105476017023112}
   m_Layer: 0
   m_Name: Shrapnel Up Left
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3041,7 +3041,7 @@ GameObject:
   - component: {fileID: 8688817583129536765}
   m_Layer: 0
   m_Name: Circle
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3186,7 +3186,7 @@ GameObject:
   - component: {fileID: 5787145766483065419}
   m_Layer: 0
   m_Name: Shrapnel Down Right
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3323,7 +3323,7 @@ GameObject:
   - component: {fileID: 4034147904666268809}
   m_Layer: 0
   m_Name: Shrapnel Down
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3460,7 +3460,7 @@ GameObject:
   - component: {fileID: 4853625710356818462}
   m_Layer: 0
   m_Name: Shrapnel Down Right
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3597,7 +3597,7 @@ GameObject:
   - component: {fileID: 8848198315167774447}
   m_Layer: 0
   m_Name: Shrapnel Down Left
-  m_TagString: Untagged
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
