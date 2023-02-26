@@ -3,12 +3,15 @@ tpsheetFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.tpsheet
 - Assets/Sprites/Boss/Rock Lobster/Charge-default-default.tpsheet
 - Assets/Sprites/Boss/Rock Lobster/Idle_Final.tpsheet
+- Assets/Sprites/Boss/Rock Lobster/stem_pos.tpsheet
 textureFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.png
 - Assets/Sprites/Boss/Rock Lobster/Charge-default-default.png
 - Assets/Sprites/Boss/Rock Lobster/Idle_Final.png
+- Assets/Sprites/Boss/Rock Lobster/stem_pos.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
 - 
 - 
 enableDebugOutput: 0

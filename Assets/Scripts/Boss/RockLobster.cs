@@ -32,7 +32,8 @@ public class RockLobster : MonoBehaviour
     #endregion
 
     #region States
-    bool _isAttacking;
+    [SerializeField]
+    Animator _rockLobAnim;
 
     [SerializeField]
     bool _isAnchored = false;
@@ -42,8 +43,17 @@ public class RockLobster : MonoBehaviour
 
     #region Attack Timers
 
-    //time to initiate attack
-    //time to execute attack
+
+    //time bettween attacks
+    float _attackDelay = 4;
+    float _attackTimer;
+
+
+    //time to choose and execute an attack
+    float _executionDelay = 3;
+    float _executionTimer;
+
+
 
     //regular attack
 
@@ -78,12 +88,38 @@ public class RockLobster : MonoBehaviour
             _spawnManagerScript = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         }
 
+        _attackTimer = Time.time + _attackDelay;
+
+        _rockLobAnim = GetComponent<Animator>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
         Movement();
+        Attack();
+    }
+
+    void Attack()
+    {
+        if(Time.time > _attackTimer)
+        {
+            _rockLobAnim.SetBool("is_attacking", true);
+
+
+            //run through all attacks and time
+            if (_rockLobAnim.GetBool("is_attacking") == true)
+            {
+
+
+
+
+
+
+                _attackTimer = Time.time + _attackDelay;
+            }
+        }
     }
 
     void Movement()

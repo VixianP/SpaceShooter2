@@ -1,0 +1,31 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# https://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:abc6bdf00411c2dd3eee85de4482c6c7:4d2355e2314cc3e1d33fc3917e83836f:fa23113de1a7fc39913300bf401a4882$
+#
+:format=40300
+:texture=stem_pos.png
+:size=4096x4096
+:pivotpoints=enabled
+:borders=disabled
+:alphahandling=ClearTransparentPixels
+
+Timeline 1_0000;0;3016;1920;1080; 0.5;0.5; 0;0;0;0
+Timeline 1_0001;0;3016;1920;1080; 0.5;0.5; 0;0;0;0
+Timeline 1_0002;1920;3016;1920;1080; 0.5;0.5; 0;0;0;0
+Timeline 1_0003;1920;3016;1920;1080; 0.5;0.5; 0;0;0;0
+Timeline 1_0004;1920;3016;1920;1080; 0.5;0.5; 0;0;0;0
+Timeline 1_0005;0;1936;1920;1080; 0.5;0.5; 0;0;0;0
+Timeline 1_0006;0;1936;1920;1080; 0.5;0.5; 0;0;0;0
+Timeline 1_0007;0;1936;1920;1080; 0.5;0.5; 0;0;0;0
+Timeline 1_0008;1920;1936;1920;1080; 0.5;0.5; 0;0;0;0
+Timeline 1_0009;1920;1936;1920;1080; 0.5;0.5; 0;0;0;0
+Timeline 1_0010;1920;1936;1920;1080; 0.5;0.5; 0;0;0;0
+Timeline 1_0011;0;856;1920;1080; 0.5;0.5; 0;0;0;0
+Timeline 1_0012;0;856;1920;1080; 0.5;0.5; 0;0;0;0
+Timeline 1_0013;1920;856;1920;1080; 0.5;0.5; 0;0;0;0
+Timeline 1_0014;1920;856;1920;1080; 0.5;0.5; 0;0;0;0
+Timeline 1_0015;1920;856;1920;1080; 0.5;0.5; 0;0;0;0
