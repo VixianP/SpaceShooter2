@@ -42,9 +42,11 @@ public class Player : MonoBehaviour
             if (PlayerHealth < 1)
             {
                 PlayerValues.PlayerIsDead = true;
+
                 PlayerDamage[0].SetActive(false);
                 PlayerDamage[1].SetActive(false);
                 PlayerDamage[2].SetActive(false);
+
                 PlayerCollider.enabled = false;
                 PlayerSpriteRenderer.enabled = false;
                 return;
@@ -399,7 +401,7 @@ public class Player : MonoBehaviour
     Slider PlayerHpBar;
 
 
-
+    [Space(15)]
     //Level Up Notificiations
     [SerializeField]
     TextMeshProUGUI _levelUpText;
@@ -407,13 +409,27 @@ public class Player : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI _statIncreaseText;
 
-
+    [Space(15)]
     //skill point
     [SerializeField]
     GameObject _displaySpendingUI;
 
 
-    //Stats
+
+    [Space(15)]
+    //boss
+    [SerializeField]
+    GameObject _bossUI;
+
+    [SerializeField]
+    TextMeshProUGUI _bossName;
+
+    [SerializeField]
+    Slider _bossHealth;
+
+    //Stage Complete
+    [SerializeField]
+    GameObject _stageComplete;
 
     #endregion
 
@@ -467,6 +483,8 @@ public class Player : MonoBehaviour
 
     SkillPointUIScript _skillPointUIScript;
 
+    
+
     #endregion
 
     private void Awake()
@@ -480,10 +498,9 @@ public class Player : MonoBehaviour
         SpawnSuperK();
     }
 
-
     void Update()
     {
-        if (PlayerValues.PlayerIsDead == false)
+        if (PlayerValues.PlayerIsDead == false && PlayerValues.PlayerCompleted == false)
         {
             PlayerInputs();
 
@@ -496,6 +513,12 @@ public class Player : MonoBehaviour
             HomingShot();
 
             SpendSkillPoint();
+        } else if (PlayerValues.PlayerCompleted == true)
+        {
+            if (_stageComplete.activeInHierarchy == false)
+            {
+                PlayerComplete();
+            }
         }
     }
 
@@ -698,7 +721,7 @@ public class Player : MonoBehaviour
 
     }
 
-    #region Super K
+    #region Super K functions
     void SpawnSuperK()
     {
         _theSuperKObject = Instantiate(_superKGameObjectToSpawn, new Vector3(transform.position.x, transform.position.y + 6, transform.position.z), Quaternion.identity);
@@ -709,7 +732,6 @@ public class Player : MonoBehaviour
     }
 
     #endregion
-
 
     public void TakeDamage(int value)
     {
@@ -756,7 +778,6 @@ public class Player : MonoBehaviour
                 shieldSlider.value = _shieldHealth;
 
                 ShieldEffects();
-
 
                 if (_shieldHealth < 1)
                 {
@@ -1131,6 +1152,26 @@ public class Player : MonoBehaviour
     }
 
 
+    public void InitializeBoss(string BossName, float MaxHealth)
+    {
+        if (_bossUI != null)
+        {
+            _bossName.text = BossName;
+            _bossHealth.maxValue = MaxHealth;
+            _bossHealth.value = MaxHealth;
+            _bossUI.SetActive(true);
+        }
+    }
+    public void UpdateBossUI(float CurrentHealth)
+    {
+        _bossHealth.value = CurrentHealth;
+        if(_bossHealth.value <= 0)
+        {
+            _bossUI.SetActive(false);
+        }
+    }
+
+
     //resets all values related to player on death or reset
     void ResetPlayer()
     {
@@ -1141,6 +1182,20 @@ public class Player : MonoBehaviour
         PlayerValues.playerGameobject = null;
     }
 
+    public void PlayerComplete()
+    {
+
+        PlayerValues.PlayerCompleted = true;
+
+        PlayerDamage[0].SetActive(false);
+        PlayerDamage[1].SetActive(false);
+        PlayerDamage[2].SetActive(false);
+
+        PlayerCollider.enabled = false;
+        PlayerSpriteRenderer.enabled = false;
+
+        _stageComplete.SetActive(true);
+    }
 
     void OnTriggerEnter2D(Collider2D collision)
     {

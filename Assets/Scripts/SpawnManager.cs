@@ -152,6 +152,9 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField]
     Text _gameTimeText;
+
+    [SerializeField]
+    GameObject _stageCompleteCanvas;
     #endregion
 
     #region GameClock
@@ -240,7 +243,7 @@ public class SpawnManager : MonoBehaviour
 
     private void Update()
     {
-        if (PlayerValues.PlayerIsDead == false)
+        if (PlayerValues.PlayerIsDead == false && PlayerValues.PlayerCompleted == false)
         {
             // SpawnPowerUp();
             SpawnObstacles();
@@ -295,7 +298,12 @@ public class SpawnManager : MonoBehaviour
 
                 _obstacleTime = Time.time + _obstacleSpawnDelay;
             }
+        } else
+        {
+            _WarningIndicator.SetActive(false);
         }
+
+
     }
 
     void SpawnPlayer()
@@ -386,7 +394,8 @@ public class SpawnManager : MonoBehaviour
 
         if (_isBoss == true && _boss != null && _bossActive == false) 
         {
-            Instantiate(_boss, new Vector3(0, 120, 0), Quaternion.identity);
+            _WarningIndicator.SetActive(true);
+            Instantiate(_boss, new Vector3(0, 100, 0), Quaternion.identity);
             _bossActive = true;
         }
 
@@ -420,7 +429,7 @@ public class SpawnManager : MonoBehaviour
             _elitesToSpawn = 0;
             _maxNumberToSpawn = 0;
             _numberToRespawn = 0;
-            print("End Reached");
+
             SpecialSpawn();
         }
 
@@ -746,7 +755,11 @@ public class SpawnManager : MonoBehaviour
         SpawnEnemy();
     }
 
-
+    public void GameEnd()
+    {
+        PlayerValues.PlayerCompleted = true;
+        
+    }
 
     #region Stage Transitions
 

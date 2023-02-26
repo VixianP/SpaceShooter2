@@ -48,10 +48,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyHealth: 1
+  _expOrbSpawner: {fileID: 0}
   _enemyShieldHealth: 0
   CollsionDamage: 50
   enemyProjetileGameobject_: {fileID: 7993733017014561468, guid: 1c7d3f83860499f49a6b3b8b2cd5c3d5, type: 3}
   _fireDelay: 0.5
+  _oneShotBullet: {fileID: 0}
   PointValue: 1
   Explosion: {fileID: 772484977331015354, guid: 3eb5ef472a7b15944b580e01bcc7915d, type: 3}
   _isElite: 1
@@ -60,6 +62,10 @@ MonoBehaviour:
   _powerUpDrops: {fileID: 8574808493367577513, guid: cf5ca0c1eada9f94da21da8f97044c01, type: 3}
   MveDirection: {x: 0, y: 0, z: 0}
   Down: 0
+  _healthSlider: {fileID: 0}
+  _dmgTextToShow: {fileID: 0}
+  DmgTextPos: {fileID: 0}
+  _enemyCanvas: {fileID: 0}
   FormationID: 0
   _spwnManager: {fileID: 0}
 --- !u!212 &6937189678289831980
@@ -176,7 +182,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8792585283919301895
 Transform:
   m_ObjectHideFlags: 0

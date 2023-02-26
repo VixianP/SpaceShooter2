@@ -19,7 +19,7 @@ public class SuperK : MonoBehaviour
     public bool _isattached;
 
     [HideInInspector]
-    public bool _front,_back,_side;
+    public bool _front, _back, _side;
 
     bool _movementLock = false;
 
@@ -33,7 +33,7 @@ public class SuperK : MonoBehaviour
     int MovementSpeed;
 
     Vector3 _playerPos;
-    
+
     Vector3 _positionToMoveTo;
 
     [SerializeField]
@@ -48,7 +48,7 @@ public class SuperK : MonoBehaviour
     [SerializeField]
     bool _isMoving;
 
-    [SerializeField] [Range(0,3)]
+    [SerializeField] [Range(0, 3)]
     int _clickCount;
 
     bool _isReturning;
@@ -87,11 +87,19 @@ public class SuperK : MonoBehaviour
 
     //timing
     [SerializeField]
-    float _fireDelay;
+    float _fireDelay = 0.5f;
 
     float _fireTime;
 
     bool _autoFire;
+
+
+    //flal
+    int _timesToFlak = -1;
+    int _timestoFlakPowerUp = 10;
+
+    float _FlakDelay = 0.3f;
+    float _FlakTimer;
     #endregion
 
     #region Health and Regeration
@@ -111,7 +119,7 @@ public class SuperK : MonoBehaviour
     {
         _isFrontAttached = true;
         PlayerGameObject = PlayerValues.playerGameobject;
-        if(PlayerGameObject != null)
+        if (PlayerGameObject != null)
         {
             _playerScript = PlayerGameObject.GetComponent<Player>();
         }
@@ -121,12 +129,16 @@ public class SuperK : MonoBehaviour
     void Update()
     {
 
-        //this does not get modified my other commands. its a reference of where the players position is in real time.
-        _playerPos = PlayerGameObject.transform.position;
+        if (PlayerValues.PlayerIsDead == false && PlayerValues.PlayerCompleted == false)
+        {
 
-        //this gets modified by other commands
-        _positionToMoveTo = new Vector3(_playerPos.x + _positionOffset.x, _playerPos.y + _positionOffset.y, 0);
-        
+
+            //this does not get modified my other commands. its a reference of where the players position is in real time.
+            _playerPos = PlayerGameObject.transform.position;
+
+            //this gets modified by other commands
+            _positionToMoveTo = new Vector3(_playerPos.x + _positionOffset.x, _playerPos.y + _positionOffset.y, 0);
+        }
 
         Attached();
         SuperKInputs();
@@ -134,9 +146,10 @@ public class SuperK : MonoBehaviour
         Return();
         Chamber();
         FireInput();
+        Flak();
 
         //temporary
-        if(PlayerValues.PlayerIsDead == true)
+        if (PlayerValues.PlayerIsDead == true || PlayerValues.PlayerCompleted == true)
         {
             Destroy(gameObject);
         }
@@ -437,14 +450,13 @@ public class SuperK : MonoBehaviour
 
     void Flak()
     {
-        int _timesToFlak = 3;
-        int _timestoFlakPowerUp = 10;
-        while(_timesToFlak > 0)
-        {
-            Instantiate(FlakBullets, transform.position, Quaternion.identity);
-            _timesToFlak--;
-        }
-        _timesToFlak = 0;
+
+            if (Time.time > _FlakTimer && _timesToFlak > -1)
+            {
+                Instantiate(FlakBullets, transform.position, Quaternion.identity);
+                _timesToFlak--;
+                _FlakTimer = Time.time + _FlakDelay;
+            }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -456,7 +468,7 @@ public class SuperK : MonoBehaviour
 
         if(collision.name == "ChargedShot(Clone)")
         {
-            Flak();
+            _timesToFlak = 3;
             Destroy(collision.gameObject);
         }
         

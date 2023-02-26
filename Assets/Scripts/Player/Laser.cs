@@ -28,7 +28,7 @@ public class Laser : MonoBehaviour
     Player _player;
     private void Awake()
     {
-        if(PlayerValues.PlayerIsDead == false)
+        if (PlayerValues.PlayerIsDead == false && PlayerValues.PlayerCompleted == false)
         {
             _player = PlayerValues.playerGameobject.GetComponent<Player>();
             _laserDamageAmount = Mathf.FloorToInt( _player._PlayerDmg + _laserDamageAmount);

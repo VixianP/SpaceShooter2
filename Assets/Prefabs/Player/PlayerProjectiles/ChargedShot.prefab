@@ -47,7 +47,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LaserSpeed: 125
-  _laserDamageAmount: 100
+  _projectileLifeSpan: 1.5
+  _laserDamageAmount: 75
+  _isflak: 0
+  CrtDamage: 0
 --- !u!212 &2327568772845912290
 SpriteRenderer:
   m_ObjectHideFlags: 0
