@@ -122,6 +122,7 @@ MonoBehaviour:
   _movementSpeed: 0.3
   _amplitude: 8
   _positionToAnchor: {x: 0, y: 30}
+  _rockLobAnim: {fileID: 0}
   _isAnchored: 0
   _isAligned: 0
 --- !u!60 &4311293516831068303

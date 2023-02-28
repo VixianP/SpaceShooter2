@@ -35,6 +35,8 @@ public class RockLobster : MonoBehaviour
     [SerializeField]
     Animator _rockLobAnim;
 
+    int _chooseAttack;
+
     [SerializeField]
     bool _isAnchored = false;
     [SerializeField]
@@ -45,7 +47,7 @@ public class RockLobster : MonoBehaviour
 
 
     //time bettween attacks
-    float _attackDelay = 4;
+    float _attackDelay = 5;
     float _attackTimer;
 
 
@@ -105,21 +107,42 @@ public class RockLobster : MonoBehaviour
     {
         if(Time.time > _attackTimer)
         {
-            _rockLobAnim.SetBool("is_attacking", true);
+            _rockLobAnim.SetBool("Preparing", true);
 
 
             //run through all attacks and time
-            if (_rockLobAnim.GetBool("is_attacking") == true)
+            if (_rockLobAnim.GetBool("Preparing") == true)
             {
 
+                _chooseAttack = Random.Range(1, 3);
+
+                if(_chooseAttack == 3)
+                {
+                    //bubble attack == true
+                    //call bubble attack function
+                }
 
 
-
-
-
-                _attackTimer = Time.time + _attackDelay;
+                //_attackTimer = Time.time + _attackDelay;
             }
         }
+    }
+
+    void BubbleAttack()
+    {
+        //preparing = false
+        //_attackTimer = Time.time + _attackDelay;
+        //set up for bubble attack
+
+        //executing bubble prepare animation. make boss invulnerable
+
+        //if timer is a go
+        //bubble attack set trigger
+        //bubble attack for X amount of time.
+        //instantiate bubble attack every 0.5f
+
+
+        //dont forget to create the bubble projectile and link up its prefab to instantiate
     }
 
     void Movement()
