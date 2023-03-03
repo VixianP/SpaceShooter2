@@ -3,6 +3,7 @@ tpsheetFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.tpsheet
 - Assets/Sprites/Boss/Rock Lobster/bubble_transition.tpsheet
 - Assets/Sprites/Boss/Rock Lobster/bubbleattack.tpsheet
+- Assets/Sprites/Boss/Rock Lobster/BubbleAttack_execute_hold.tpsheet
 - Assets/Sprites/Boss/Rock Lobster/BubbleHold.tpsheet
 - Assets/Sprites/Boss/Rock Lobster/Charge-default-default.tpsheet
 - Assets/Sprites/Boss/Rock Lobster/Idle_Final.tpsheet
@@ -11,12 +12,14 @@ textureFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.png
 - Assets/Sprites/Boss/Rock Lobster/bubble_transition.png
 - Assets/Sprites/Boss/Rock Lobster/bubbleattack.png
+- Assets/Sprites/Boss/Rock Lobster/BubbleAttack_execute_hold.png
 - Assets/Sprites/Boss/Rock Lobster/BubbleHold.png
 - Assets/Sprites/Boss/Rock Lobster/Charge-default-default.png
 - Assets/Sprites/Boss/Rock Lobster/Idle_Final.png
 - Assets/Sprites/Boss/Rock Lobster/stem_pos.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
 - 
 - 
 - 
