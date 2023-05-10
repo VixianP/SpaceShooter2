@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        PlayerScoreText.text = "Score " + PlayerValues.Score;
+        PlayerScoreText.text = "スコア: " + PlayerValues.Score;
         OnDeath();
         if (Input.GetKey(KeyCode.Escape))
         {

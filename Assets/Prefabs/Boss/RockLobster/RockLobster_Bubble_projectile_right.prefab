@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &908382126865415754
+--- !u!1 &1897818025877559672
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5040301946664007486}
-  - component: {fileID: 2780276875359715232}
-  - component: {fileID: 4418471059501905751}
-  - component: {fileID: 7210442972075514250}
-  - component: {fileID: 435771360894364615}
-  - component: {fileID: 3257881001301276899}
+  - component: {fileID: 1774411304382413911}
+  - component: {fileID: 1737701421128311958}
+  - component: {fileID: 5774927684467708370}
+  - component: {fileID: 997956777668362763}
+  - component: {fileID: 8222655749281422577}
   m_Layer: 0
-  m_Name: RockLobster
-  m_TagString: Enemy
+  m_Name: RockLobster_Bubble_projectile_right
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5040301946664007486
+--- !u!4 &1774411304382413911
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 908382126865415754}
+  m_GameObject: {fileID: 1897818025877559672}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.54088974, y: 3.1176994, z: 0}
-  m_LocalScale: {x: 7, y: 7, z: 1}
+  m_LocalPosition: {x: 14.940041, y: 34.506454, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2780276875359715232
+--- !u!212 &1737701421128311958
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 908382126865415754}
+  m_GameObject: {fileID: 1897818025877559672}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -74,69 +73,61 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1518381755
   m_SortingLayer: 5
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 1014425922272214605, guid: fc42484aa6d2f474f88d3e6ef90a51d6, type: 3}
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 1a30c901db9a560409458d4660afeb3b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 10.31, y: 10.06}
+  m_Size: {x: 20.64, y: 11.88}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &4418471059501905751
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 908382126865415754}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 03fa58e154b1e3747a9cdab4b57bc2d1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7210442972075514250
+--- !u!114 &5774927684467708370
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 908382126865415754}
+  m_GameObject: {fileID: 1897818025877559672}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc5abcf95f8556248ade7d842bda8742, type: 3}
+  m_Script: {fileID: 11500000, guid: b62cb8c0fe934d64a92b92de9172377f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bossname: "\u77F3\u30B6\u30EA\u30AC\u30CB"
-  _maxHealth: 900
-  _movementSpeed: 0.3
-  _amplitude: 8
-  _positionToAnchor: {x: 10, y: 35}
-  _distance: 0
-  _rockLobAnim: {fileID: 0}
-  _chooseAttack: 0
-  _isAnchored: 0
-  _isAligned: 0
-  _bubbleGameObject: {fileID: 6387879846930501640, guid: 59f0caf9249c966488a48ec58411c661, type: 3}
-  _crtShot: {fileID: 6167458193503650658, guid: 29b4465ff3ca99541afac0a45dfe89db, type: 3}
---- !u!50 &435771360894364615
+  _movementspeed: 2.5
+  _damage: 20
+  _dir: {x: 10, y: -10, z: 0}
+  _growSpeed: 3
+  _maxSize: 8
+  _splitBubbleSpawner: {fileID: 548551308063459333, guid: 2970d2a9e6dfc244d861d43886925ac5, type: 3}
+  _boundaries: -80
+--- !u!58 &997956777668362763
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897818025877559672}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.13453484, y: -0.1933937}
+  serializedVersion: 2
+  m_Radius: 3.222044
+--- !u!50 &8222655749281422577
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 908382126865415754}
+  m_GameObject: {fileID: 1897818025877559672}
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
@@ -150,19 +141,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!70 &3257881001301276899
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 908382126865415754}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.98577833, y: 1.19807}
-  m_Size: {x: 7.52085, y: 8.553869}
-  m_Direction: 0

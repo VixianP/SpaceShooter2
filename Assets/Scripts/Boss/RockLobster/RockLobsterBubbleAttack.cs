@@ -5,6 +5,8 @@ using UnityEngine;
 public class RockLobsterBubbleAttack : MonoBehaviour
 {
 
+    public GameObject LobsterGameobject;
+    public Vector2 LobsterPos;
 
     #region Filling and Deflating
 
@@ -15,31 +17,33 @@ public class RockLobsterBubbleAttack : MonoBehaviour
     [SerializeField]
     float _deflatespeed;
 
-    [SerializeField]
-    float _mBubblesize = 6.9f;
+    
+    public float _mBubblesize = 6.9f;
 
-    float _cBubblesize = 0;
+    [SerializeField]
+    float _knockout = 10;
+
+    public float _cBubblesize = 0;
     
     Vector3 _maxBubbleSize, _currentBubbleSize;
 
     bool _initfill,_done;
 
+    [SerializeField]
+    float _fillDelay = 2;
+    float _fillTimer;
 
+    CircleCollider2D _collider;
     #endregion
 
-    #region projectile
 
 
     [SerializeField]
-    float _firingDelay;
-
-    float _fireTimer;
+    GameObject _leftprojectilePrefab, _midprojectilePrefab, _rightprojectilePrefab;
 
     [SerializeField]
-    GameObject _projectilePrefab;
-
-
-    #endregion
+    float _spawnDelay = 0.7f;
+    float _timeTospawn;
 
 
     // Start is called before the first frame update
@@ -48,28 +52,48 @@ public class RockLobsterBubbleAttack : MonoBehaviour
         _maxBubbleSize = new Vector3(_mBubblesize, _mBubblesize, _mBubblesize);
         _currentBubbleSize = new Vector3(_cBubblesize, _cBubblesize, _cBubblesize);
         _initfill = true;
+
+        _fillTimer = Time.time + _fillDelay;
+
+        _collider = gameObject.GetComponent<CircleCollider2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
 
+        if (LobsterGameobject != null)
+        {
+            LobsterPos = new Vector2(LobsterGameobject.transform.position.x - 12, LobsterGameobject.transform.position.y - 20);
+            transform.position = LobsterPos;
+        }
+
+        _currentBubbleSize = new Vector3(_cBubblesize, _cBubblesize, _cBubblesize);
+        transform.localScale = _currentBubbleSize;
+        _collider.radius = _cBubblesize;
+
+
+
         Fill();
 
         Shoot();
 
-        Expire();
         
     }
 
     void Fill()
     {
         //initial fill
-        if (_cBubblesize < _mBubblesize && _initfill == true)
+        if (Time.time > _fillTimer)
         {
-            _cBubblesize += _fillspeed;
-            _currentBubbleSize = new Vector3(_cBubblesize, _cBubblesize, _cBubblesize);
-            transform.localScale = _currentBubbleSize;
+            if (_cBubblesize < _mBubblesize && _initfill == true)
+            {
+                _cBubblesize += _fillspeed;
+            }
+            else
+            {
+                _initfill = false;
+            }
         }
     }
 
@@ -79,20 +103,31 @@ public class RockLobsterBubbleAttack : MonoBehaviour
         //shoot
         if (_cBubblesize > 0 && _initfill == false)
         {
-            _cBubblesize -= _deflatespeed;
+            if (Time.time > _timeTospawn)
+            {
+                Instantiate(_leftprojectilePrefab, transform.position, Quaternion.identity);
+                Instantiate(_midprojectilePrefab, transform.position, Quaternion.identity);
+                Instantiate(_rightprojectilePrefab, transform.position, Quaternion.identity);
+                _timeTospawn = Time.time + _spawnDelay;
+            }
+
+            _cBubblesize -= _deflatespeed * Time.deltaTime;
+
 
         }
-        else
-        {
-            _done = true;
-        }
+
     }
 
-    void Expire()
+
+
+    private void OnTriggerEnter2D(Collider2D coll)
     {
-        if(_done == true)
+        if(coll.tag == "Laser")
         {
-            Destroy(gameObject);
+            if (_initfill == false)
+            {
+                _cBubblesize += 0.07f;
+            }
         }
     }
 

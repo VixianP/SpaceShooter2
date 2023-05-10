@@ -17,6 +17,11 @@ public class RockLobster : MonoBehaviour
 
     [SerializeField]
     float _movementSpeed = 0.4f;
+
+    float _bubbleSize;
+    float _mbubbleSize;
+
+    bool _deflating;
     #endregion
 
     #region Positioning
@@ -29,13 +34,26 @@ public class RockLobster : MonoBehaviour
     Vector2 _positionToAnchor;
 
     Vector2 _pos;
+    Vector3 _playerPos;
+
+    Vector2 _bubbleAnchorPos;
+
+    Vector2 _firingPos; //for crt bubble and other potential projectiles
+
+    [SerializeField]
+    float _distance;
+
     #endregion
 
     #region States
     [SerializeField]
     Animator _rockLobAnim;
 
+    [SerializeField]
     int _chooseAttack;
+    bool _attackChosen;
+
+    bool _isAttacking;
 
     [SerializeField]
     bool _isAnchored = false;
@@ -46,23 +64,47 @@ public class RockLobster : MonoBehaviour
     #region Attack Timers
 
 
-    //time bettween attacks
+    //General cool down bettween all attacks
     float _attackDelay = 5;
     float _attackTimer;
 
 
-    //time to choose and execute an attack
-    float _executionDelay = 3;
-    float _executionTimer;
+    //regular attack timer
+    float _strikeTimer;
+
+    float _strikeDelay = 6;
+
+    //charge timer
+    float _chargerTimer;
+
+    float _chargeDelay = 20;
+    
+
+    //bubble attack timer
+    float _bubbleTimer;
+
+    float _bubbleAttackDelay = 4.5f;
+    float _bubblePrepareTimer;
+    float _bubbleExecuteDelayTimer;
+    float _bubbleTimerDuration;
+
+    //Crtshot
+    float _crtShotDelay = 1;
+    float _crtShotTimer;
 
 
 
-    //regular attack
+    #endregion
 
-    //bubble attack
+    #region GameObjects
 
-    //charge
+    [SerializeField]
+    GameObject _bubbleGameObject; //the projectile its going to shoot ( that spawns out of the big bubble )
 
+    [SerializeField]
+    GameObject _crtShot;
+
+    GameObject _instantiatedBubble; //the bubble that fills and deflates
 
     #endregion
 
@@ -72,6 +114,7 @@ public class RockLobster : MonoBehaviour
 
     Player _playerScript;
 
+    RockLobsterBubbleAttack _BubbleGameObjectScript;
     #endregion
 
     void Start()
@@ -94,6 +137,8 @@ public class RockLobster : MonoBehaviour
 
         _rockLobAnim = GetComponent<Animator>();
 
+        WindClocks();
+
     }
 
     // Update is called once per frame
@@ -101,55 +146,141 @@ public class RockLobster : MonoBehaviour
     {
         Movement();
         Attack();
+        BubbleAttack();
+        FiringPositions();
+    }
+
+    void FiringPositions()
+    {
+        _bubbleAnchorPos = transform.position;
+        _bubbleAnchorPos.y = transform.position.y - 15;
+
+        _firingPos = transform.position;
+        _firingPos.x = transform.position.x - 10;
+    }
+
+    void WindClocks()
+    {
+        _strikeTimer = Time.time + _strikeDelay;
+        _chargerTimer = Time.time + _chargeDelay;
+        _bubbleTimer = Time.time + _bubbleAttackDelay;
     }
 
     void Attack()
     {
-        if(Time.time > _attackTimer)
+
+        if(Time.time > _attackTimer && _chooseAttack == 0)
         {
+
             _rockLobAnim.SetBool("Preparing", true);
 
-
-            //run through all attacks and time
-            if (_rockLobAnim.GetBool("Preparing") == true)
-            {
-
-                _chooseAttack = Random.Range(1, 3);
-
-                if(_chooseAttack == 3)
+                if (_rockLobAnim.GetBool("Preparing") == true)
                 {
-                    //bubble attack == true
-                    //call bubble attack function
+
+
+
+                    //choosing  attack
+                    if (_attackChosen == false)
+                    {
+                        
+                        if(Time.time > _strikeTimer)
+                        {
+                            _chooseAttack = 1;
+                        }
+
+                        if (Time.time > _chargerTimer)
+                        {
+                            _chooseAttack = 2;
+                        }
+
+                    if (Time.time > _bubbleTimer)
+                    {
+                        _bubbleExecuteDelayTimer = Time.time + _bubbleAttackDelay;
+                        _bubblePrepareTimer = Time.time + 2;
+                        _chooseAttack = 3;
+                    }
                 }
 
+                }
 
-                //_attackTimer = Time.time + _attackDelay;
-            }
-        }
+            }  
+        
+
     }
 
     void BubbleAttack()
     {
-        //preparing = false
-        //_attackTimer = Time.time + _attackDelay;
-        //set up for bubble attack
+        if (_chooseAttack == 3 && Time.time > _bubblePrepareTimer)
+        {
+            _rockLobAnim.SetBool("Preparing", false);
+            _rockLobAnim.SetBool("Bubble_Attack", true);
 
-        //executing bubble prepare animation. make boss invulnerable
+            if (Time.time > _bubbleExecuteDelayTimer  && _isAttacking == false)
+            {
+                _rockLobAnim.SetBool("Attack_Bubble", true);
+                
+                
+                _instantiatedBubble = Instantiate(_bubbleGameObject, _bubbleAnchorPos, Quaternion.identity);
+                _BubbleGameObjectScript = _instantiatedBubble.GetComponent<RockLobsterBubbleAttack>();
+                
 
-        //if timer is a go
-        //bubble attack set trigger
-        //bubble attack for X amount of time.
-        //instantiate bubble attack every 0.5f
+                _BubbleGameObjectScript.LobsterGameobject = gameObject;
+                _BubbleGameObjectScript.LobsterPos = transform.position;
+                
+                _isAttacking = true;
+            }
+
+            if(_isAttacking == true)
+            {
+                _bubbleSize = _BubbleGameObjectScript._cBubblesize;
+                _mbubbleSize = _BubbleGameObjectScript._mBubblesize;
+
+                if(_bubbleSize >= _mbubbleSize && _deflating == false)
+                {
+                    _deflating = true;
+                }
 
 
-        //dont forget to create the bubble projectile and link up its prefab to instantiate
+
+                if (_bubbleSize <= 2 && _deflating == true)
+                {
+
+                    Destroy(_instantiatedBubble);
+
+                    _bubbleExecuteDelayTimer = Time.time + 1.1f;
+
+                    _rockLobAnim.SetBool("CrtPrep", true);
+                    _deflating = false;
+
+                }
+
+                if(_rockLobAnim.GetBool("CrtPrep") == true)
+                {
+                    if(Time.time > _bubbleExecuteDelayTimer && _deflating == false)
+                    {
+                        _rockLobAnim.SetBool("CrtShot", true);
+                        Instantiate(_crtShot, _firingPos, Quaternion.identity);
+                        _bubbleExecuteDelayTimer = Time.time + 10;
+                    }
+                }
+
+      
+
+
+            }
+
+            //use a bool, use size, or check if the state has reached the knock out animation to exit the attack.
+
+            //refresh attack delay on exit
+
+        }
     }
 
     void Movement()
     {
         if (_isAnchored == false)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _positionToAnchor, 0.5f);
+            transform.position = Vector3.MoveTowards(transform.position, _positionToAnchor, 0.06f);
             if (Vector3.Distance(transform.position, _positionToAnchor) == 0)
             {
                 _isAnchored = true;
@@ -162,14 +293,14 @@ public class RockLobster : MonoBehaviour
 
             if (_isAligned == false)
             {
-                _pos.y = 30;
+                _pos.y = _positionToAnchor.y;
                 _pos.x = _playerGameObject.transform.position.x;
                 if (transform.position.x < _playerGameObject.transform.position.x || transform.position.x > _playerGameObject.transform.position.x)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, _pos, 0.3f);
+                    transform.position = Vector3.MoveTowards(transform.position, _pos, 0.03f);
                     if (Vector3.Distance(transform.position, _pos) == 0)
                     {
-                        _pos.x = _playerGameObject.transform.position.x + Mathf.Cos(Time.time) * -_amplitude;
+                        _pos.x = _playerGameObject.transform.position.x + 10 + Mathf.Cos(Time.time) * -_amplitude;
                         _isAligned = true;
                     }
 
@@ -177,11 +308,19 @@ public class RockLobster : MonoBehaviour
             }
 
 
-            if (_isAligned == true)
+            if (_isAligned == true && _isAttacking == false)
             {
-                _pos.x = _playerGameObject.transform.position.x + Mathf.Cos(Time.time) * -_amplitude;
+                _pos.x = _playerGameObject.transform.position.x + 10 + Mathf.Cos(Time.time) * -_amplitude;
                 transform.position = Vector3.MoveTowards(transform.position, _pos, _movementSpeed);
             }
+
+            if (_isAligned == true && _isAttacking == true)
+            {
+                _pos.x = _playerGameObject.transform.position.x + 10;
+                transform.position = Vector3.MoveTowards(transform.position, _pos, _movementSpeed);
+            }
+
+
         }
     }
 
@@ -189,8 +328,18 @@ public class RockLobster : MonoBehaviour
     {
         if (_isAnchored == true)
         {
-            _currentHealth -= _laserDamageAmount;
-            _playerScript.UpdateBossUI(_currentHealth);
+            if(Vector3.Distance(transform.position,_playerPos) < 50)
+            {
+                //take full damage if close
+                _currentHealth -= _laserDamageAmount;
+                _playerScript.UpdateBossUI(_currentHealth);
+            } else if(Vector3.Distance(transform.position, _playerPos) > 50)
+            {
+                //take half damage if futher away
+                _currentHealth -= _laserDamageAmount * 0.5f;
+                _playerScript.UpdateBossUI(_currentHealth);
+            }
+
             if(_currentHealth < 1)
             {
                 Death();

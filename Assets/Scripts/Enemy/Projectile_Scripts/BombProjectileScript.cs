@@ -33,10 +33,6 @@ public class BombProjectileScript : MonoBehaviour
             coll.gameObject.GetComponent<Player>().TakeDamage(_projectileDamage);
             Destroy(gameObject);
         }
-        else if (coll.tag == "EnemyBullet")
-        {
-            Destroy(coll.gameObject);
-            Destroy(gameObject);
-        }
+ 
     }
 }

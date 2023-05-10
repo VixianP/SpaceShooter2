@@ -422,7 +422,7 @@ public class Player : MonoBehaviour
     GameObject _bossUI;
 
     [SerializeField]
-    TextMeshProUGUI _bossName;
+    Text _bossName;
 
     [SerializeField]
     Slider _bossHealth;
