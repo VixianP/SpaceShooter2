@@ -8,6 +8,7 @@ tpsheetFileNames:
 - Assets/Sprites/Boss/Rock Lobster/Charge-default-default.tpsheet
 - Assets/Sprites/Boss/Rock Lobster/Idle_Final.tpsheet
 - Assets/Sprites/Boss/Rock Lobster/Overloading.tpsheet
+- Assets/Sprites/Boss/Rock Lobster/Rocklobster_Stunnned-default.tpsheet
 - Assets/Sprites/Boss/Rock Lobster/stem_pos.tpsheet
 textureFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.png
@@ -18,9 +19,11 @@ textureFileNames:
 - Assets/Sprites/Boss/Rock Lobster/Charge-default-default.png
 - Assets/Sprites/Boss/Rock Lobster/Idle_Final.png
 - Assets/Sprites/Boss/Rock Lobster/Overloading.png
+- Assets/Sprites/Boss/Rock Lobster/Rocklobster_Stunnned-default.png
 - Assets/Sprites/Boss/Rock Lobster/stem_pos.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
 - 
 - 
 - 

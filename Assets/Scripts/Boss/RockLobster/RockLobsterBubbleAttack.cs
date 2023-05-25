@@ -20,8 +20,8 @@ public class RockLobsterBubbleAttack : MonoBehaviour
     
     public float _mBubblesize = 6.9f;
 
-    [SerializeField]
-    float _knockout = 10;
+    
+    public float _knockout = 10;
 
     public float _cBubblesize = 0;
     
@@ -86,7 +86,7 @@ public class RockLobsterBubbleAttack : MonoBehaviour
         //initial fill
         if (Time.time > _fillTimer)
         {
-            if (_cBubblesize < _mBubblesize && _initfill == true)
+            if (_cBubblesize < 5 && _initfill == true)
             {
                 _cBubblesize += _fillspeed;
             }
@@ -126,7 +126,7 @@ public class RockLobsterBubbleAttack : MonoBehaviour
         {
             if (_initfill == false)
             {
-                _cBubblesize += 0.07f;
+                _cBubblesize += 0.1f;
             }
         }
     }

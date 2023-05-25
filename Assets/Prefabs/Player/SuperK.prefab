@@ -112,7 +112,7 @@ MonoBehaviour:
   _back: 0
   _side: 0
   _PoweredUp: 0
-  MovementSpeed: 20
+  MovementSpeed: 30
   _positionOffset: {x: 0, y: 7, z: 0}
   _sendOutDistance: 20
   _isMoving: 0

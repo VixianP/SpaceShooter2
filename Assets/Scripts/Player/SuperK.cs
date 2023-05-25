@@ -248,7 +248,7 @@ public class SuperK : MonoBehaviour
         //attaching.....
         if(_returnLock == true)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _positionToMoveTo, 0.05f);
+            transform.position = Vector3.MoveTowards(transform.position, _positionToMoveTo, 0.7f);
             if(Vector3.Distance(transform.position,_positionToMoveTo) == 0)
             {
                 _isattached = true;

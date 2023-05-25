@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using TMPro;
+
 
 [System.Serializable]
 
@@ -155,6 +157,9 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField]
     GameObject _stageCompleteCanvas;
+
+    [SerializeField]
+    TextMeshProUGUI _waveText;
     #endregion
 
     #region GameClock
@@ -238,6 +243,8 @@ public class SpawnManager : MonoBehaviour
         _eliteSpawntimer = Time.time + _eliteSpawnCoolDown;
         _currentSpawnPosition = _formationList[_fomartionSelection].SpawnPosition;
         StartCoroutine(StartGameCounter());
+        _waveText.text = "Wave "+_currentWave.ToString() + "/" + _maxWaves.ToString();
+        _waveText.enabled = true;
 
     }
 
@@ -397,6 +404,7 @@ public class SpawnManager : MonoBehaviour
             _WarningIndicator.SetActive(true);
             Instantiate(_boss, new Vector3(0, 100, 0), Quaternion.identity);
             _bossActive = true;
+            _waveText.enabled = false;
         }
 
     }
@@ -407,8 +415,10 @@ public class SpawnManager : MonoBehaviour
     {
         if (_currentWave < _maxWaves)
         {
-            print("Wave is Done");
+            
             _currentWave++;
+
+            _waveText.text = "Wave " + _currentWave.ToString() + "/" + _maxWaves.ToString();
 
             _maxNumberToSpawn += _enemyWaveIncrement;
             _spawnPool = 0;

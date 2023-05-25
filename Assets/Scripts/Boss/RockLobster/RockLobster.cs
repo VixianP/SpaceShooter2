@@ -21,7 +21,9 @@ public class RockLobster : MonoBehaviour
     float _bubbleSize;
     float _mbubbleSize;
 
+    [SerializeField]
     bool _deflating;
+
     #endregion
 
     #region Positioning
@@ -40,6 +42,8 @@ public class RockLobster : MonoBehaviour
 
     Vector2 _firingPos; //for crt bubble and other potential projectiles
 
+    bool _movementTrack; // track player movement
+
     [SerializeField]
     float _distance;
 
@@ -53,12 +57,16 @@ public class RockLobster : MonoBehaviour
     int _chooseAttack;
     bool _attackChosen;
 
-    bool _isAttacking;
+    [SerializeField]
+    bool _isAttacking = false;
 
     [SerializeField]
     bool _isAnchored = false;
     [SerializeField]
     bool _isAligned = false;
+
+    bool _bubbleSpawned;
+
     #endregion
 
     #region Attack Timers
@@ -104,6 +112,7 @@ public class RockLobster : MonoBehaviour
     [SerializeField]
     GameObject _crtShot;
 
+    [SerializeField]
     GameObject _instantiatedBubble; //the bubble that fills and deflates
 
     #endregion
@@ -119,6 +128,7 @@ public class RockLobster : MonoBehaviour
 
     void Start()
     {
+        _movementTrack = true;
         if (PlayerValues.playerGameobject != null)
         {
             _playerGameObject = PlayerValues.playerGameobject;
@@ -197,6 +207,10 @@ public class RockLobster : MonoBehaviour
                     {
                         _bubbleExecuteDelayTimer = Time.time + _bubbleAttackDelay;
                         _bubblePrepareTimer = Time.time + 2;
+                        _rockLobAnim.SetBool("CrtPrep", false);
+                        _rockLobAnim.SetBool("CrtShot", false);
+                        _isAttacking = false;
+                        _bubbleSpawned = false;
                         _chooseAttack = 3;
                     }
                 }
@@ -215,7 +229,7 @@ public class RockLobster : MonoBehaviour
             _rockLobAnim.SetBool("Preparing", false);
             _rockLobAnim.SetBool("Bubble_Attack", true);
 
-            if (Time.time > _bubbleExecuteDelayTimer  && _isAttacking == false)
+            if (Time.time > _bubbleExecuteDelayTimer  && _bubbleSpawned == false)
             {
                 _rockLobAnim.SetBool("Attack_Bubble", true);
                 
@@ -226,101 +240,130 @@ public class RockLobster : MonoBehaviour
 
                 _BubbleGameObjectScript.LobsterGameobject = gameObject;
                 _BubbleGameObjectScript.LobsterPos = transform.position;
-                
+
+                _bubbleSpawned = true;
                 _isAttacking = true;
+
+                //bubble deflate
             }
 
+            
             if(_isAttacking == true)
             {
+                //current bubble size
                 _bubbleSize = _BubbleGameObjectScript._cBubblesize;
-                _mbubbleSize = _BubbleGameObjectScript._mBubblesize;
 
-                if(_bubbleSize >= _mbubbleSize && _deflating == false)
+                if (_bubbleSize > 4 && _instantiatedBubble != null)
                 {
                     _deflating = true;
                 }
 
-
-
-                if (_bubbleSize <= 2 && _deflating == true)
+                //update and link bubble size to animation
+                if (_instantiatedBubble != null)
                 {
+                    _rockLobAnim.SetFloat("BubbleSize", _bubbleSize);
 
-                    Destroy(_instantiatedBubble);
-
-                    _bubbleExecuteDelayTimer = Time.time + 1.1f;
-
-                    _rockLobAnim.SetBool("CrtPrep", true);
-                    _deflating = false;
-
-                }
-
-                if(_rockLobAnim.GetBool("CrtPrep") == true)
-                {
-                    if(Time.time > _bubbleExecuteDelayTimer && _deflating == false)
+                    //knockout
+                    if (_bubbleSize >= _BubbleGameObjectScript._knockout)
                     {
-                        _rockLobAnim.SetBool("CrtShot", true);
-                        Instantiate(_crtShot, _firingPos, Quaternion.identity);
-                        _bubbleExecuteDelayTimer = Time.time + 10;
+                        _movementTrack = false;
+                        StartCoroutine(KnockoutTimer());
+                        Destroy(_instantiatedBubble);
+                        _instantiatedBubble = null;
+                        _isAttacking = false;
+
+                    } 
+                    
+                    if (_bubbleSize <= 2 && _deflating == true) //crtwindup
+                    {
+
+
+                        _bubbleExecuteDelayTimer = Time.time + 1.1f;
+                        _rockLobAnim.SetBool("CrtPrep", true);
+                        Destroy(_instantiatedBubble);
+                        _instantiatedBubble = null;
+                        _isAttacking = false;
+
                     }
+
                 }
-
-      
-
 
             }
 
-            //use a bool, use size, or check if the state has reached the knock out animation to exit the attack.
+            //crtshot execute
+            if (_rockLobAnim.GetBool("CrtPrep") == true)
+            {
+                if (Time.time > _bubbleExecuteDelayTimer)
+                {
+                    _rockLobAnim.SetBool("CrtShot", true);
+                    Instantiate(_crtShot, _firingPos, Quaternion.identity);
 
-            //refresh attack delay on exit
+                    _deflating = false;
+
+                    _rockLobAnim.SetBool("Bubble_Attack", false);
+                    _rockLobAnim.SetBool("Attack_Bubble", false);
+
+                    _attackTimer = Time.time + _attackDelay;
+                    _bubbleTimer = Time.time + _bubbleAttackDelay;
+
+
+                    _chooseAttack = 0;
+                }
+            }
+
+
 
         }
     }
 
     void Movement()
     {
-        if (_isAnchored == false)
+        if (_movementTrack == true)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _positionToAnchor, 0.06f);
-            if (Vector3.Distance(transform.position, _positionToAnchor) == 0)
+            if (_isAnchored == false)
             {
-                _isAnchored = true;
-            }
-        }
-
-        if (_isAnchored == true)
-        {
-
-
-            if (_isAligned == false)
-            {
-                _pos.y = _positionToAnchor.y;
-                _pos.x = _playerGameObject.transform.position.x;
-                if (transform.position.x < _playerGameObject.transform.position.x || transform.position.x > _playerGameObject.transform.position.x)
+                transform.position = Vector3.MoveTowards(transform.position, _positionToAnchor, 0.6f);
+                if (Vector3.Distance(transform.position, _positionToAnchor) == 0)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, _pos, 0.03f);
-                    if (Vector3.Distance(transform.position, _pos) == 0)
-                    {
-                        _pos.x = _playerGameObject.transform.position.x + 10 + Mathf.Cos(Time.time) * -_amplitude;
-                        _isAligned = true;
-                    }
-
+                    _isAnchored = true;
                 }
             }
 
-
-            if (_isAligned == true && _isAttacking == false)
+            if (_isAnchored == true)
             {
-                _pos.x = _playerGameObject.transform.position.x + 10 + Mathf.Cos(Time.time) * -_amplitude;
-                transform.position = Vector3.MoveTowards(transform.position, _pos, _movementSpeed);
+
+
+                if (_isAligned == false)
+                {
+                    _pos.y = _positionToAnchor.y;
+                    _pos.x = _playerGameObject.transform.position.x;
+                    if (transform.position.x < _playerGameObject.transform.position.x || transform.position.x > _playerGameObject.transform.position.x)
+                    {
+                        transform.position = Vector3.MoveTowards(transform.position, _pos, 0.8f);
+                        if (Vector3.Distance(transform.position, _pos) == 0)
+                        {
+                            _pos.x = _playerGameObject.transform.position.x + 10 + Mathf.Cos(Time.time) * -_amplitude;
+                            _isAligned = true;
+                        }
+
+                    }
+                }
+
+
+                if (_isAligned == true && _isAttacking == false)
+                {
+                    _pos.x = _playerGameObject.transform.position.x + 10 + Mathf.Cos(Time.time) * -_amplitude;
+                    transform.position = Vector3.MoveTowards(transform.position, _pos, _movementSpeed);
+                }
+
+                if (_isAligned == true && _isAttacking == true)
+                {
+                    _pos.x = _playerGameObject.transform.position.x + 10;
+                    transform.position = Vector3.MoveTowards(transform.position, _pos, _movementSpeed);
+                }
+
+
             }
-
-            if (_isAligned == true && _isAttacking == true)
-            {
-                _pos.x = _playerGameObject.transform.position.x + 10;
-                transform.position = Vector3.MoveTowards(transform.position, _pos, _movementSpeed);
-            }
-
-
         }
     }
 
@@ -345,6 +388,39 @@ public class RockLobster : MonoBehaviour
                 Death();
             }
         }
+    }
+
+    IEnumerator KnockoutTimer()
+    {
+        Time.timeScale = 0.1f;
+        _rockLobAnim.Play("Knockout");
+        yield return new WaitForSecondsRealtime(2);
+        Time.timeScale = 1f;
+        StartCoroutine(StunTimer());
+    }
+
+    IEnumerator StunTimer()
+    {
+        yield return new WaitForSeconds(1);
+
+        _rockLobAnim.SetBool("Stun", true);
+
+        yield return new WaitForSeconds(10);
+
+        _rockLobAnim.SetBool("Stun", false);
+        _movementTrack = true;
+
+        _attackTimer = Time.time + _attackDelay;
+        _bubbleTimer = Time.time + _bubbleAttackDelay;
+
+        _rockLobAnim.SetBool("CrtShot", false);
+        _rockLobAnim.SetBool("CrtPrep", false);
+        _rockLobAnim.SetBool("Preparing", false);
+        _rockLobAnim.SetBool("Bubble_Attack", false);
+        _rockLobAnim.SetBool("Attack_Bubble", false);
+        _isAttacking = false;
+        _deflating = false;
+        _chooseAttack = 0;
     }
 
     void Death()

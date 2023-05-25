@@ -138,7 +138,7 @@ MonoBehaviour:
   LobsterPos: {x: 0, y: 0}
   _fillspeed: 0.2
   _deflatespeed: 0.5
-  _mBubblesize: 5.6
+  _mBubblesize: 8
   _knockout: 8
   _cBubblesize: 0
   _fillDelay: 0.5
